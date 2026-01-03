@@ -1,10 +1,46 @@
-import { View, Text } from 'react-native';
+import { View, Text, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import {useNavigation} from '@react-navigation/native'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TextInput } from 'react-native';
+import { useState } from 'react';
+import { ScrollView } from 'react-native';
+import readUserData from '../functions/readUserData';
+
 const Profile = () => {
+  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [isNameFocused, setIsNameFocused] = useState(false);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isLastNameFocused, setIsLastNameFocused] = useState(false);
+  const [isPhoneFocused, setIsPhoneFocused] = useState(false);
   const navigation = useNavigation();
+  useState(() => {
+    const getUserData = async () => {
+      const userData = await readUserData();
+      if (userData) {
+        setName(userData.name);
+        setLastName(userData.lastName);
+        setEmail(userData.email);
+        setPhone(userData.phone);
+      }
+    };
+    getUserData();
+  }, []);
+  const handleSaveInfo = async () => {
+    try { 
+      await AsyncStorage.setItem('userName', name);
+      await AsyncStorage.setItem('userLastName', lastName);
+      await AsyncStorage.setItem('userEmail', email);
+      await AsyncStorage.setItem('userPhone', phone);
+      console.log('User info saved');
+    } catch (error) {
+      console.log('Error saving user info:', error);
+    }
+  };
   const handleLogout = async () => {
     navigation.navigate('Onboarding');
     try {
@@ -23,19 +59,68 @@ const Profile = () => {
           </TouchableOpacity>
           <Text style={styles.headerText}> Your Profile</Text>
         </View>
-        <View style={styles.content}>
-            <View>
+        <KeyboardAvoidingView behavior='padding' style={styles.content}>
+          <ScrollView>
+            <View style={styles.profileContainer}>
                 <Image source={require('../assets/profile-icon.png') } resizeMode="contain" style={styles.profileImage} />
             </View>
-            <View>
+            <View style={styles.form}>
+              <Text style={styles.label}>First Name</Text>
+               <TextInput
+                        onFocus={() => setIsNameFocused(true)}
+                        onBlur={() => setIsNameFocused(false)}
+                        style={[styles.input, isNameFocused && styles.inputFocused]}
+                        value={name}
+                        onChangeText={setName}
+                
+                      />
+              <Text style={styles.label}>Last Name</Text>
+              <TextInput
+                        onFocus={() => setIsLastNameFocused(true)}
+                        onBlur={() => setIsLastNameFocused(false)}
+                        style={[styles.input, isLastNameFocused && styles.inputFocused]}
+                        value={lastName}
+                        onChangeText={setLastName}
+                      />
+               <Text style={styles.label}>Email</Text>
+               <TextInput
+                        keyboardType='email-address'
+                        autoCapitalize='none'
+                        onFocus={() => setIsEmailFocused(true)}
+                        onBlur={() => setIsEmailFocused(false)}
+                        style={[styles.input, isEmailFocused && styles.inputFocused]}
+                        value={email}
+                        onChangeText={setEmail}
+                      />
+                <Text style={styles.label}>Phone</Text>
+                <TextInput
+                        keyboardType='phone-pad'
+                        onFocus={() => setIsPhoneFocused(true)}
+                        onBlur={() => setIsPhoneFocused(false)}
+                        style={[styles.input, isPhoneFocused && styles.inputFocused]}
+                        value={phone}
+                        onChangeText={setPhone}
+                      />
+                <TouchableOpacity
+                          style={styles.saveButton}
+                          onPress={handleSaveInfo}
+                        >
+                    <Text style={styles.saveButtonText}>Save Changes</Text>
+                </TouchableOpacity>
+
+              
+            </View>
+            </ScrollView>
+            
+        </KeyboardAvoidingView>
+        <View>
                 <TouchableOpacity
                           style={styles.logoutButton}
                           onPress={handleLogout}
                         >
-                    <Text style={styles.buttonText}>Logout</Text>
+                    <Text style={styles.logoutButtonText}>Logout</Text>
                 </TouchableOpacity>
             </View>
-        </View>
       </SafeAreaView>
     )  
 };
@@ -47,7 +132,10 @@ const styles = StyleSheet.create({
   logoutContainer :{
     borderColor: 'black',
     borderWidth: 1,
-
+  
+  },
+  profileContainer : {
+    height: '20%'
   },
   logoutButton : {
     alignSelf: 'center',
@@ -60,7 +148,7 @@ const styles = StyleSheet.create({
     borderWidth: 2
   },
   content : {
-    flex: 1,
+  
     backgroundColor: 'white'
   },
   headerText : {
@@ -70,9 +158,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   profileImage :{
-    height: '40%',
-    alignSelf: 'center',
-    marginTop: 50
+    height: 80,
+    width: 80,
+    margin: 20,
+    alignSelf: 'flex-start',
+    
   },
   header : {
     flexDirection: 'row',
@@ -89,11 +179,55 @@ const styles = StyleSheet.create({
     height: 48,
    
   },
-  buttonText: {
+  logoutButtonText: {
     color: 'red',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  input: {
+    height: 48,
+    borderWidth: 2,
+    borderColor: '#495E57',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 20,
+    backgroundColor: '#EDEFEE',
+  },
+  inputFocused: {
+    height: 48,
+    borderWidth: 2,
+    borderColor: '#F4CE14',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 20,
+    backgroundColor: '#EDEFEE',
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 6,
+  },
+  form :{
+    padding: 20,
+    
+  },
+  saveButton : {
+    width: '100%',
+    alignSelf: 'center',
+    marginTop: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+    backgroundColor: '#495E57',
+    borderColor: 'black',
+    borderWidth: 2
+  },
+  saveButtonText : {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  }
 });
 export default Profile;

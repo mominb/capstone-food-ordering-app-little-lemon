@@ -18,7 +18,9 @@ const Onboarding = () => {
     try{
         await AsyncStorage.setItem('userName' , name);
         await AsyncStorage.setItem('userEmail', email)
-        await AsyncStorage.setItem('isOnboarded', 'present');
+        await AsyncStorage.setItem('userLastName', '');
+        await AsyncStorage.setItem('userPhone', '');
+        await AsyncStorage.setItem('isOnboarded', 'true');
     }
     catch (error){
         console.log('Error saving user info:', error);
@@ -28,9 +30,7 @@ const Onboarding = () => {
         navigation.navigate('Home');
     }
   }
-  const testOnPress = () => {
-    console.log("OnPress Triggered")
-  }
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -82,6 +82,8 @@ const Onboarding = () => {
     </SafeAreaView>
   );
 };
+
+
 
 const styles = StyleSheet.create({
   container: {

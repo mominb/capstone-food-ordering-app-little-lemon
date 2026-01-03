@@ -14,12 +14,12 @@ const navigation = useNavigation();
     try {
         const data = await AsyncStorage.getItem('isOnboarded');
         if (data !== null) {   
-        console.log('Onboarding data:', data);
+        console.log('isOnboarded?', data);
         setTimeout(() => {
         navigation.navigate('Home');
         }, 1000);
         } else {
-        console.log('No onboarding data');
+        console.log('isOnboarded?', data);
         setTimeout(() => {
         navigation.navigate('Onboarding');
         }, 1000);
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'black',
     },
     logo: {
     width: 250,
