@@ -142,3 +142,21 @@ export async function saveItemToCart(item_id, amount) {
       await database.execAsync("ROLLBACK;");
    }
 }
+
+export async function getCategoriesfromDB() {
+   const database = await initDB();
+   const menu = await database.getAllAsync("SELECT * FROM menuitems");
+   const categories = [];
+   menu.forEach((item) => {
+      if (!categories.includes(item.category)) {
+         categories.push(item.category);
+      }
+   });
+   return categories;
+}
+
+export async function isMenuPopulated() {
+   const database = await initDB();
+   const rows = await database.getAllAsync("SELECT * FROM menuitems");
+   return rows.length > 0;
+}

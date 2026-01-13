@@ -13,14 +13,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Filter from "../components/Filter";
 import itemSeperator from "../components/itemSeperator";
-import {
-   createTable,
-   filterByQueryAndCategories,
-   saveMenuItems,
-} from "../utils/database";
-import { fetchMenu } from "../utils/menu";
 
-const Home = ({ menuCategories }) => {
+const Home = ({ menuCategories, database }) => {
    const [query, setQuery] = useState("");
    const [data, setData] = useState([]);
    const [activeCategories, setActiveCategories] = useState([]);
@@ -44,30 +38,20 @@ const Home = ({ menuCategories }) => {
       navigation.navigate("Item", { item });
    };
 
-   const manageDatabase = async () => {
-      await createTable();
-      const data = await fetchMenu();
-      await saveMenuItems(data);
-   };
-
    const handleProfileIconClick = () => {
       navigation.navigate("Profile");
    };
 
    useEffect(() => {
-      manageDatabase();
-   }, []);
-
-   useEffect(() => {
       const loadData = async () => {
-         const filteredItems = await filterByQueryAndCategories(
+         const filteredItems = await database.filterByQueryAndCategories(
             query,
             activeCategories,
          );
          setData(filteredItems);
       };
       loadData();
-   }, [activeCategories, query]);
+   }, [activeCategories, query, database]);
 
    return (
       <SafeAreaView style={styles.container}>

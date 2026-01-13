@@ -34,7 +34,7 @@ const Item = ({ route }) => {
 
          <Image
             style={{
-               resizeMode: "strech",
+               resizeMode: "stretch",
                backgroundColor: "gray",
                width: "100%",
                height: "30%",
