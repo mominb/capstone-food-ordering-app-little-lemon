@@ -1,14 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import {
    Image,
    KeyboardAvoidingView,
+   ScrollView,
    StyleSheet,
    Text,
    TextInput,
    TouchableOpacity,
    View,
 } from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Onboarding = ({ setIsOnboarded }) => {
@@ -36,41 +39,41 @@ const Onboarding = ({ setIsOnboarded }) => {
 
    return (
       <SafeAreaView style={styles.container}>
-         <View style={styles.header}>
+         <View>
             <Image
-               source={require("../assets/logo-long-text.png")}
+               source={require("../assets/littlelemon-logo-long-white.jpg")}
                style={styles.logo}
                resizeMode="contain"
             />
          </View>
+         <Text style={styles.title}>Let us get to know you</Text>
 
-         <View style={styles.content}>
-            <Text style={styles.title}>Let us get to know you</Text>
+         <ScrollView style={styles.content}>
+            <View>
+               <Text style={styles.label}>First Name</Text>
+               <TextInput
+                  onFocus={() => setIsNameFocused(true)}
+                  onBlur={() => setIsNameFocused(false)}
+                  style={[styles.input, isNameFocused && styles.inputFocused]}
+                  value={name}
+                  onChangeText={setName}
+               />
+            </View>
 
-            <Text style={styles.label}>First Name</Text>
-            <TextInput
-               onFocus={() => setIsNameFocused(true)}
-               onBlur={() => setIsNameFocused(false)}
-               style={[styles.input, isNameFocused && styles.inputFocused]}
-               value={name}
-               onChangeText={setName}
-            />
-
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-               onFocus={() => setIsEmailFocused(true)}
-               onBlur={() => setIsEmailFocused(false)}
-               style={[styles.input, isEmailFocused && styles.inputFocused]}
-               value={email}
-               onChangeText={setEmail}
-               keyboardType="email-address"
-               autoCapitalize="none"
-            />
-         </View>
-         <KeyboardAvoidingView
-            behavior="padding"
-            style={styles.buttonContainer}
-         >
+            <View>
+               <Text style={styles.label}>Email</Text>
+               <TextInput
+                  onFocus={() => setIsEmailFocused(true)}
+                  onBlur={() => setIsEmailFocused(false)}
+                  style={[styles.input, isEmailFocused && styles.inputFocused]}
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+               />
+            </View>
+         </ScrollView>
+         <KeyboardAvoidingView behavior="padding">
             <TouchableOpacity
                style={[styles.button, !isFormValid && styles.buttonDisabled]}
                disabled={!isFormValid}
@@ -86,8 +89,8 @@ const Onboarding = ({ setIsOnboarded }) => {
 const styles = StyleSheet.create({
    container: {
       flex: 1,
-      justifyContent: "space-between",
-      backgroundColor: "white",
+
+      backgroundColor: "#495E57",
       padding: 20,
    },
    header: {
@@ -97,15 +100,12 @@ const styles = StyleSheet.create({
    },
    logo: {
       width: 200,
-      height: 48,
+      height: 150,
+      alignSelf: "center",
    },
-   content: {
-      padding: 20,
-      backgroundColor: "#495E57",
-      borderRadius: 30,
-   },
+   content: {},
    title: {
-      fontSize: 20,
+      fontSize: 25,
       fontWeight: "bold",
       color: "#F4CE14",
       padding: 30,
@@ -116,28 +116,25 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
       color: "#EDEFEE",
       marginBottom: 6,
+      marginLeft: 20,
    },
    input: {
       height: 48,
-      borderWidth: 2,
+      width: "90%",
+      borderWidth: 2.5,
       borderColor: "#495E57",
       borderRadius: 8,
       paddingHorizontal: 12,
       marginBottom: 20,
       backgroundColor: "#EDEFEE",
+      alignSelf: "center",
    },
    inputFocused: {
-      height: 48,
-      borderWidth: 2,
       borderColor: "#F4CE14",
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      marginBottom: 20,
-      backgroundColor: "#EDEFEE",
    },
    button: {
       alignSelf: "center",
-      width: "100%",
+      width: "90%",
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
@@ -148,9 +145,7 @@ const styles = StyleSheet.create({
    buttonDisabled: {
       opacity: 0.4,
    },
-   buttonContainer: {
-      padding: 20,
-   },
+
    buttonText: {
       color: "black",
       fontSize: 16,
