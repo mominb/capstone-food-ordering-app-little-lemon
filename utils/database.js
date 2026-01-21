@@ -185,3 +185,39 @@ export async function cartItemCount() {
    const cartItems = await database.getAllAsync("SELECT * FROM cartitems");
    return cartItems.length;
 }
+
+export async function changeItemQtyInCart(item_id, operation) {
+   const database = await initDB();
+   let sql;
+   if (operation === "increase") {
+      sql = `UPDATE cartitems
+      SET amount = amount + 1
+      WHERE item_id = ?`;
+   }
+   if (operation === "decrease") {
+      sql = `UPDATE cartitems
+      SET amount = amount - 1
+      WHERE item_id = ? AND amount > 0 `;
+   }
+
+   try {
+      await database.execAsync("BEGIN TRANSACTION;");
+      await database.runAsync(sql, item_id);
+      await database.execAsync("COMMIT;");
+   } catch (error) {
+      console.log("Error changing amount item from cart: ", error);
+      await database.execAsync("ROLLBACK;");
+   }
+}
+
+export async function getTotalCartCost() {
+   const database = await initDB();
+   try {
+      const total = await database.getAllAsync(`
+         SELECT SUM( cartitems.amount * menuitems.price )
+
+         `);
+   } catch (error) {
+      console.log("Error calculating total cose of cart: ", error);
+   }
+}

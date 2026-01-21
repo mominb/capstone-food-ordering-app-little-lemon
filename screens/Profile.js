@@ -101,7 +101,7 @@ const Profile = () => {
          </View>
          <KeyboardAvoidingView behavior="padding" style={styles.content}>
             <ScrollView>
-               <View style={styles.profileContainer}>
+               <View style={styles.profileImageContainer}>
                   <Image
                      source={require("../assets/profile-icon.png")}
                      resizeMode="contain"
@@ -181,12 +181,9 @@ const styles = StyleSheet.create({
    container: {
       flex: 1,
    },
-   logoutContainer: {
-      borderColor: "black",
-      borderWidth: 1,
-   },
-   profileContainer: {
-      height: "20%",
+   profileImageContainer: {
+      height: "25%",
+      alignSelf: "center",
    },
    logoutButton: {
       alignSelf: "center",
@@ -208,10 +205,9 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
    },
    profileImage: {
-      height: 80,
-      width: 80,
+      height: 100,
+      width: 100,
       margin: 20,
-      alignSelf: "flex-start",
    },
    header: {
       flexDirection: "row",
@@ -276,17 +272,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: "bold",
       textAlign: "center",
-   },
-   checkboxContainer: {
-      flexDirection: "row",
-      marginBottom: 20,
-      marginTop: 10,
-   },
-   checkbox: {},
-   checkboxText: {
-      fontSize: 14,
-      color: "black",
-      alignSelf: "flex-end",
    },
 });
 export default Profile;

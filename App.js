@@ -67,6 +67,7 @@ export default function App() {
                            {...props}
                            getCartItems={database.getMenuItemsInCart}
                            deleteCartItem={database.deleteCartItem}
+                           changeItemQtyInCart={database.changeItemQtyInCart}
                         />
                      )}
                   </Stack.Screen>

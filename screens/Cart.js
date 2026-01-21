@@ -10,16 +10,21 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import ItemSeperator from "../components/ItemSeperator";
 
-const Cart = ({ getCartItems, deleteCartItem }) => {
+const Cart = ({ getCartItems, deleteCartItem, changeItemQtyInCart }) => {
    const navigator = useNavigation();
    const [cartItems, setCartItems] = useState([]);
+   const [totalAmount, setTotalAmount] = useState(0);
    const load = async () => {
       const items = await getCartItems();
       setCartItems(items);
    };
-
+   const increaseAmount = async (item_id) => {
+      await changeItemQtyInCart(item_id, "increase");
+   };
+   const decreaseAmount = async (item_id) => {
+      await changeItemQtyInCart(item_id, "decrease");
+   };
    useFocusEffect(() => {
       load();
    });
@@ -34,19 +39,12 @@ const Cart = ({ getCartItems, deleteCartItem }) => {
                   style={styles.backButton}
                />
             </TouchableOpacity>
-            <Image
-               source={require("../assets/logo-long-text.png")}
-               resizeMode="contain"
-               style={styles.logoLemon}
-            />
+            <Text style={styles.heading}>Your Cart</Text>
          </View>
-
-         <Text style={styles.heading}>Your Cart</Text>
 
          <FlatList
             data={cartItems}
             keyExtractor={(item) => String(item.item_id)}
-            ItemSeparatorComponent={ItemSeperator}
             contentContainerStyle={styles.listContainer}
             renderItem={({ item }) => (
                <View style={styles.itemContainer}>
@@ -67,6 +65,23 @@ const Cart = ({ getCartItems, deleteCartItem }) => {
                         }}
                         style={styles.itemImage}
                      />
+                     <View style={styles.counterContainer}>
+                        <TouchableOpacity
+                           style={styles.CounterButton}
+                           onPress={() => decreaseAmount(item.item_id)}
+                        >
+                           <Text style={styles.counterText}>-</Text>
+                        </TouchableOpacity>
+                        <Text style={[styles.counterText, { color: "black" }]}>
+                           {item.amount}
+                        </Text>
+                        <TouchableOpacity
+                           style={styles.CounterButton}
+                           onPress={() => increaseAmount(item.item_id)}
+                        >
+                           <Text style={styles.counterText}>+</Text>
+                        </TouchableOpacity>
+                     </View>
                      <TouchableOpacity
                         onPress={async () => {
                            const response = await deleteCartItem(item.item_id);
@@ -84,6 +99,17 @@ const Cart = ({ getCartItems, deleteCartItem }) => {
                </View>
             )}
          />
+         <View style={styles.footer}>
+            <View style={styles.totalAmountContainer}>
+               <Text style={styles.totalAmountText}>Total amount</Text>
+               <Text style={styles.totalAmountText}>${totalAmount}</Text>
+            </View>
+            <TouchableOpacity style={styles.checkoutButton}>
+               <Text style={styles.checkoutButtonText}>
+                  Continue to Checkout
+               </Text>
+            </TouchableOpacity>
+         </View>
       </SafeAreaView>
    );
 };
@@ -127,6 +153,9 @@ const styles = StyleSheet.create({
       backgroundColor: "#f9f9f9",
       padding: 15,
       borderRadius: 8,
+      marginBottom: 10,
+      borderColor: "black",
+      borderWidth: 1,
    },
    itemInfo: {
       flexDirection: "row",
@@ -167,6 +196,51 @@ const styles = StyleSheet.create({
    deleteText: {
       color: "#fff",
       fontWeight: "600",
+   },
+   counterContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+   },
+   CounterButton: {
+      backgroundColor: "grey",
+      width: 20,
+      height: 20,
+      alignItems: "center",
+      borderRadius: 20,
+      margin: 8,
+   },
+   counterText: {
+      color: "white",
+      fontSize: 15,
+   },
+   footer: {},
+   totalAmountContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      width: "100%",
+      backgroundColor: "#F4CE14",
+      padding: 10,
+   },
+   totalAmountText: {
+      fontWeight: "bold",
+      fontSize: 20,
+   },
+   checkoutButton: {
+      alignSelf: "center",
+      width: "90%",
+      paddingVertical: 12,
+      paddingHorizontal: 28,
+      borderRadius: 8,
+      backgroundColor: "#EDEFEE",
+      borderColor: "black",
+      borderWidth: 2,
+      marginTop: 15,
+   },
+   checkoutButtonText: {
+      fontSize: 16,
+      fontWeight: "bold",
+      textAlign: "center",
    },
 });
 
