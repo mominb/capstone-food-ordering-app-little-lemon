@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
@@ -16,39 +15,40 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../components/PageHeader";
-import readUserData from "../utils/asyncStorage";
-import { supabase } from "../utils/supabase";
+import { getUserData, supabase, updateUserData } from "../utils/supabase";
 
 const Profile = () => {
    const [name, setName] = useState("");
-   const [lastName, setLastName] = useState("");
    const [email, setEmail] = useState("");
    const [phone, setPhone] = useState("");
    const [isNameFocused, setIsNameFocused] = useState(false);
    const [isEmailFocused, setIsEmailFocused] = useState(false);
-   const [isLastNameFocused, setIsLastNameFocused] = useState(false);
    const [isPhoneFocused, setIsPhoneFocused] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
    const navigator = useNavigation();
 
    useEffect(() => {
-      const getUserData = async () => {
-         const userData = await readUserData();
-         if (userData) {
-            setName(userData.name ?? "");
-            setLastName(userData.lastName ?? "");
-            setEmail(userData.email ?? "");
-            setPhone(userData.phone ?? "");
+      const loadUserData = async () => {
+         setIsLoading(true);
+         const data = await getUserData();
+         setIsLoading(false);
+         if (data.user) {
+            setName(data.user.user_metadata.displayName ?? "");
+            setEmail(data.user.email ?? "");
+            setPhone(data.user.user_metadata.phone ?? "");
          }
       };
-      getUserData();
+      loadUserData();
    }, []);
    const handleSaveInfo = async () => {
+      setIsLoading(true);
       try {
-         await AsyncStorage.setItem("userName", name);
-         await AsyncStorage.setItem("userLastName", lastName);
-         await AsyncStorage.setItem("userEmail", email);
-         await AsyncStorage.setItem("userPhone", phone);
+         await updateUserData({
+            phone: phone,
+            email: email,
+            displayName: name,
+         });
+         setIsLoading(false);
          Keyboard.dismiss();
          console.log("User info saved");
          Toast.show({
@@ -101,7 +101,7 @@ const Profile = () => {
                   />
                </View>
                <View style={styles.form}>
-                  <Text style={styles.label}>First Name</Text>
+                  <Text style={styles.label}>Name</Text>
                   <TextInput
                      onFocus={() => setIsNameFocused(true)}
                      onBlur={() => setIsNameFocused(false)}
@@ -112,17 +112,7 @@ const Profile = () => {
                      value={name}
                      onChangeText={setName}
                   />
-                  <Text style={styles.label}>Last Name</Text>
-                  <TextInput
-                     onFocus={() => setIsLastNameFocused(true)}
-                     onBlur={() => setIsLastNameFocused(false)}
-                     style={[
-                        styles.input,
-                        isLastNameFocused && styles.inputFocused,
-                     ]}
-                     value={lastName}
-                     onChangeText={setLastName}
-                  />
+
                   <Text style={styles.label}>Email</Text>
                   <TextInput
                      keyboardType="email-address"

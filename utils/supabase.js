@@ -22,6 +22,9 @@ export async function sendEmailOTP(email) {
 
    if (error) {
       console.log(error.message);
+      return "error";
+   } else {
+      return "success";
    }
 }
 
@@ -38,4 +41,25 @@ export async function verifyEmailOTP(email, token) {
    }
 
    return data.session;
+}
+
+export async function updateUserData(updates) {
+   const { data, error } = await supabase.auth.updateUser({
+      data: updates,
+   });
+   if (error) {
+      console.log("error updating user data in supabase: ", error);
+   }
+   return data.user;
+}
+
+export async function getUserData() {
+   const { data, error } = await supabase.auth.getUser();
+
+   if (error) {
+      console.log("error retrieving user data from supabase: ", error);
+      return;
+   }
+
+   return data;
 }

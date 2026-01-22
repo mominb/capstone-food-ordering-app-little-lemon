@@ -30,9 +30,8 @@ const Onboarding = () => {
       await AsyncStorage.setItem("userEmail", email);
       setIsLoading(true);
       try {
-         const { error } = await sendEmailOTP(email);
-         if (error) {
-            console.log(error.message);
+         const status = await sendEmailOTP(email);
+         if (status === "error") {
             Toast.show({
                type: "error",
                text1: `Unable to send OTP: ${error.message}`,

@@ -17,10 +17,12 @@ const Cart = ({
    deleteCartItem,
    changeItemQtyInCart,
    getTotalCartCost,
+   userMetaDataExists,
 }) => {
    const navigator = useNavigation();
    const [cartItems, setCartItems] = useState([]);
    const [totalAmount, setTotalAmount] = useState(0);
+
    const load = async () => {
       const items = await getCartItems();
       setCartItems(items);
@@ -31,6 +33,7 @@ const Cart = ({
          setTotalAmount(0);
       }
    };
+
    const increaseAmount = async (item_id) => {
       await changeItemQtyInCart(item_id, "increase");
    };
@@ -40,7 +43,27 @@ const Cart = ({
    useFocusEffect(() => {
       load();
    });
-
+   const isCheckoutAllowed = userMetaDataExists && cartItems.length > 0;
+   const handleCheckoutNavi = () => {
+      if (isCheckoutAllowed) {
+         navigator.navigate("Checkout");
+      } else {
+         if (!userMetaDataExists) {
+            Toast.show({
+               type: "error",
+               text1: "Please complete profile",
+               text2: "You cannot checkout until information is complete",
+            });
+            navigator.navigate("Profile");
+         } else {
+            Toast.show({
+               type: "error",
+               text1: "Cart is empty",
+               text2: "You cannot checkout with an empty cart",
+            });
+         }
+      }
+   };
    return (
       <SafeAreaView style={styles.container}>
          <PageHeader navigator={navigator} heading={"Cart"}></PageHeader>
@@ -108,7 +131,7 @@ const Cart = ({
                <Text style={styles.totalAmountText}>${totalAmount}</Text>
             </View>
             <TouchableOpacity
-               onPress={() => navigator.navigate("Checkout")}
+               onPress={handleCheckoutNavi}
                style={styles.checkoutButton}
             >
                <Text style={styles.checkoutButtonText}>
