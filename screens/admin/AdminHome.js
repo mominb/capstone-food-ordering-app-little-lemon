@@ -20,9 +20,16 @@ const AdminHome = () => {
                />
             </TouchableOpacity>
          </View>
-         <View>
-            <TouchableOpacity onPress={() => navigator.navigate("AdminOrders")}>
-               <Text>View All Orders</Text>
+         <View style={styles.operationsContainer}>
+            <Text style={styles.heading}>Admin Operations</Text>
+            <TouchableOpacity
+               style={styles.operationButton}
+               onPress={() => navigator.navigate("AdminOrders")}
+            >
+               <Text style={styles.operationButtonText}>Manage Orders</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.operationButton}>
+               <Text style={styles.operationButtonText}>Manage Menu</Text>
             </TouchableOpacity>
          </View>
       </SafeAreaView>
@@ -48,6 +55,24 @@ const styles = StyleSheet.create({
    headerProfileIcon: {
       width: 40,
       height: 40,
+   },
+   heading: {
+      fontWeight: "bold",
+      fontSize: 20,
+      marginBottom: 10,
+   },
+   operationButton: {
+      padding: 10,
+      backgroundColor: "black",
+      margin: 5,
+   },
+   operationButtonText: {
+      color: "white",
+      fontSize: 15,
+      fontWeight: "bold",
+   },
+   operationsContainer: {
+      padding: 20,
    },
 });
 export default AdminHome;
