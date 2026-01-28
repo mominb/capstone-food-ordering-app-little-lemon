@@ -70,6 +70,7 @@ export async function placeOrder(
    paymentMethod,
    total_price,
 ) {
+   const user = await getUserData();
    const orderItems = cartItems.map((item) => ({
       name: item.name,
       quantity: item.amount,
@@ -80,6 +81,7 @@ export async function placeOrder(
          payment_mode: paymentMethod,
          delivery_mode: deliveryMethod,
          total_price: total_price,
+         user_data: user.user.user_metadata,
       },
    ]);
    if (error) {
@@ -125,4 +127,13 @@ export async function getUserRole() {
    }
 
    return data;
+}
+export async function updateOrderStatus(status, id) {
+   const { error } = await supabase
+      .from("orders")
+      .update({ order_status: status })
+      .eq("id", id);
+   if (error) {
+      console.log("error updating order status: ", error);
+   }
 }

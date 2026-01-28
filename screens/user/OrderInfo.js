@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ItemSeperator from "../../components/ItemSeperator";
+import OrderItemList from "../../components/OrderItemList";
 import PageHeader from "../../components/PageHeader";
 
 const OrderInfo = ({ route }) => {
@@ -24,42 +24,21 @@ const OrderInfo = ({ route }) => {
    return (
       <SafeAreaView style={styles.container}>
          <PageHeader navigator={navigator} heading={"Order"} />
+         <ScrollView>
+            <OrderItemList orderItems={orderItems} order={order} />
 
-         <View style={styles.metaContainer}>
-            <Text style={styles.metaText}>Order ID: {order.id}</Text>
-            <Text style={styles.metaText}>
-               Placed on {formattedDate(order.created_at)}
-            </Text>
-            <Text style={styles.metaText}>Status: {order.order_status}</Text>
-            <Text style={styles.metaText}>Payment: {order.payment_mode}</Text>
-            <Text style={styles.metaText}>{order.delivery_mode}</Text>
-         </View>
-
-         <View style={styles.orderDetailsContainer}>
-            <Text style={styles.subHeading}>Order Details</Text>
-            <FlatList
-               data={orderItems}
-               keyExtractor={(item, index) =>
-                  String(item.id ?? item.item_id ?? index)
-               }
-               ItemSeparatorComponent={ItemSeperator}
-               renderItem={({ item }) => (
-                  <View style={styles.itemContainer}>
-                     <View style={styles.itemInfoContainer}>
-                        <Text style={styles.itemText}>{item.quantity}x</Text>
-                        <Text style={styles.itemText}>{item.name}</Text>
-                     </View>
-                  </View>
-               )}
-            />
-            <ItemSeperator />
-            <View style={styles.totalAmountContainer}>
-               <Text style={styles.totalAmountText}>Total :</Text>
-               <Text style={styles.totalAmountText}>
-                  ${Number(order.total_price).toFixed(2)}
+            <View style={styles.metaContainer}>
+               <Text style={styles.metaText}>Order ID: {order.id}</Text>
+               <Text style={styles.metaText}>
+                  Placed on {formattedDate(order.created_at)}
                </Text>
+               <Text style={styles.metaText}>Status: {order.order_status}</Text>
+               <Text style={styles.metaText}>
+                  Payment: {order.payment_mode}
+               </Text>
+               <Text style={styles.metaText}>{order.delivery_mode}</Text>
             </View>
-         </View>
+         </ScrollView>
       </SafeAreaView>
    );
 };

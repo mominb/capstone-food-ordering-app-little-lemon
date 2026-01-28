@@ -24,7 +24,7 @@ const AdminHome = () => {
             <Text style={styles.heading}>Admin Operations</Text>
             <TouchableOpacity
                style={styles.operationButton}
-               onPress={() => navigator.navigate("AdminOrders")}
+               onPress={() => navigator.navigate("AllOrders")}
             >
                <Text style={styles.operationButtonText}>Manage Orders</Text>
             </TouchableOpacity>

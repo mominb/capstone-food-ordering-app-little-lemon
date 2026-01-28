@@ -4,7 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import Spinner from "react-native-loading-spinner-overlay";
 import Toast from "react-native-toast-message";
 import AdminHome from "./screens/admin/AdminHome";
-import AdminOrders from "./screens/admin/AdminOrders";
+import AllOrders from "./screens/admin/AllOrders";
+import ManageOrder from "./screens/admin/ManageOrder";
 import Onboarding from "./screens/Onboarding";
 import Cart from "./screens/user/Cart";
 import Checkout from "./screens/user/Checkout";
@@ -68,7 +69,8 @@ export default function App() {
             ) : userRole === "admin" ? (
                <>
                   <Stack.Screen name="AdminHome" component={AdminHome} />
-                  <Stack.Screen name="AdminOrders" component={AdminOrders} />
+                  <Stack.Screen name="AllOrders" component={AllOrders} />
+                  <Stack.Screen name="ManageOrder" component={ManageOrder} />
                </>
             ) : (
                <>

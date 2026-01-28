@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useCallback, useState } from "react";
 import {
    FlatList,
    StyleSheet,
@@ -11,9 +11,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import PageHeader from "../../components/PageHeader";
 import { getAllOrders } from "../../utils/supabase";
 
-const Orders = () => {
+const AllOrders = () => {
    const navigator = useNavigation();
    const [orders, setOrders] = useState();
+
    const formattedDate = (date) => {
       const formatted = new Date(date).toLocaleString("en-GB", {
          day: "2-digit",
@@ -25,15 +26,15 @@ const Orders = () => {
       });
       return formatted;
    };
-   useEffect(() => {
-      const getOrders = async () => {
-         const orders = await getAllOrders();
-
-         setOrders(orders.reverse());
-      };
-
-      getOrders();
-   }, []);
+   useFocusEffect(
+      useCallback(() => {
+         const getOrders = async () => {
+            const orders = await getAllOrders();
+            setOrders(orders.reverse());
+         };
+         getOrders();
+      }, []),
+   );
 
    return (
       <SafeAreaView>
@@ -44,25 +45,25 @@ const Orders = () => {
                keyExtractor={(item) => String(item.id)}
                renderItem={({ item }) => (
                   <TouchableOpacity
-                     onPress={() => navigator.navigate("OrderInfo", { item })}
+                     onPress={() => navigator.navigate("ManageOrder", { item })}
                      style={
-                        item.order_status === "completed"
+                        item.order_status === "completed" ||
+                        item.order_status === "cancelled"
                            ? styles.orderInactive
                            : styles.orderActive
                      }
                   >
-                     <Text style={styles.orderText}>Order ID: {item.id}</Text>
+                     <Text style={styles.orderText}>
+                        Customer Name: {item.user_data.displayName}
+                     </Text>
+                     <Text style={styles.orderText}>
+                        Order ID: {item.id.substring(0, 8)}
+                     </Text>
                      <Text style={styles.orderText}>
                         Placed on {formattedDate(item.created_at)}
                      </Text>
                      <Text style={styles.orderText}>
                         Status: {item.order_status}
-                     </Text>
-                     <Text style={styles.orderText}>
-                        Number of items: {item.order_items.length}
-                     </Text>
-                     <Text style={styles.orderText}>
-                        Payment: {item.payment_mode}
                      </Text>
                      <Text style={styles.orderText}>{item.delivery_mode}</Text>
                   </TouchableOpacity>
@@ -73,22 +74,6 @@ const Orders = () => {
    );
 };
 const styles = StyleSheet.create({
-   button: {
-      alignSelf: "center",
-      width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
-      borderWidth: 2,
-      marginTop: 15,
-   },
-   buttonText: {
-      fontSize: 16,
-      fontWeight: "bold",
-      textAlign: "center",
-   },
    orderActive: {
       backgroundColor: "#E8F5E9",
       borderColor: "#2E7D32",
@@ -110,5 +95,21 @@ const styles = StyleSheet.create({
    orderText: {
       fontWeight: "bold",
    },
+   button: {
+      alignSelf: "center",
+      width: "90%",
+      paddingVertical: 12,
+      paddingHorizontal: 28,
+      borderRadius: 8,
+      backgroundColor: "#F4CE14",
+      borderColor: "black",
+      borderWidth: 2,
+      marginTop: 15,
+   },
+   buttonText: {
+      fontSize: 16,
+      fontWeight: "bold",
+      textAlign: "center",
+   },
 });
-export default Orders;
+export default AllOrders;

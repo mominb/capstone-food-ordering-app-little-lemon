@@ -34,7 +34,7 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
          setIsLoading(false);
          if (data.user) {
             setName(data.user.user_metadata.displayName ?? "");
-            setEmail(data.user.email ?? "");
+            setEmail(data.user.user_metadata.email ?? "");
             setPhone(data.user.user_metadata.phone ?? "");
          }
       };

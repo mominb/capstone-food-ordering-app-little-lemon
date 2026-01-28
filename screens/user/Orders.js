@@ -51,18 +51,14 @@ const Orders = () => {
                            : styles.orderActive
                      }
                   >
-                     <Text style={styles.orderText}>Order ID: {item.id}</Text>
+                     <Text style={styles.orderText}>
+                        Order ID: {item.id.substring(0, 8)}
+                     </Text>
                      <Text style={styles.orderText}>
                         Placed on {formattedDate(item.created_at)}
                      </Text>
                      <Text style={styles.orderText}>
                         Status: {item.order_status}
-                     </Text>
-                     <Text style={styles.orderText}>
-                        Number of items: {item.order_items.length}
-                     </Text>
-                     <Text style={styles.orderText}>
-                        Payment: {item.payment_mode}
                      </Text>
                      <Text style={styles.orderText}>{item.delivery_mode}</Text>
                   </TouchableOpacity>

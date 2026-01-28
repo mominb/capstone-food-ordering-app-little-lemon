@@ -99,15 +99,32 @@ const Home = ({ menuCategories, database }) => {
             </TouchableOpacity>
          </View>
 
-         <View style={styles.filtersSection}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+         <View>
+            <TouchableOpacity
+               style={[
+                  styles.cartButton,
+                  { width: "90%", alignSelf: "center", marginVertical: 10 },
+               ]}
+               onPress={() => navigation.navigate("Orders")}
+            >
+               <Text style={[styles.itemTitle, { marginHorizontal: 10 }]}>
+                  View my orders
+               </Text>
+            </TouchableOpacity>
+            <ItemSeperator />
+
+            <ScrollView
+               style={styles.filtersSection}
+               horizontal
+               showsHorizontalScrollIndicator={false}
+            >
                <Filter
                   categories={menuCategories}
                   onClick={handleFilterSelection}
                   activeCat={activeCategories}
                />
             </ScrollView>
-            <View style={styles.filtersDivider} />
+            <ItemSeperator />
          </View>
 
          <FlatList
