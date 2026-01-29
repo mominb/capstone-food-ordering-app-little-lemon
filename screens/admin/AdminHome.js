@@ -12,7 +12,11 @@ const AdminHome = () => {
                resizeMode="contain"
                style={styles.headerLogo}
             />
-            <TouchableOpacity>
+            <TouchableOpacity
+               onPress={() => {
+                  navigator.navigate("Settings");
+               }}
+            >
                <Image
                   source={require("../../assets/settings_icon.jpg")}
                   resizeMode="contain"
@@ -28,7 +32,10 @@ const AdminHome = () => {
             >
                <Text style={styles.operationButtonText}>Manage Orders</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.operationButton}>
+            <TouchableOpacity
+               onPress={() => navigator.navigate("ManageMenu")}
+               style={styles.operationButton}
+            >
                <Text style={styles.operationButtonText}>Manage Menu</Text>
             </TouchableOpacity>
          </View>

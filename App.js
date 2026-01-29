@@ -5,7 +5,9 @@ import Spinner from "react-native-loading-spinner-overlay";
 import Toast from "react-native-toast-message";
 import AdminHome from "./screens/admin/AdminHome";
 import AllOrders from "./screens/admin/AllOrders";
+import ManageMenu from "./screens/admin/ManageMenu";
 import ManageOrder from "./screens/admin/ManageOrder";
+import Settings from "./screens/admin/Settings";
 import Onboarding from "./screens/Onboarding";
 import Cart from "./screens/user/Cart";
 import Checkout from "./screens/user/Checkout";
@@ -71,6 +73,8 @@ export default function App() {
                   <Stack.Screen name="AdminHome" component={AdminHome} />
                   <Stack.Screen name="AllOrders" component={AllOrders} />
                   <Stack.Screen name="ManageOrder" component={ManageOrder} />
+                  <Stack.Screen name="Settings" component={Settings} />
+                  <Stack.Screen name="ManageMenu" component={ManageMenu} />
                </>
             ) : (
                <>

@@ -95,21 +95,5 @@ const styles = StyleSheet.create({
    orderText: {
       fontWeight: "bold",
    },
-   button: {
-      alignSelf: "center",
-      width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
-      borderWidth: 2,
-      marginTop: 15,
-   },
-   buttonText: {
-      fontSize: 16,
-      fontWeight: "bold",
-      textAlign: "center",
-   },
 });
 export default AllOrders;

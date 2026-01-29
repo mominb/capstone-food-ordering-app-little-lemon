@@ -137,3 +137,11 @@ export async function updateOrderStatus(status, id) {
       console.log("error updating order status: ", error);
    }
 }
+
+export async function getMenuItems() {
+   const { data, error } = await supabase.from("menu").select("*");
+   if (error) {
+      console.log("error fetching menu items: ", error);
+   }
+   return data;
+}

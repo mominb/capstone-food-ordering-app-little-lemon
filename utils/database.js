@@ -4,7 +4,7 @@ let db;
 
 async function initDB() {
    if (!db) {
-      db = await SQLite.openDatabaseAsync("little_lemon-v2");
+      db = await SQLite.openDatabaseAsync("little_lemon-v3");
    }
    return db;
 }
@@ -52,7 +52,7 @@ export async function saveMenuItems(menuItems) {
             item.name,
             item.price,
             item.description,
-            item.image,
+            item.image_url,
             item.category,
          );
       }

@@ -46,7 +46,8 @@ const Orders = () => {
                   <TouchableOpacity
                      onPress={() => navigator.navigate("OrderInfo", { item })}
                      style={
-                        item.order_status === "completed"
+                        item.order_status === "completed" ||
+                        item.order_status === "cancelled"
                            ? styles.orderInactive
                            : styles.orderActive
                      }
