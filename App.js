@@ -7,6 +7,7 @@ import AdminHome from "./screens/admin/AdminHome";
 import AllOrders from "./screens/admin/AllOrders";
 import ManageMenu from "./screens/admin/ManageMenu";
 import ManageOrder from "./screens/admin/ManageOrder";
+import MenuItem from "./screens/admin/MenuItem";
 import Settings from "./screens/admin/Settings";
 import Onboarding from "./screens/Onboarding";
 import Cart from "./screens/user/Cart";
@@ -75,6 +76,7 @@ export default function App() {
                   <Stack.Screen name="ManageOrder" component={ManageOrder} />
                   <Stack.Screen name="Settings" component={Settings} />
                   <Stack.Screen name="ManageMenu" component={ManageMenu} />
+                  <Stack.Screen name="MenuItem" component={MenuItem} />
                </>
             ) : (
                <>

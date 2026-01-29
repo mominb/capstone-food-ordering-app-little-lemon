@@ -147,7 +147,7 @@ const Home = ({ menuCategories, database }) => {
                   <Image
                      style={styles.itemImage}
                      source={{
-                        uri: `https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/refs/heads/main/images/${item.image}`,
+                        uri: item.image_url,
                      }}
                   />
                </TouchableOpacity>

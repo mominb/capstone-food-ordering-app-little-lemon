@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
    FlatList,
+   ScrollView,
    StyleSheet,
    Text,
    TouchableOpacity,
@@ -53,63 +54,65 @@ const Checkout = ({ route, deleteUserCart }) => {
             textStyle={{ color: "#fff" }}
          />
          <PageHeader navigator={navigator} heading={"Checkout"}></PageHeader>
-         <View style={styles.orderDetailsContainer}>
-            <Text style={styles.subHeading}>Order Details</Text>
-            <FlatList
-               data={cartItems}
-               keyExtractor={(item) => String(item.item_id)}
-               ItemSeparatorComponent={ItemSeperator}
-               renderItem={({ item }) => (
-                  <View style={styles.itemContainer}>
-                     <View style={styles.itemInfoContainer}>
-                        <Text style={styles.itemText}>{item.amount}x</Text>
-                        <Text style={styles.itemText}>{item.name}</Text>
-                     </View>
+         <ScrollView>
+            <View style={styles.orderDetailsContainer}>
+               <Text style={styles.subHeading}>Order Details</Text>
+               <FlatList
+                  data={cartItems}
+                  keyExtractor={(item) => String(item.item_id)}
+                  ItemSeparatorComponent={ItemSeperator}
+                  renderItem={({ item }) => (
+                     <View style={styles.itemContainer}>
+                        <View style={styles.itemInfoContainer}>
+                           <Text style={styles.itemText}>{item.amount}x</Text>
+                           <Text style={styles.itemText}>{item.name}</Text>
+                        </View>
 
-                     <View style={styles.itemPriceContainer}>
-                        <Text style={styles.itemText}>
-                           ${(item.amount * item.price).toFixed(2)}
-                        </Text>
+                        <View style={styles.itemPriceContainer}>
+                           <Text style={styles.itemText}>
+                              ${(item.amount * item.price).toFixed(2)}
+                           </Text>
+                        </View>
                      </View>
-                  </View>
-               )}
-            />
-            <ItemSeperator />
-            <View style={styles.totalAmountContainer}>
-               <Text style={styles.totalAmountText}>Total :</Text>
-               <Text style={styles.totalAmountText}>${totalAmount}</Text>
+                  )}
+               />
+               <ItemSeperator />
+               <View style={styles.totalAmountContainer}>
+                  <Text style={styles.totalAmountText}>Total :</Text>
+                  <Text style={styles.totalAmountText}>${totalAmount}</Text>
+               </View>
             </View>
-         </View>
-         <View style={styles.DetailsContainer}>
-            <Text style={[styles.subHeading, { alignSelf: "flex-start" }]}>
-               Delivery Method
-            </Text>
-            <Dropdown
-               style={styles.MethodSelector}
-               data={deliveryMethods}
-               labelField="label"
-               valueField="value"
-               placeholder="Select"
-               value={deliveryMethod}
-               onChange={(item) => {
-                  setDeliveryMethod(item.value);
-               }}
-            />
-            <Text style={[styles.subHeading, { alignSelf: "flex-start" }]}>
-               Payment Method
-            </Text>
-            <Dropdown
-               style={styles.MethodSelector}
-               data={paymentMethods}
-               labelField="label"
-               valueField="value"
-               placeholder="Select"
-               value={paymentMethod}
-               onChange={(item) => {
-                  setPaymentMethod(item.value);
-               }}
-            />
-         </View>
+            <View style={styles.DetailsContainer}>
+               <Text style={[styles.subHeading, { alignSelf: "flex-start" }]}>
+                  Delivery Method
+               </Text>
+               <Dropdown
+                  style={styles.MethodSelector}
+                  data={deliveryMethods}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Select"
+                  value={deliveryMethod}
+                  onChange={(item) => {
+                     setDeliveryMethod(item.value);
+                  }}
+               />
+               <Text style={[styles.subHeading, { alignSelf: "flex-start" }]}>
+                  Payment Method
+               </Text>
+               <Dropdown
+                  style={styles.MethodSelector}
+                  data={paymentMethods}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Select"
+                  value={paymentMethod}
+                  onChange={(item) => {
+                     setPaymentMethod(item.value);
+                  }}
+               />
+            </View>
+         </ScrollView>
          <View>
             <TouchableOpacity
                onPress={handleOrderPlacement}

@@ -145,3 +145,28 @@ export async function getMenuItems() {
    }
    return data;
 }
+
+export async function updateMenuItem(id, name, description, price) {
+   const { error } = await supabase
+      .from("menu")
+      .update({ name, description, price })
+      .eq("id", id);
+   if (error) {
+      console.log("error updating menu item: ", error);
+   }
+}
+
+export async function addMenuItem(name, description, price) {
+   const { error } = await supabase
+      .from("menu")
+      .insert({ name, description, price });
+   if (error) {
+      console.log("error adding menu item: ", error);
+   }
+}
+export async function deleteMenuItem(id) {
+   const { error } = await supabase.from("menu").delete().eq("id", id);
+   if (error) {
+      console.log("error deleting menu item: ", error);
+   }
+}
