@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
-   Image,
+   KeyboardAvoidingView,
+   ScrollView,
    StyleSheet,
    Text,
    TextInput,
@@ -9,11 +10,8 @@ import {
    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-   addMenuItem,
-   deleteMenuItem,
-   updateMenuItem,
-} from "../../utils/supabase";
+import PageHeader from "../../components/PageHeader";
+import { addMenuItem, updateMenuItem } from "../../utils/supabase";
 
 const Item = ({ route }) => {
    const navigator = useNavigation();
@@ -21,72 +19,79 @@ const Item = ({ route }) => {
    const [itemName, setItemName] = useState(item.name);
    const [itemDescription, setItemDescription] = useState(item.description);
    const [itemPrice, setItemPrice] = useState(item.price?.toString());
+   const [itemCategory, setItemCategory] = useState(item.category);
    const isItemExistent = Boolean(item.id);
-   const handleItemUpdate = async (item) => {
+
+   const handleItemUpdate = async () => {
       if (!isItemExistent) {
-         await addMenuItem(item.name, item.description, item.price);
+         await addMenuItem(itemName, itemDescription, itemPrice, itemCategory);
       } else {
-         await updateMenuItem(item.id, item.name, item.description, item.price);
+         await updateMenuItem(
+            item.id,
+            itemName,
+            itemDescription,
+            itemPrice,
+            itemCategory,
+         );
       }
    };
+
    const handleItemDelete = async (item_id) => {
       await deleteMenuItem(item_id);
    };
+
    return (
       <SafeAreaView style={styles.container}>
-         <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigator.goBack()}>
-               <Image
-                  source={require("../../assets/back-button.jpg")}
-                  resizeMode="contain"
-                  style={styles.backButton}
-               />
-            </TouchableOpacity>
-            <Image
-               source={require("../../assets/logo-long-text.png")}
-               resizeMode="contain"
-               style={styles.logoLemon}
-            />
-         </View>
+         <PageHeader navigator={navigator} heading={""} />
 
-         <Image
-            style={{
-               resizeMode: "stretch",
-               backgroundColor: "gray",
-               width: "100%",
-               height: "30%",
-               borderBottomColor: "black",
-               borderBottomWidth: 2,
-            }}
-            source={{
-               uri: item.image_url,
-            }}
-         />
-         <View style={styles.infoBox}>
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-               style={styles.input}
-               value={itemName}
-               onChangeText={setItemName}
-            />
-            <Text style={styles.label}>Description</Text>
-            <TextInput
-               style={styles.input}
-               value={itemDescription}
-               onChangeText={setItemDescription}
-            />
-            <Text style={styles.label}>Price</Text>
-            <TextInput
-               keyboardType="numeric"
-               style={styles.input}
-               value={itemPrice}
-               onChangeText={setItemPrice}
-            />
-         </View>
-         <View style={styles.seperator} />
+         <ScrollView style={styles.container}>
+            <View style={styles.infoBox}>
+               <Text style={styles.label}>Name</Text>
+               <TextInput
+                  style={styles.input}
+                  value={itemName}
+                  onChangeText={setItemName}
+               />
+
+               <Text style={styles.label}>Description</Text>
+               <TextInput
+                  style={styles.input}
+                  value={itemDescription}
+                  onChangeText={setItemDescription}
+               />
+
+               <Text style={styles.label}>Category</Text>
+               <TextInput
+                  style={styles.input}
+                  value={itemCategory}
+                  onChangeText={setItemCategory}
+               />
+
+               <Text style={styles.label}>Price</Text>
+               <TextInput
+                  keyboardType="numeric"
+                  style={styles.input}
+                  value={itemPrice}
+                  onChangeText={setItemPrice}
+               />
+            </View>
+            <View style={styles.seperator} />
+         </ScrollView>
+
+         <KeyboardAvoidingView behavior="padding">
+            <View>
+               <TouchableOpacity
+                  onPress={handleItemUpdate}
+                  style={styles.button}
+               >
+                  <Text style={styles.buttonText}>Save</Text>
+               </TouchableOpacity>
+            </View>
+         </KeyboardAvoidingView>
       </SafeAreaView>
    );
 };
+
 const styles = StyleSheet.create({
    container: {
       flex: 1,
@@ -149,7 +154,7 @@ const styles = StyleSheet.create({
       backgroundColor: "#F4CE14",
       borderColor: "black",
       borderWidth: 2,
-      marginBottom: 20,
+      margin: 10,
    },
    buttonText: {
       color: "black",

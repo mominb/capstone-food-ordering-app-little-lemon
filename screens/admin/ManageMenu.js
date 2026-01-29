@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import ItemSeperator from "../../components/ItemSeperator";
 import PageHeader from "../../components/PageHeader";
+import { deleteMenuItem, getMenuItems } from "../../utils/supabase";
 
 const ManageMenu = () => {
    const [menu, setMenu] = useState([]);
@@ -25,28 +26,57 @@ const ManageMenu = () => {
       load();
    });
    return (
-      <SafeAreaView>
+      <SafeAreaView style={styles.container}>
          <PageHeader heading={"Menu Management"} navigator={navigator} />
-         <TouchableOpacity onPress={() => navigator.navigate("MenuItem")}>
-            <Text>ADD ITEM</Text>
-         </TouchableOpacity>
+         <View>
+            <TouchableOpacity
+               onPress={() => navigator.navigate("MenuItem")}
+               style={styles.button}
+            >
+               <Text style={styles.buttonText}>Add Item</Text>
+            </TouchableOpacity>
+         </View>
+         <View>
+            <Text style={styles.title}>Menu</Text>
+         </View>
+         <ItemSeperator />
          <FlatList
-            keyExtractor={(item) => item.id}
             data={menu}
+            keyExtractor={(item) => item.id}
             ItemSeparatorComponent={ItemSeperator}
+            contentContainerStyle={{ paddingBottom: 24 }}
             renderItem={({ item }) => (
                <TouchableOpacity
                   onPress={() => navigator.navigate("MenuItem", { item })}
                   style={styles.itemRow}
                >
-                  <View style={styles.itemTextColumn}>
-                     <Text style={styles.itemTitle}>{item.name}</Text>
-                     <Text style={styles.itemDescription} numberOfLines={2}>
-                        {item.description}
-                     </Text>
-                     <Text style={styles.itemPrice}>${item.price}</Text>
+                  <View
+                     style={{
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                     }}
+                  >
+                     <View style={styles.itemTextColumn}>
+                        <Text style={styles.itemTitle}>{item.name}</Text>
+                        <Text style={styles.itemDescription} numberOfLines={2}>
+                           {item.description}
+                        </Text>
+                        <Text style={styles.itemPrice}>${item.price}</Text>
+                     </View>
+                     <TouchableOpacity
+                        style={{
+                           alignItems: "center",
+                           marginTop: 10,
+                           borderWidth: 1,
+                           borderColor: "red",
+                           padding: 10,
+                           borderRadius: 10,
+                        }}
+                        onPress={() => deleteMenuItem(item.id)}
+                     >
+                        <Text style={{ color: "red" }}>DELETE</Text>
+                     </TouchableOpacity>
                   </View>
-
                   <Image
                      style={styles.itemImage}
                      source={{
@@ -60,6 +90,9 @@ const ManageMenu = () => {
    );
 };
 const styles = StyleSheet.create({
+   container: {
+      flex: 1,
+   },
    itemRow: {
       flexDirection: "row",
       padding: 15,
@@ -82,10 +115,31 @@ const styles = StyleSheet.create({
    },
    itemImage: {
       resizeMode: "fill",
-      width: 100,
-      height: 100,
+      width: "30%",
+      height: "100%",
       backgroundColor: "gray",
       borderRadius: 10,
+   },
+   button: {
+      alignSelf: "center",
+      width: "90%",
+      paddingVertical: 12,
+      paddingHorizontal: 28,
+      borderRadius: 8,
+      backgroundColor: "#F4CE14",
+      borderColor: "black",
+      borderWidth: 2,
+      marginVertical: 15,
+   },
+   buttonText: {
+      fontSize: 16,
+      fontWeight: "bold",
+      textAlign: "center",
+   },
+   title: {
+      fontWeight: "bold",
+      fontSize: 20,
+      padding: 10,
    },
 });
 export default ManageMenu;
