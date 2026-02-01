@@ -251,11 +251,6 @@ const styles = StyleSheet.create({
       marginLeft: 20,
       marginTop: 5,
    },
-   filtersDivider: {
-      height: 0.5,
-      width: "95%",
-      backgroundColor: "black",
-   },
 
    itemRow: {
       flexDirection: "row",

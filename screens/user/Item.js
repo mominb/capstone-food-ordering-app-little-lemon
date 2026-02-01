@@ -143,15 +143,6 @@ const styles = StyleSheet.create({
       height: 0.5,
       backgroundColor: "black",
    },
-   addOnBox: {
-      width: "100%",
-      padding: 20,
-   },
-   heading: {
-      fontWeight: "bold",
-      fontSize: 20,
-   },
-   subheading: {},
    button: {
       alignSelf: "center",
       width: "90%",

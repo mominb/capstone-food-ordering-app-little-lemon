@@ -130,11 +130,6 @@ const styles = StyleSheet.create({
       backgroundColor: "#495E57",
       padding: 20,
    },
-   header: {
-      alignItems: "center",
-      padding: 20,
-      backgroundColor: "white",
-   },
    logo: {
       width: 200,
       height: 150,
@@ -188,10 +183,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: "500",
       textAlign: "center",
-   },
-   otpButton: {
-      alignSelf: "center",
-      marginBottom: 10,
    },
 });
 

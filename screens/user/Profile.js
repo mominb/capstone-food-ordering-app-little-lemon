@@ -184,30 +184,10 @@ const styles = StyleSheet.create({
    content: {
       backgroundColor: "white",
    },
-   headerText: {
-      alignSelf: "center",
-      marginLeft: 10,
-      fontSize: 24,
-      fontWeight: "bold",
-   },
    profileImage: {
       height: 100,
       width: 100,
       margin: 20,
-   },
-   header: {
-      flexDirection: "row",
-      justifyContent: "flex-start",
-      backgroundColor: "white",
-      borderColor: "#000",
-      borderWidth: 1,
-      padding: 20,
-   },
-
-   backButton: {
-      alignSelf: "flex-start",
-      width: 48,
-      height: 48,
    },
    logoutButtonText: {
       color: "red",

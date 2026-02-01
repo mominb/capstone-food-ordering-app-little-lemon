@@ -120,53 +120,14 @@ const styles = StyleSheet.create({
    container: {
       flex: 1,
    },
-   header: {
-      justifyContent: "flex-start",
-      backgroundColor: "white",
-      borderWidth: 1,
-      borderColor: "black",
-      flexDirection: "row",
-      padding: 20,
-   },
-
-   logoLemon: {
-      alignSelf: "center",
-      marginLeft: 25,
-      width: 200,
-      height: 40,
-   },
-   backButton: {
-      alignSelf: "flex-start",
-      width: 48,
-      height: 48,
-   },
    infoBox: {
       width: "100%",
       padding: 20,
-   },
-   itemName: {
-      fontWeight: "bold",
-      fontSize: 20,
-      marginBottom: 5,
-   },
-   itemDescription: {},
-   itemPrice: {
-      marginTop: 30,
-      fontWeight: "bold",
-      fontSize: 20,
    },
    seperator: {
       width: "100%",
       height: 0.5,
       backgroundColor: "black",
-   },
-   addOnBox: {
-      width: "100%",
-      padding: 20,
-   },
-   heading: {
-      fontWeight: "bold",
-      fontSize: 20,
    },
 
    button: {
@@ -185,24 +146,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: "bold",
       textAlign: "center",
-   },
-   counterContainer: {
-      height: "50%",
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "center",
-   },
-   CounterButton: {
-      backgroundColor: "grey",
-      width: 40,
-      height: 40,
-      alignItems: "center",
-      borderRadius: 20,
-      margin: 15,
-   },
-   counterText: {
-      color: "white",
-      fontSize: 30,
    },
    input: {
       height: 48,

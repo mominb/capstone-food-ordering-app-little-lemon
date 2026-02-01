@@ -136,39 +136,6 @@ const styles = StyleSheet.create({
       marginBottom: 10,
       alignSelf: "center",
    },
-   orderDetailsContainer: {
-      padding: 20,
-      margin: 20,
-      borderColor: "black",
-      borderWidth: 2,
-      borderRadius: 10,
-   },
-   itemContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-   },
-   itemInfoContainer: {
-      flexDirection: "row",
-   },
-   itemText: {
-      fontWeight: "600",
-      marginVertical: 8,
-      marginHorizontal: 6,
-   },
-   totalAmountText: {
-      fontWeight: "bold",
-      fontSize: 17,
-      margin: 10,
-   },
-   totalAmountContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-   },
-   DetailsContainer: {
-      flexDirection: "column",
-      justifyContent: "space-between",
-      margin: 20,
-   },
    button: {
       alignSelf: "center",
       width: "90%",

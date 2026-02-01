@@ -205,26 +205,6 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: "#fff",
    },
-   header: {
-      justifyContent: "flex-start",
-      backgroundColor: "white",
-      borderWidth: 1,
-      borderColor: "black",
-      flexDirection: "row",
-      padding: 20,
-   },
-
-   backButton: {
-      alignSelf: "flex-start",
-      width: 48,
-      height: 48,
-   },
-   heading: {
-      fontWeight: "bold",
-      fontSize: 25,
-      marginHorizontal: 20,
-      marginVertical: 10,
-   },
    listContainer: {
       paddingHorizontal: 20,
       paddingBottom: 20,
