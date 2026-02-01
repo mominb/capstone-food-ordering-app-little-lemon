@@ -8,6 +8,7 @@ import {
    TouchableOpacity,
    View,
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
@@ -22,23 +23,58 @@ const Cart = ({
    const navigator = useNavigation();
    const [cartItems, setCartItems] = useState([]);
    const [totalAmount, setTotalAmount] = useState(0);
+   const [isLoading, setIsLoading] = useState(false);
 
    const load = async () => {
-      const items = await getCartItems();
-      setCartItems(items);
-      const cost = await getTotalCartCost();
-      if (cost) {
-         setTotalAmount(cost.toFixed(2));
-      } else {
-         setTotalAmount(0);
+      setIsLoading(true);
+      try {
+         const items = await getCartItems();
+         setCartItems(items);
+         const cost = await getTotalCartCost();
+         if (cost) {
+            setTotalAmount(cost.toFixed(2));
+         } else {
+            setTotalAmount(0);
+         }
+      } catch (err) {
+         console.log(err);
+         Toast.show({ type: "error", text1: "Failed to load cart" });
+      } finally {
+         setIsLoading(false);
       }
    };
 
    const increaseAmount = async (item_id) => {
-      await changeItemQtyInCart(item_id, "increase");
+      setIsLoading(true);
+      try {
+         const res = await changeItemQtyInCart(item_id, "increase");
+         if (res?.error)
+            Toast.show({
+               type: "error",
+               text1: res.message || "Update failed",
+            });
+      } catch (err) {
+         console.log(err);
+         Toast.show({ type: "error", text1: "Update failed" });
+      } finally {
+         await load();
+      }
    };
    const decreaseAmount = async (item_id) => {
-      await changeItemQtyInCart(item_id, "decrease");
+      setIsLoading(true);
+      try {
+         const res = await changeItemQtyInCart(item_id, "decrease");
+         if (res?.error)
+            Toast.show({
+               type: "error",
+               text1: res.message || "Update failed",
+            });
+      } catch (err) {
+         console.log(err);
+         Toast.show({ type: "error", text1: "Update failed" });
+      } finally {
+         await load();
+      }
    };
    useFocusEffect(() => {
       load();
@@ -70,6 +106,11 @@ const Cart = ({
    };
    return (
       <SafeAreaView style={styles.container}>
+         <Spinner
+            visible={isLoading}
+            textContent="Loading..."
+            textStyle={{ color: "#fff" }}
+         />
          <PageHeader navigator={navigator} heading={"Cart"}></PageHeader>
 
          <FlatList
@@ -114,12 +155,24 @@ const Cart = ({
                      </View>
                      <TouchableOpacity
                         onPress={async () => {
-                           const response = await deleteCartItem(item.item_id);
-                           Toast.show({
-                              type: response.type,
-                              text1: response.message,
-                           });
-                           load();
+                           setIsLoading(true);
+                           try {
+                              const response = await deleteCartItem(
+                                 item.item_id,
+                              );
+                              Toast.show({
+                                 type: response.type,
+                                 text1: response.message,
+                              });
+                           } catch (err) {
+                              console.log(err);
+                              Toast.show({
+                                 type: "error",
+                                 text1: "Delete failed",
+                              });
+                           } finally {
+                              await load();
+                           }
                         }}
                         style={styles.deleteButton}
                      >

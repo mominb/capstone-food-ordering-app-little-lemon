@@ -16,16 +16,13 @@ export const supabase = createClient(
 );
 
 export async function sendEmailOTP(email) {
-   const { error } = await supabase.auth.signInWithOtp({
-      email,
-   });
+   const { error } = await supabase.auth.signInWithOtp({ email });
 
    if (error) {
       console.log(error.message);
       return "error";
-   } else {
-      return "success";
    }
+   return "success";
 }
 
 export async function verifyEmailOTP(email, token) {
@@ -44,13 +41,12 @@ export async function verifyEmailOTP(email, token) {
 }
 
 export async function updateUserData(updates) {
-   const { data, error } = await supabase.auth.updateUser({
-      data: updates,
-   });
+   const { data, error } = await supabase.auth.updateUser({ data: updates });
    if (error) {
       console.log("error updating user data in supabase: ", error);
+      return { error };
    }
-   return data.user;
+   return { user: data.user, error: null };
 }
 
 export async function getUserData() {
@@ -58,10 +54,10 @@ export async function getUserData() {
 
    if (error) {
       console.log("error retrieving user data from supabase: ", error);
-      return;
+      return { error };
    }
 
-   return data;
+   return { data, error: null };
 }
 
 export async function placeOrder(
@@ -81,19 +77,23 @@ export async function placeOrder(
          payment_mode: paymentMethod,
          delivery_mode: deliveryMethod,
          total_price: total_price,
-         user_data: user.user.user_metadata,
+         user_data: user.data?.user?.user_metadata,
       },
    ]);
    if (error) {
       console.log("error placing order: ", error);
+      return { error };
    }
+   return { error: null };
 }
 
 export async function getUsersOrders() {
-   const { data: userData } = await supabase.auth.getUser();
-
+   const { data: userData, error: userErr } = await supabase.auth.getUser();
+   if (userErr) {
+      console.log("error getting user: ", userErr);
+      return [];
+   }
    const userId = userData?.user?.id;
-
    const { data, error } = await supabase
       .from("orders")
       .select("*")
@@ -115,19 +115,24 @@ export async function getAllOrders() {
 }
 
 export async function getUserRole() {
-   const { data: userData } = await supabase.auth.getUser();
+   const { data: userData, error: userErr } = await supabase.auth.getUser();
+   if (userErr) {
+      console.log("error getting user: ", userErr);
+      return [];
+   }
    const userId = userData?.user?.id;
    const { data, error } = await supabase
       .from("user_roles")
       .select("*")
       .eq("user_id", userId);
    if (error) {
-      console.log("error retrieving user orders: ", error);
+      console.log("error retrieving user roles: ", error);
       return [];
    }
 
    return data;
 }
+
 export async function updateOrderStatus(status, id) {
    const { error } = await supabase
       .from("orders")
@@ -135,13 +140,16 @@ export async function updateOrderStatus(status, id) {
       .eq("id", id);
    if (error) {
       console.log("error updating order status: ", error);
+      return { error };
    }
+   return { error: null };
 }
 
 export async function getMenuItems() {
    const { data, error } = await supabase.from("menu").select("*");
    if (error) {
       console.log("error fetching menu items: ", error);
+      return [];
    }
    return data;
 }
@@ -153,8 +161,10 @@ export async function updateMenuItem(id, name, description, price, category) {
       .eq("id", id);
    if (error) {
       console.log("error updating menu item: ", error);
+      return { error };
    } else {
       console.log("menu updated");
+      return { error: null };
    }
 }
 
@@ -164,15 +174,20 @@ export async function addMenuItem(name, description, price, category) {
       .insert({ name, description, price, category });
    if (error) {
       console.log("error adding menu item: ", error);
+      return { error };
    } else {
       console.log("menu updated");
+      return { error: null };
    }
 }
+
 export async function deleteMenuItem(id) {
    const { error } = await supabase.from("menu").delete().eq("id", id);
    if (error) {
       console.log("error deleting menu item: ", error);
+      return { error };
    } else {
       console.log("menu updated");
+      return { error: null };
    }
 }

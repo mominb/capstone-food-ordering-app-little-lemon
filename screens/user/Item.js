@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { saveItemToCart } from "../../utils/database";
@@ -9,6 +10,7 @@ const Item = ({ route }) => {
    const navigator = useNavigation();
    const item = route.params.item;
    const [amount, setAmount] = useState(1);
+
    const increaseAmount = () => {
       setAmount((prev) => prev + 1);
    };
@@ -74,12 +76,20 @@ const Item = ({ route }) => {
             </View>
             <TouchableOpacity
                onPress={async () => {
-                  const response = await saveItemToCart(item.id, amount);
-                  Toast.show({
-                     type: response.type,
-                     text1: response.message,
-                  });
-                  navigator.navigate("Home");
+                  setIsLoading(true);
+                  try {
+                     const response = await saveItemToCart(item.id, amount);
+                     Toast.show({
+                        type: response.type,
+                        text1: response.message,
+                     });
+                     navigator.navigate("Home");
+                  } catch (err) {
+                     console.log(err);
+                     Toast.show({ type: "error", text1: "Add to cart failed" });
+                  } finally {
+                     setIsLoading(false);
+                  }
                }}
                style={styles.button}
             >

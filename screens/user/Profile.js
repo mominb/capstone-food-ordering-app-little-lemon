@@ -30,12 +30,13 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
    useEffect(() => {
       const loadUserData = async () => {
          setIsLoading(true);
-         const data = await getUserData();
+         const userData = await getUserData();
          setIsLoading(false);
-         if (data.user) {
-            setName(data.user.user_metadata.displayName ?? "");
-            setEmail(data.user.user_metadata.email ?? "");
-            setPhone(data.user.user_metadata.phone ?? "");
+         const user = userData.data?.user;
+         if (user) {
+            setName(user.user_metadata?.displayName ?? "");
+            setEmail(user.user_metadata?.email ?? "");
+            setPhone(user.user_metadata?.phone ?? "");
          }
       };
       loadUserData();

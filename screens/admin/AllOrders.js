@@ -7,13 +7,16 @@ import {
    TouchableOpacity,
    View,
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
 import { getAllOrders } from "../../utils/supabase";
 
 const AllOrders = () => {
    const navigator = useNavigation();
    const [orders, setOrders] = useState();
+   const [isLoading, setIsLoading] = useState(false);
 
    const formattedDate = (date) => {
       const formatted = new Date(date).toLocaleString("en-GB", {
@@ -29,8 +32,16 @@ const AllOrders = () => {
    useFocusEffect(
       useCallback(() => {
          const getOrders = async () => {
-            const orders = await getAllOrders();
-            setOrders(orders.reverse());
+            setIsLoading(true);
+            try {
+               const orders = await getAllOrders();
+               setOrders(orders.reverse());
+            } catch (error) {
+               console.log(error);
+               Toast.show({ type: "error", text1: "Failed to load orders" });
+            } finally {
+               setIsLoading(false);
+            }
          };
          getOrders();
       }, []),
@@ -38,6 +49,11 @@ const AllOrders = () => {
 
    return (
       <SafeAreaView>
+         <Spinner
+            visible={isLoading}
+            textContent="Loading..."
+            textStyle={{ color: "#fff" }}
+         />
          <PageHeader navigator={navigator} heading={"Orders"} />
          <View>
             <FlatList

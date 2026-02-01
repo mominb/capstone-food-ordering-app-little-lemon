@@ -8,7 +8,9 @@ import {
    View,
 } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import OrderItemList from "../../components/OrderItemList";
 import PageHeader from "../../components/PageHeader";
 import { updateOrderStatus } from "../../utils/supabase";
@@ -25,6 +27,7 @@ const ManageOrder = ({ route }) => {
    const { item: order } = route.params;
    const orderItems = order.order_items || [];
    const [statusUpdate, setStatusUpdate] = useState(order.order_status);
+   const [isLoading, setIsLoading] = useState(false);
    const formattedDate = (date) => {
       if (!date) return "";
       return new Date(date).toLocaleString("en-GB", {
@@ -37,8 +40,31 @@ const ManageOrder = ({ route }) => {
       });
    };
 
+   const handleUpdate = async () => {
+      setIsLoading(true);
+      try {
+         const res = await updateOrderStatus(statusUpdate, order.id);
+         if (res?.error) {
+            Toast.show({ type: "error", text1: "Update failed" });
+         } else {
+            Toast.show({ type: "success", text1: "Order updated" });
+            navigator.goBack();
+         }
+      } catch (error) {
+         console.log(error);
+         Toast.show({ type: "error", text1: "Update failed" });
+      } finally {
+         setIsLoading(false);
+      }
+   };
+
    return (
       <SafeAreaView style={styles.container}>
+         <Spinner
+            visible={isLoading}
+            textContent="Loading..."
+            textStyle={{ color: "#fff" }}
+         />
          <PageHeader navigator={navigator} heading={"Order"} />
          <View style={styles.dropdownContainer}>
             <Text style={[styles.subHeading, { alignSelf: "flex-start" }]}>
@@ -82,13 +108,7 @@ const ManageOrder = ({ route }) => {
             </View>
          </ScrollView>
 
-         <TouchableOpacity
-            onPress={() => {
-               updateOrderStatus(statusUpdate, order.id);
-               navigator.goBack();
-            }}
-            style={styles.button}
-         >
+         <TouchableOpacity onPress={handleUpdate} style={styles.button}>
             <Text style={styles.buttonText}>Update Order Status</Text>
          </TouchableOpacity>
       </SafeAreaView>
@@ -97,7 +117,6 @@ const ManageOrder = ({ route }) => {
 const styles = StyleSheet.create({
    container: {
       flex: 1,
-      backgroundColor: "#fff",
    },
    orderInfoContainer: {
       margin: 16,

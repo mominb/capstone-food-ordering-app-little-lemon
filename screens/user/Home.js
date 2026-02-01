@@ -10,13 +10,16 @@ import {
    TouchableOpacity,
    View,
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import Filter from "../../components/Filter";
 import ItemSeperator from "../../components/ItemSeperator";
 
 const Home = ({ menuCategories, database }) => {
    const [query, setQuery] = useState("");
    const [data, setData] = useState([]);
+   const [isLoading, setIsLoading] = useState(false);
    const [activeCategories, setActiveCategories] = useState([]);
    const [numOfCartItems, setNumOfCartItems] = useState(0);
    const navigation = useNavigation();
@@ -38,11 +41,19 @@ const Home = ({ menuCategories, database }) => {
 
    useEffect(() => {
       const loadData = async () => {
-         const filteredItems = await database.filterByQueryAndCategories(
-            query,
-            activeCategories,
-         );
-         setData(filteredItems);
+         setIsLoading(true);
+         try {
+            const filteredItems = await database.filterByQueryAndCategories(
+               query,
+               activeCategories,
+            );
+            setData(filteredItems);
+         } catch (err) {
+            console.log(err);
+            Toast.show({ type: "error", text1: "Failed to load items" });
+         } finally {
+            setIsLoading(false);
+         }
       };
       loadData();
    }, [activeCategories, query, database]);
@@ -57,6 +68,11 @@ const Home = ({ menuCategories, database }) => {
 
    return (
       <SafeAreaView style={styles.screen}>
+         <Spinner
+            visible={isLoading}
+            textContent="Loading..."
+            textStyle={{ color: "#fff" }}
+         />
          <View style={styles.header}>
             <Image
                source={require("../../assets/logo-long-text.png")}

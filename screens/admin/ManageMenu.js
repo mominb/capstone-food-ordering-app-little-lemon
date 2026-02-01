@@ -8,25 +8,59 @@ import {
    TouchableOpacity,
    View,
 } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import ItemSeperator from "../../components/ItemSeperator";
 import PageHeader from "../../components/PageHeader";
 import { deleteMenuItem, getMenuItems } from "../../utils/supabase";
 
 const ManageMenu = () => {
    const [menu, setMenu] = useState([]);
+   const [isLoading, setIsLoading] = useState(true);
 
    const navigator = useNavigation();
 
    useFocusEffect(() => {
       const load = async () => {
-         const menu = await getMenuItems();
-         setMenu(menu);
+         try {
+            const menu = await getMenuItems();
+            setMenu(menu);
+         } catch (error) {
+            console.log(error);
+            Toast.show({ type: "error", text1: "Failed to load menu" });
+         } finally {
+            setIsLoading(false);
+         }
       };
       load();
    });
+
+   const handleDelete = async (id) => {
+      setIsLoading(true);
+      try {
+         const res = await deleteMenuItem(id);
+         if (res?.error) {
+            Toast.show({ type: "error", text1: "Delete failed" });
+         } else {
+            Toast.show({ type: "success", text1: "Item deleted" });
+            const menu = await getMenuItems();
+            setMenu(menu);
+         }
+      } catch (error) {
+         console.log(error);
+         Toast.show({ type: "error", text1: "Delete failed" });
+      } finally {
+         setIsLoading(false);
+      }
+   };
    return (
       <SafeAreaView style={styles.container}>
+         <Spinner
+            visible={isLoading}
+            textContent="Loading..."
+            textStyle={{ color: "#fff" }}
+         />
          <PageHeader heading={"Menu Management"} navigator={navigator} />
          <View>
             <TouchableOpacity
@@ -72,7 +106,7 @@ const ManageMenu = () => {
                            padding: 10,
                            borderRadius: 10,
                         }}
-                        onPress={() => deleteMenuItem(item.id)}
+                        onPress={() => handleDelete(item.id)}
                      >
                         <Text style={{ color: "red" }}>DELETE</Text>
                      </TouchableOpacity>

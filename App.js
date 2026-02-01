@@ -31,12 +31,12 @@ export default function App() {
    const [userMetaDataExists, setUserMetaDataExists] = useState(false);
    const getUserInformation = useCallback(async () => {
       const userData = await getUserData();
+      const user = userData.data?.user;
       setUserMetaDataExists(
-         userData.user.user_metadata.displayName &&
-            userData.user.user_metadata.phone,
+         user?.user_metadata?.displayName && user?.user_metadata?.phone,
       );
       const userRole = await getUserRole();
-      setUserRole(userRole[0].role);
+      setUserRole(userRole?.[0]?.role);
    }, []);
    useEffect(() => {
       const load = async () => {
