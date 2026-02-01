@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useState } from "react";
 import Spinner from "react-native-loading-spinner-overlay";
 import Toast from "react-native-toast-message";
+import Splash from "./components/Splash";
 import AdminHome from "./screens/admin/AdminHome";
 import AllOrders from "./screens/admin/AllOrders";
 import ManageMenu from "./screens/admin/ManageMenu";
@@ -42,25 +43,30 @@ export default function App() {
       const load = async () => {
          const data = await bootstrap();
          setMenuCategories(data[0]);
+
+         await getUserInformation();
+
+         const { data: sessionData } = await supabase.auth.getSession();
+         setSession(sessionData.session);
+
+         SetLoading(false);
       };
 
       load();
-      getUserInformation();
-
-      supabase.auth.getSession().then(({ data }) => {
-         setSession(data.session);
-      });
 
       const { data: listener } = supabase.auth.onAuthStateChange(
          (_event, session) => {
             setSession(session);
          },
       );
-      SetLoading(false);
       return () => {
          listener.subscription.unsubscribe();
       };
    }, [getUserInformation]);
+
+   if (loading) {
+      return <Splash />;
+   }
 
    return (
       <NavigationContainer>
