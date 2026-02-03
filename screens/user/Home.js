@@ -116,17 +116,19 @@ const Home = ({ menuCategories, database }) => {
          </View>
 
          <View>
-            <TouchableOpacity
-               style={[
-                  styles.cartButton,
-                  { width: "90%", alignSelf: "center", marginVertical: 10 },
-               ]}
-               onPress={() => navigation.navigate("Orders")}
-            >
-               <Text style={[styles.itemTitle, { marginHorizontal: 10 }]}>
-                  View my orders
-               </Text>
-            </TouchableOpacity>
+            <View style={{ backgroundColor: "#495E57" }}>
+               <TouchableOpacity
+                  style={[
+                     styles.cartButton,
+                     { width: "90%", alignSelf: "center", marginBottom: 10 },
+                  ]}
+                  onPress={() => navigation.navigate("Orders")}
+               >
+                  <Text style={[styles.itemTitle, { marginHorizontal: 10 }]}>
+                     View orders
+                  </Text>
+               </TouchableOpacity>
+            </View>
             <ItemSeperator />
 
             <ScrollView

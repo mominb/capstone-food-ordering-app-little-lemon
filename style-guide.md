@@ -7,18 +7,6 @@ Tone: warm, fresh, friendly, modern
 
 ---
 
-## Logo
-
-![Little Lemon Logo](https://raw.githubusercontent.com/meta-frontend/little-lemon-assets/main/logo.png)
-
-**Logo characteristics**
-- Circular badge
-- Lemon illustration
-- Flat design
-- Green and yellow only
-- No gradients or shadows
-
----
 
 ## Color Palette
 
@@ -50,11 +38,6 @@ Tone: warm, fresh, friendly, modern
 ### Font Strategy
 System fonts only
 
-| Platform | Font |
-|--------|------|
-| iOS | San Francisco |
-| Android | Roboto |
-
 **Text rules**
 - Headlines: bold or semibold
 - Body: regular weight
@@ -63,14 +46,6 @@ System fonts only
 
 ---
 
-## Imagery and Icons
-
-- Flat icons only
-- Minimal detail
-- No gradients
-- Warm, natural food imagery if used
-
----
 
 ## Design Principles
 

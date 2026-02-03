@@ -12,6 +12,7 @@ import {
    View,
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
+import PhoneInput from "react-native-phone-number-input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
@@ -23,21 +24,24 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
    const [phone, setPhone] = useState("");
    const [isNameFocused, setIsNameFocused] = useState(false);
    const [isEmailFocused, setIsEmailFocused] = useState(false);
-   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
+   const [phoneInputKey, setPhoneInputKey] = useState(0);
+
    const [isLoading, setIsLoading] = useState(false);
+
    const navigator = useNavigation();
 
    useEffect(() => {
       const loadUserData = async () => {
          setIsLoading(true);
          const userData = await getUserData();
-         setIsLoading(false);
          const user = userData.data?.user;
          if (user) {
             setName(user.user_metadata?.displayName ?? "");
             setEmail(user.user_metadata?.email ?? "");
             setPhone(user.user_metadata?.phone ?? "");
+            setPhoneInputKey((prev) => prev + 1);
          }
+         setIsLoading(false);
       };
       loadUserData();
    }, []);
@@ -131,16 +135,14 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
                      onChangeText={setEmail}
                   />
                   <Text style={styles.label}>Phone</Text>
-                  <TextInput
-                     keyboardType="phone-pad"
-                     onFocus={() => setIsPhoneFocused(true)}
-                     onBlur={() => setIsPhoneFocused(false)}
-                     style={[
-                        styles.input,
-                        isPhoneFocused && styles.inputFocused,
-                     ]}
-                     value={phone}
+                  <PhoneInput
+                     key={`phone-input-${phoneInputKey}`}
+                     defaultCode="PK"
+                     defaultValue={phone}
                      onChangeText={setPhone}
+                     containerStyle={[styles.phoneContainer]}
+                     textContainerStyle={styles.phoneTextContainer}
+                     textInputStyle={styles.phoneTextInput}
                   />
                </View>
             </ScrollView>
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
       textAlign: "center",
    },
    input: {
-      height: 48,
+      height: 54,
       borderWidth: 2,
       borderColor: "#495E57",
       borderRadius: 8,
@@ -205,13 +207,27 @@ const styles = StyleSheet.create({
       backgroundColor: "#EDEFEE",
    },
    inputFocused: {
-      height: 48,
+      height: 54,
       borderWidth: 2,
       borderColor: "#F4CE14",
       borderRadius: 8,
       paddingHorizontal: 12,
       marginBottom: 20,
+   },
+   phoneContainer: {
+      width: "100%",
+      height: 54,
+      borderColor: "black",
+      borderWidth: 2,
+      borderRadius: 8,
+   },
+   phoneTextContainer: {
+      borderTopRightRadius: 8,
+      borderBottomRightRadius: 8,
       backgroundColor: "#EDEFEE",
+   },
+   phoneTextInput: {
+      height: 50,
    },
    label: {
       fontSize: 14,

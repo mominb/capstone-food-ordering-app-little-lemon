@@ -7,6 +7,7 @@ export async function bootstrap() {
    // const isTablePopulated = await database.isMenuPopulated();
    // if (!isTablePopulated) {
    try {
+      await database.deleteAllMenuRows();
       const data = await getMenuItems();
       await database.saveMenuItems(data);
    } catch (err) {

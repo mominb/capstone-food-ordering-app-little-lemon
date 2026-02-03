@@ -228,3 +228,8 @@ export async function deleteAllCartRows() {
    const database = await initDB();
    await database.execAsync("DELETE FROM cartitems;");
 }
+
+export async function deleteAllMenuRows() {
+   const database = await initDB();
+   await database.execAsync("DELETE FROM menuitems");
+}

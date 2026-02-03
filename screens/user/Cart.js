@@ -23,10 +23,9 @@ const Cart = ({
    const navigator = useNavigation();
    const [cartItems, setCartItems] = useState([]);
    const [totalAmount, setTotalAmount] = useState(0);
-   const [isLoading, setIsLoading] = useState(false);
+   const [isLoading, setIsLoading] = useState(true);
 
    const load = async () => {
-      setIsLoading(true);
       try {
          const items = await getCartItems();
          setCartItems(items);

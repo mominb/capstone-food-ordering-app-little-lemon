@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { saveItemToCart } from "../../utils/database";
@@ -10,6 +11,7 @@ const Item = ({ route }) => {
    const navigator = useNavigation();
    const item = route.params.item;
    const [amount, setAmount] = useState(1);
+   const [isLoading, setIsLoading] = useState(false);
 
    const increaseAmount = () => {
       setAmount((prev) => prev + 1);
@@ -22,6 +24,11 @@ const Item = ({ route }) => {
 
    return (
       <SafeAreaView style={styles.container}>
+         <Spinner
+            visible={isLoading}
+            textContent="Loading..."
+            textStyle={{ color: "#fff" }}
+         />
          <View style={styles.header}>
             <TouchableOpacity onPress={() => navigator.goBack()}>
                <Image
