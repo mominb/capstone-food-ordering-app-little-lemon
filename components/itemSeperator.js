@@ -1,8 +1,9 @@
 import { View } from "react-native";
+import { colors } from "../styles/theme";
 
 const itemSeperator = () => {
    return (
-      <View style={{ width: "100%", backgroundColor: "black", height: 1 }} />
+      <View style={{ width: "100%", backgroundColor: colors.black, height: 1 }} />
    );
 };
 

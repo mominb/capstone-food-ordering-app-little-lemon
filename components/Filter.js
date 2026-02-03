@@ -1,43 +1,46 @@
-import { TouchableOpacity, Text, StyleSheet } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { colors, typography } from "../styles/theme";
 
-
-
-const Filter = ({categories, onClick, activeCat}) => {
-    const isActive = (category) => {
+const Filter = ({ categories, onClick, activeCat }) => {
+   const isActive = (category) => {
       if (activeCat.includes(category)) {
-        return true
+         return true;
       } else {
-        return false
+         return false;
       }
-    }
-    return (
-        categories.map((category) => (
-             <TouchableOpacity style={isActive(category) ? styles.filterButtonActive : styles.filterButton} onPress={() => onClick(category)} key={category}>
-                 <Text style={styles.filterButtonText}>{category}</Text>
-             </TouchableOpacity>
-        ))
-    )
-}
+   };
+   return categories.map((category) => (
+      <TouchableOpacity
+         style={
+            isActive(category) ? styles.filterButtonActive : styles.filterButton
+         }
+         onPress={() => onClick(category)}
+         key={category}
+      >
+         <Text style={styles.filterButtonText}>{category}</Text>
+      </TouchableOpacity>
+   ));
+};
 
 const styles = StyleSheet.create({
-    filterButton: {
-    padding: 10,
-    margin: 10,
-    borderRadius: 15,
-    backgroundColor: 'lightgray',
-  },
+   filterButton: {
+      padding: 10,
+      margin: 10,
+      borderRadius: 15,
+      backgroundColor: colors.tertiary,
+   },
 
-  filterButtonActive: {
-    padding: 10,
-    margin: 10,
-    borderRadius: 15,
-    backgroundColor: '#F4CE14',
-  },
+   filterButtonActive: {
+      padding: 10,
+      margin: 10,
+      borderRadius: 15,
+      backgroundColor: colors.secondary,
+   },
 
-  filterButtonText: {
-    color: '#495E57',
-    fontWeight: 'bold',
-  }
-})
+   filterButtonText: {
+      ...typography.bodyBold,
+      color: colors.black,
+   },
+});
 
 export default Filter;

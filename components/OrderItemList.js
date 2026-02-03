@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
+import { colors, typography } from "../styles/theme";
 import ItemSeperator from "./ItemSeperator";
 
 const OrderItemList = ({ orderItems, order }) => {
@@ -12,6 +13,11 @@ const OrderItemList = ({ orderItems, order }) => {
                   <View style={styles.itemInfoContainer}>
                      <Text style={styles.itemText}>{item.quantity}x</Text>
                      <Text style={styles.itemText}>{item.name}</Text>
+                     {item.price && (
+                        <Text style={styles.itemText}>
+                           ${item.price.toFixed(2)}
+                        </Text>
+                     )}
                   </View>
                </View>
                {index !== orderItems.length - 1 && <ItemSeperator />}
@@ -34,13 +40,12 @@ const styles = StyleSheet.create({
    orderDetailsContainer: {
       padding: 20,
       margin: 20,
-      borderColor: "black",
+      borderColor: colors.black,
       borderWidth: 2,
       borderRadius: 10,
    },
    subHeading: {
-      fontWeight: "bold",
-      fontSize: 16,
+      ...typography.bodyBold,
       marginBottom: 10,
    },
    itemContainer: {
@@ -51,7 +56,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
    },
    itemText: {
-      fontWeight: "600",
+      ...typography.body,
       marginVertical: 8,
       marginHorizontal: 6,
    },
@@ -60,8 +65,7 @@ const styles = StyleSheet.create({
       justifyContent: "space-between",
    },
    totalAmountText: {
-      fontWeight: "bold",
-      fontSize: 17,
+      ...typography.h3,
       margin: 10,
    },
 });

@@ -5,6 +5,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import { colors, layout, typography } from "../../styles/theme";
 import { saveItemToCart } from "../../utils/database";
 
 const Item = ({ route }) => {
@@ -23,11 +24,11 @@ const Item = ({ route }) => {
    };
 
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: colors.white }}
          />
          <View style={styles.header}>
             <TouchableOpacity onPress={() => navigator.goBack()}>
@@ -47,14 +48,14 @@ const Item = ({ route }) => {
          <Image
             style={{
                resizeMode: "stretch",
-               backgroundColor: "gray",
+               backgroundColor: colors.lightgrey,
                width: "100%",
                height: "30%",
-               borderBottomColor: "black",
+               borderBottomColor: colors.black,
                borderBottomWidth: 2,
             }}
             source={{
-               uri: `https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/refs/heads/main/images/${item.image}`,
+               uri: item.image_url,
             }}
          />
          <View style={styles.infoBox}>
@@ -71,7 +72,7 @@ const Item = ({ route }) => {
                >
                   <Text style={styles.counterText}>-</Text>
                </TouchableOpacity>
-               <Text style={[styles.counterText, { color: "black" }]}>
+               <Text style={[styles.counterText, { color: colors.black }]}>
                   {amount}
                </Text>
                <TouchableOpacity
@@ -107,14 +108,12 @@ const Item = ({ route }) => {
    );
 };
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-   },
+   container: {},
    header: {
       justifyContent: "flex-start",
-      backgroundColor: "white",
+      backgroundColor: colors.white,
       borderWidth: 1,
-      borderColor: "black",
+      borderColor: colors.black,
       flexDirection: "row",
       padding: 20,
    },
@@ -135,20 +134,20 @@ const styles = StyleSheet.create({
       padding: 20,
    },
    itemName: {
-      fontWeight: "bold",
-      fontSize: 20,
+      ...typography.h2,
       marginBottom: 5,
    },
-   itemDescription: {},
+   itemDescription: {
+      ...typography.body,
+   },
    itemPrice: {
+      ...typography.h2,
       marginTop: 30,
-      fontWeight: "bold",
-      fontSize: 20,
    },
    seperator: {
       width: "100%",
       height: 0.5,
-      backgroundColor: "black",
+      backgroundColor: colors.black,
    },
    button: {
       alignSelf: "center",
@@ -156,15 +155,14 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
+      backgroundColor: colors.secondary,
+      borderColor: colors.black,
       borderWidth: 2,
       marginBottom: 20,
    },
    buttonText: {
-      color: "black",
-      fontSize: 16,
-      fontWeight: "bold",
+      ...typography.bodyBold,
+      color: colors.black,
       textAlign: "center",
    },
    counterContainer: {
@@ -174,16 +172,16 @@ const styles = StyleSheet.create({
       justifyContent: "center",
    },
    CounterButton: {
-      backgroundColor: "grey",
-      width: 40,
-      height: 40,
+      backgroundColor: colors.lightgrey,
+      width: 35,
+      height: 35,
       alignItems: "center",
       borderRadius: 20,
       margin: 15,
    },
    counterText: {
-      color: "white",
-      fontSize: 30,
+      ...typography.h1,
+      color: colors.white,
    },
 });
 

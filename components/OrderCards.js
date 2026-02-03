@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { colors, typography } from "../styles/theme";
 
-const OrderCards = ({ orders, navigator }) => {
+const OrderCards = ({ orders, navigator, onPressRoute = "OrderInfo" }) => {
    const formattedDate = (date) => {
       const formatted = new Date(date).toLocaleString("en-GB", {
          day: "2-digit",
@@ -21,7 +22,7 @@ const OrderCards = ({ orders, navigator }) => {
          contentContainerStyle={styles.listContent}
          renderItem={({ item }) => (
             <TouchableOpacity
-               onPress={() => navigator.navigate("OrderInfo", { item })}
+               onPress={() => navigator.navigate(onPressRoute, { item })}
                style={
                   item.order_status === "completed" ||
                   item.order_status === "cancelled"
@@ -53,48 +54,46 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
    },
    orderActive: {
-      backgroundColor: "#FFFFFF",
+      backgroundColor: colors.white,
       borderRadius: 10,
       padding: 16,
       marginVertical: 8,
       marginHorizontal: 16,
-      shadowColor: "#000",
+      shadowColor: colors.black,
       shadowOpacity: 0.2,
       shadowRadius: 6,
       shadowOffset: { width: 0, height: 3 },
       elevation: 4,
       borderLeftWidth: 5,
-      borderLeftColor: "#2E7D32",
+      borderLeftColor: "green",
    },
    orderInactive: {
-      backgroundColor: "#F2F2F2",
+      backgroundColor: "lightgray",
       borderRadius: 10,
       padding: 16,
       marginVertical: 8,
       marginHorizontal: 16,
-      shadowColor: "#000",
+      shadowColor: colors.black,
       shadowOpacity: 0.05,
       shadowRadius: 4,
       shadowOffset: { width: 0, height: 2 },
       elevation: 2,
       borderLeftWidth: 5,
-      borderLeftColor: "#757575",
+      borderLeftColor: colors.black,
    },
    orderId: {
-      fontSize: 16,
-      fontWeight: "700",
+      ...typography.bodyBold,
       marginBottom: 6,
-      color: "#212121",
+      color: colors.black,
    },
    metaText: {
-      fontSize: 13,
-      color: "#616161",
+      ...typography.caption,
+      color: colors.black,
       marginBottom: 4,
    },
    statusText: {
-      fontSize: 14,
-      fontWeight: "600",
-      color: "#424242",
+      ...typography.caption,
+      color: colors.black,
       marginBottom: 6,
    },
 });

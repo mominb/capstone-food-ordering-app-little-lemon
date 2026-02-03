@@ -12,6 +12,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
+import { colors, layout, typography } from "../../styles/theme";
 
 const Cart = ({
    getCartItems,
@@ -104,11 +105,11 @@ const Cart = ({
       }
    };
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: colors.white }}
          />
          <PageHeader navigator={navigator} heading={"Cart"}></PageHeader>
 
@@ -142,7 +143,9 @@ const Cart = ({
                         >
                            <Text style={styles.counterText}>-</Text>
                         </TouchableOpacity>
-                        <Text style={[styles.counterText, { color: "black" }]}>
+                        <Text
+                           style={[styles.counterText, { color: colors.black }]}
+                        >
                            {item.amount}
                         </Text>
                         <TouchableOpacity
@@ -200,21 +203,18 @@ const Cart = ({
 };
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: "#fff",
-   },
+   container: {},
    listContainer: {
       paddingHorizontal: 20,
       paddingBottom: 20,
       marginTop: 30,
    },
    itemContainer: {
-      backgroundColor: "#f9f9f9",
+      backgroundColor: colors.tertiary,
       padding: 15,
       borderRadius: 8,
       marginBottom: 10,
-      borderColor: "black",
+      borderColor: colors.black,
       borderWidth: 1,
    },
    itemInfo: {
@@ -224,17 +224,15 @@ const styles = StyleSheet.create({
       marginBottom: 10,
    },
    itemName: {
-      fontSize: 16,
-      fontWeight: "600",
+      ...typography.body,
    },
    itemQty: {
-      fontSize: 14,
-      color: "#555",
+      ...typography.caption,
+      color: colors.black,
       marginTop: 4,
    },
    itemTotal: {
-      fontSize: 15,
-      fontWeight: "600",
+      ...typography.button,
    },
    itemActions: {
       flexDirection: "row",
@@ -245,17 +243,17 @@ const styles = StyleSheet.create({
       width: 60,
       height: 60,
       borderRadius: 6,
-      backgroundColor: "grey",
+      backgroundColor: colors.lightgrey,
    },
    deleteButton: {
       paddingVertical: 6,
       paddingHorizontal: 12,
-      backgroundColor: "#e74c3c",
+      backgroundColor: colors.red,
       borderRadius: 4,
    },
    deleteText: {
-      color: "#fff",
-      fontWeight: "600",
+      ...typography.body,
+      color: colors.white,
    },
    counterContainer: {
       flexDirection: "row",
@@ -263,7 +261,7 @@ const styles = StyleSheet.create({
       justifyContent: "center",
    },
    CounterButton: {
-      backgroundColor: "grey",
+      backgroundColor: colors.lightgrey,
       width: 20,
       height: 20,
       alignItems: "center",
@@ -271,20 +269,19 @@ const styles = StyleSheet.create({
       margin: 8,
    },
    counterText: {
-      color: "white",
-      fontSize: 15,
+      ...typography.button,
+      color: colors.white,
    },
    footer: {},
    totalAmountContainer: {
       flexDirection: "row",
       justifyContent: "space-between",
       width: "100%",
-      backgroundColor: "#F4CE14",
+      backgroundColor: colors.secondary,
       padding: 10,
    },
    totalAmountText: {
-      fontWeight: "bold",
-      fontSize: 20,
+      ...typography.h2,
    },
    checkoutButton: {
       alignSelf: "center",
@@ -292,14 +289,13 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#EDEFEE",
-      borderColor: "black",
+      backgroundColor: colors.tertiary,
+      borderColor: colors.black,
       borderWidth: 2,
       marginTop: 15,
    },
    checkoutButtonText: {
-      fontSize: 16,
-      fontWeight: "bold",
+      ...typography.bodyBold,
       textAlign: "center",
    },
 });

@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import Filter from "../../components/Filter";
 import ItemSeperator from "../../components/ItemSeperator";
+import { colors, layout, typography } from "../../styles/theme";
 
 const Home = ({ menuCategories, database }) => {
    const [query, setQuery] = useState("");
@@ -67,11 +68,11 @@ const Home = ({ menuCategories, database }) => {
    });
 
    return (
-      <SafeAreaView style={styles.screen}>
+      <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: colors.white }}
          />
          <View style={styles.header}>
             <Image
@@ -116,7 +117,7 @@ const Home = ({ menuCategories, database }) => {
          </View>
 
          <View>
-            <View style={{ backgroundColor: "#495E57" }}>
+            <View style={{ backgroundColor: colors.primary }}>
                <TouchableOpacity
                   style={[
                      styles.cartButton,
@@ -176,6 +177,7 @@ const Home = ({ menuCategories, database }) => {
 };
 
 const styles = StyleSheet.create({
+   container: {},
    screen: {
       flex: 1,
    },
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
    },
 
    searchBarSection: {
-      backgroundColor: "#495E57",
+      backgroundColor: colors.primary,
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
@@ -203,7 +205,7 @@ const styles = StyleSheet.create({
    },
    searchBar: {
       flexDirection: "row",
-      backgroundColor: "white",
+      backgroundColor: colors.white,
       width: "80%",
       height: 40,
       borderRadius: 15,
@@ -223,7 +225,7 @@ const styles = StyleSheet.create({
    },
 
    cartButton: {
-      backgroundColor: "#F4CE14",
+      backgroundColor: colors.secondary,
       borderRadius: 15,
       justifyContent: "center",
       alignItems: "center",
@@ -237,7 +239,7 @@ const styles = StyleSheet.create({
       height: 30,
    },
    cartBadge: {
-      backgroundColor: "red",
+      backgroundColor: colors.red,
       width: 20,
       height: 20,
       borderRadius: 10,
@@ -245,8 +247,8 @@ const styles = StyleSheet.create({
       justifyContent: "center",
    },
    cartBadgeText: {
-      color: "white",
-      fontWeight: "bold",
+      ...typography.caption,
+      color: colors.white,
    },
 
    filtersSection: {
@@ -263,22 +265,22 @@ const styles = StyleSheet.create({
       width: "60%",
    },
    itemTitle: {
-      fontWeight: "bold",
-      fontSize: 20,
+      ...typography.h2,
    },
    itemDescription: {
-      color: "gray",
+      ...typography.body,
+      color: colors.black,
       marginTop: 5,
       marginBottom: 5,
    },
    itemPrice: {
-      fontWeight: "bold",
+      ...typography.bodyBold,
    },
    itemImage: {
       resizeMode: "fill",
       width: 100,
       height: 100,
-      backgroundColor: "gray",
+      backgroundColor: colors.lightgrey,
       borderRadius: 10,
    },
 });

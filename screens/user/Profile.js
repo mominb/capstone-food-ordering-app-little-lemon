@@ -16,6 +16,7 @@ import PhoneInput from "react-native-phone-number-input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
+import { colors, layout, typography } from "../../styles/theme";
 import { getUserData, supabase, updateUserData } from "../../utils/supabase";
 
 const Profile = ({ refreshUserInfo, deleteUserCart }) => {
@@ -92,11 +93,11 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
       }
    };
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: colors.white }}
          />
          <PageHeader navigator={navigator} heading={"Profile"}></PageHeader>
          <KeyboardAvoidingView behavior="padding" style={styles.content}>
@@ -166,9 +167,7 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
 };
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-   },
+   container: {},
    profileImageContainer: {
       height: "25%",
       alignSelf: "center",
@@ -179,12 +178,12 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#EDEFEE",
-      borderColor: "black",
+      backgroundColor: colors.red,
+      borderColor: colors.red,
       borderWidth: 2,
    },
    content: {
-      backgroundColor: "white",
+      backgroundColor: colors.white,
    },
    profileImage: {
       height: 100,
@@ -192,24 +191,23 @@ const styles = StyleSheet.create({
       margin: 20,
    },
    logoutButtonText: {
-      color: "red",
-      fontSize: 16,
-      fontWeight: "bold",
+      ...typography.bodyBold,
+      color: colors.white,
       textAlign: "center",
    },
    input: {
       height: 54,
       borderWidth: 2,
-      borderColor: "#495E57",
+      borderColor: colors.primary,
       borderRadius: 8,
       paddingHorizontal: 12,
       marginBottom: 20,
-      backgroundColor: "#EDEFEE",
+      backgroundColor: colors.white,
    },
    inputFocused: {
       height: 54,
       borderWidth: 2,
-      borderColor: "#F4CE14",
+      borderColor: colors.secondary,
       borderRadius: 8,
       paddingHorizontal: 12,
       marginBottom: 20,
@@ -217,22 +215,23 @@ const styles = StyleSheet.create({
    phoneContainer: {
       width: "100%",
       height: 54,
-      borderColor: "black",
+      borderColor: colors.black,
       borderWidth: 2,
       borderRadius: 8,
    },
    phoneTextContainer: {
       borderTopRightRadius: 8,
       borderBottomRightRadius: 8,
-      backgroundColor: "#EDEFEE",
+      backgroundColor: colors.lightgrey,
    },
    phoneTextInput: {
       height: 50,
+      fontWeight: "600",
+      paddingTop: 2.45,
    },
    label: {
-      fontSize: 14,
-      fontWeight: "bold",
-      color: "black",
+      ...typography.caption,
+      color: colors.black,
       marginBottom: 6,
    },
    form: {
@@ -244,15 +243,14 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
+      backgroundColor: colors.secondary,
+      borderColor: colors.black,
       borderWidth: 2,
       marginBottom: 20,
    },
    saveButtonText: {
-      color: "black",
-      fontSize: 16,
-      fontWeight: "bold",
+      ...typography.bodyBold,
+      color: colors.black,
       textAlign: "center",
    },
 });

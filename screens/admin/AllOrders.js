@@ -1,34 +1,18 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
-import {
-   FlatList,
-   StyleSheet,
-   Text,
-   TouchableOpacity,
-   View,
-} from "react-native";
+import { StyleSheet } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import OrderCards from "../../components/OrderCards";
 import PageHeader from "../../components/PageHeader";
+import * as theme from "../../styles/theme";
 import { getAllOrders } from "../../utils/supabase";
 
 const AllOrders = () => {
    const navigator = useNavigation();
    const [orders, setOrders] = useState();
    const [isLoading, setIsLoading] = useState(false);
-
-   const formattedDate = (date) => {
-      const formatted = new Date(date).toLocaleString("en-GB", {
-         day: "2-digit",
-         month: "2-digit",
-         year: "numeric",
-         hour: "2-digit",
-         minute: "2-digit",
-         hour12: true,
-      });
-      return formatted;
-   };
    useFocusEffect(
       useCallback(() => {
          const getOrders = async () => {
@@ -48,68 +32,22 @@ const AllOrders = () => {
    );
 
    return (
-      <SafeAreaView>
+      <SafeAreaView style={[styles.container, theme.layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: theme.colors.white }}
          />
          <PageHeader navigator={navigator} heading={"Orders"} />
-         <View>
-            <FlatList
-               data={orders}
-               keyExtractor={(item) => String(item.id)}
-               renderItem={({ item }) => (
-                  <TouchableOpacity
-                     onPress={() => navigator.navigate("ManageOrder", { item })}
-                     style={
-                        item.order_status === "completed" ||
-                        item.order_status === "cancelled"
-                           ? styles.orderInactive
-                           : styles.orderActive
-                     }
-                  >
-                     <Text style={styles.orderText}>
-                        Customer Name: {item.user_data.displayName}
-                     </Text>
-                     <Text style={styles.orderText}>
-                        Order ID: {item.id.substring(0, 8)}
-                     </Text>
-                     <Text style={styles.orderText}>
-                        Placed on {formattedDate(item.created_at)}
-                     </Text>
-                     <Text style={styles.orderText}>
-                        Status: {item.order_status}
-                     </Text>
-                     <Text style={styles.orderText}>{item.delivery_mode}</Text>
-                  </TouchableOpacity>
-               )}
-            />
-         </View>
+         <OrderCards
+            navigator={navigator}
+            orders={orders}
+            onPressRoute="ManageOrder"
+         />
       </SafeAreaView>
    );
 };
 const styles = StyleSheet.create({
-   orderActive: {
-      backgroundColor: "#E8F5E9",
-      borderColor: "#2E7D32",
-      borderWidth: 1,
-      borderRadius: 6,
-      padding: 12,
-      marginVertical: 8,
-      marginHorizontal: 12,
-   },
-   orderInactive: {
-      backgroundColor: "#b0afaf",
-      borderColor: "#000000",
-      borderWidth: 1,
-      borderRadius: 6,
-      padding: 12,
-      marginVertical: 8,
-      marginHorizontal: 12,
-   },
-   orderText: {
-      fontWeight: "bold",
-   },
+   container: {},
 });
 export default AllOrders;

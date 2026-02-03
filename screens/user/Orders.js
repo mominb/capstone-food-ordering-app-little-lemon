@@ -7,6 +7,7 @@ import Toast from "react-native-toast-message";
 import OrderCards from "../../components/OrderCards";
 import PageHeader from "../../components/PageHeader";
 import { getUsersOrders } from "../../utils/supabase";
+import { layout, colors, typography } from "../../styles/theme";
 
 const Orders = () => {
    const navigator = useNavigation();
@@ -31,11 +32,11 @@ const Orders = () => {
    }, []);
 
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: colors.white }}
          />
          <PageHeader navigator={navigator} heading={"Your Orders"} />
          <View style={styles.content}>
@@ -51,7 +52,7 @@ const Orders = () => {
    );
 };
 const styles = StyleSheet.create({
-   container: { flex: 1, backgroundColor: "#fff" },
+   container: {},
    content: { flex: 1, justifyContent: "space-between" },
    button: {
       alignSelf: "center",
@@ -59,14 +60,13 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
+      backgroundColor: colors.secondary,
+      borderColor: colors.black,
       borderWidth: 2,
       marginVertical: 16,
    },
    buttonText: {
-      fontSize: 16,
-      fontWeight: "bold",
+      ...typography.bodyBold,
       textAlign: "center",
    },
 });

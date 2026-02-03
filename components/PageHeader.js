@@ -1,4 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { colors, typography } from "../styles/theme";
 
 const PageHeader = ({ navigator, heading }) => {
    return (
@@ -17,9 +18,9 @@ const PageHeader = ({ navigator, heading }) => {
 const styles = StyleSheet.create({
    header: {
       justifyContent: "flex-start",
-      backgroundColor: "white",
+      backgroundColor: colors.white,
       borderWidth: 1,
-      borderColor: "black",
+      borderColor: colors.black,
       flexDirection: "row",
       padding: 20,
    },
@@ -30,8 +31,7 @@ const styles = StyleSheet.create({
       height: 48,
    },
    heading: {
-      fontWeight: "bold",
-      fontSize: 25,
+      ...typography.h1,
       marginHorizontal: 20,
       marginVertical: 10,
    },

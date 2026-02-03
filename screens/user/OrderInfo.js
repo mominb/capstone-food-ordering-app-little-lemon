@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import OrderItemList from "../../components/OrderItemList";
 import PageHeader from "../../components/PageHeader";
+import { layout, colors, typography } from "../../styles/theme";
 
 const OrderInfo = ({ route }) => {
    const navigator = useNavigation();
@@ -22,7 +23,7 @@ const OrderInfo = ({ route }) => {
    };
 
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, layout.container]}>
          <PageHeader navigator={navigator} heading={"Order"} />
          <ScrollView>
             <OrderItemList orderItems={orderItems} order={order} />
@@ -43,20 +44,17 @@ const OrderInfo = ({ route }) => {
    );
 };
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: "#fff",
-   },
+   container: {},
    metaContainer: {
       margin: 16,
       padding: 12,
       borderRadius: 8,
-      backgroundColor: "#F6F6F6",
+      backgroundColor: colors.tertiary,
       borderWidth: 1,
-      borderColor: "#DDD",
+      borderColor: colors.black,
    },
    metaText: {
-      fontWeight: "600",
+      ...typography.body,
       marginVertical: 4,
    },
 });

@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import ItemSeperator from "../../components/ItemSeperator";
 import PageHeader from "../../components/PageHeader";
+import * as theme from "../../styles/theme";
 import { deleteMenuItem, getMenuItems } from "../../utils/supabase";
 
 const ManageMenu = () => {
@@ -55,24 +56,44 @@ const ManageMenu = () => {
       }
    };
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, theme.layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: theme.colors.white }}
          />
          <PageHeader heading={"Menu Management"} navigator={navigator} />
          <View>
-            <TouchableOpacity
-               onPress={() => navigator.navigate("MenuItem")}
-               style={styles.button}
-            >
-               <Text style={styles.buttonText}>Add Item</Text>
+            <ItemSeperator />
+            <TouchableOpacity onPress={() => navigator.navigate("MenuItem")}>
+               <View
+                  style={{
+                     flexDirection: "row",
+                     justifyContent: "space-between",
+                     alignItems: "center",
+                     padding: 15,
+                  }}
+               >
+                  <Text
+                     style={[
+                        theme.typography.body,
+                        { fontSize: 20, fontWeight: "400" },
+                     ]}
+                  >
+                     Add Item
+                  </Text>
+                  <Text
+                     style={[
+                        theme.typography.body,
+                        { fontSize: 30, fontWeight: "400" },
+                     ]}
+                  >
+                     +
+                  </Text>
+               </View>
             </TouchableOpacity>
          </View>
-         <View>
-            <Text style={styles.title}>Menu</Text>
-         </View>
+
          <ItemSeperator />
          <FlatList
             data={menu}
@@ -102,13 +123,13 @@ const ManageMenu = () => {
                            alignItems: "center",
                            marginTop: 10,
                            borderWidth: 1,
-                           borderColor: "red",
+                           borderColor: theme.colors.red,
                            padding: 10,
                            borderRadius: 10,
                         }}
                         onPress={() => handleDelete(item.id)}
                      >
-                        <Text style={{ color: "red" }}>DELETE</Text>
+                        <Text style={{ color: theme.colors.red }}>DELETE</Text>
                      </TouchableOpacity>
                   </View>
                   <Image
@@ -124,9 +145,7 @@ const ManageMenu = () => {
    );
 };
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-   },
+   container: {},
    itemRow: {
       flexDirection: "row",
       padding: 15,
@@ -136,22 +155,22 @@ const styles = StyleSheet.create({
       width: "60%",
    },
    itemTitle: {
-      fontWeight: "bold",
-      fontSize: 20,
+      ...theme.typography.h2,
    },
    itemDescription: {
-      color: "gray",
+      ...theme.typography.body,
+      color: theme.colors.black,
       marginTop: 5,
       marginBottom: 5,
    },
    itemPrice: {
-      fontWeight: "bold",
+      ...theme.typography.bodyBold,
    },
    itemImage: {
       resizeMode: "fill",
       width: "30%",
       height: "100%",
-      backgroundColor: "gray",
+      backgroundColor: theme.colors.black,
       borderRadius: 10,
    },
    button: {
@@ -160,19 +179,17 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
+      backgroundColor: theme.colors.secondary,
+      borderColor: theme.colors.black,
       borderWidth: 2,
       marginVertical: 15,
    },
    buttonText: {
-      fontSize: 16,
-      fontWeight: "bold",
+      ...theme.typography.bodyBold,
       textAlign: "center",
    },
    title: {
-      fontWeight: "bold",
-      fontSize: 20,
+      ...theme.typography.h2,
       padding: 10,
    },
 });

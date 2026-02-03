@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import OtpTimer from "../components/OtpTimer";
 import { sendEmailOTP, verifyEmailOTP } from "../utils/supabase";
+import { layout, colors, typography } from "../styles/theme";
 
 const Onboarding = () => {
    const [email, setEmail] = useState("");
@@ -68,11 +69,11 @@ const Onboarding = () => {
    };
 
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: colors.white }}
          />
          <View>
             <Image
@@ -124,12 +125,7 @@ const Onboarding = () => {
 };
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-
-      backgroundColor: "#495E57",
-      padding: 20,
-   },
+   container: {},
    logo: {
       width: 200,
       height: 150,
@@ -137,31 +133,29 @@ const styles = StyleSheet.create({
    },
    content: {},
    title: {
-      fontSize: 25,
-      fontWeight: "bold",
-      color: "#F4CE14",
+      ...typography.h1,
+      color: colors.secondary,
       padding: 30,
       textAlign: "center",
    },
    label: {
-      fontSize: 14,
-      fontWeight: "bold",
-      color: "#EDEFEE",
+      ...typography.caption,
+      color: colors.tertiary,
       marginBottom: 6,
    },
    input: {
       height: 48,
       width: "100%",
       borderWidth: 2.5,
-      borderColor: "#495E57",
+      borderColor: colors.primary,
       borderRadius: 8,
       paddingHorizontal: 12,
       marginBottom: 20,
-      backgroundColor: "#EDEFEE",
+      backgroundColor: colors.tertiary,
       alignSelf: "center",
    },
    inputFocused: {
-      borderColor: "#F4CE14",
+      borderColor: colors.secondary,
    },
    button: {
       alignSelf: "center",
@@ -169,8 +163,8 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
+      backgroundColor: colors.secondary,
+      borderColor: colors.black,
       borderWidth: 2,
       marginBottom: 10,
    },
@@ -179,9 +173,8 @@ const styles = StyleSheet.create({
    },
 
    buttonText: {
-      color: "black",
-      fontSize: 16,
-      fontWeight: "500",
+      ...typography.body,
+      color: colors.black,
       textAlign: "center",
    },
 });

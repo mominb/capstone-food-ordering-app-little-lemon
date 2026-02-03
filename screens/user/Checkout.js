@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ItemSeperator from "../../components/ItemSeperator";
 import PageHeader from "../../components/PageHeader";
 import { placeOrder } from "../../utils/supabase";
+import { layout, colors, typography } from "../../styles/theme";
 
 const Checkout = ({ route, deleteUserCart }) => {
    const [isLoading, setIsLoading] = useState(false);
@@ -47,11 +48,11 @@ const Checkout = ({ route, deleteUserCart }) => {
    };
 
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: colors.white }}
          />
          <PageHeader navigator={navigator} heading={"Checkout"}></PageHeader>
          <ScrollView>
@@ -125,20 +126,16 @@ const Checkout = ({ route, deleteUserCart }) => {
    );
 };
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: "#fff",
-   },
+   container: {},
    subHeading: {
-      fontWeight: "bold",
-      fontSize: 20,
+      ...typography.h2,
       marginBottom: 10,
       alignSelf: "center",
    },
    orderDetailsContainer: {
       padding: 20,
       margin: 20,
-      borderColor: "black",
+      borderColor: colors.black,
       borderWidth: 2,
       borderRadius: 10,
    },
@@ -150,12 +147,11 @@ const styles = StyleSheet.create({
       flexDirection: "row",
    },
    itemText: {
-      fontWeight: "bold",
+      ...typography.bodyBold,
       margin: 10,
    },
    totalAmountText: {
-      fontWeight: "bold",
-      fontSize: 17,
+      ...typography.h3,
       margin: 10,
    },
    totalAmountContainer: {
@@ -172,8 +168,8 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#EDEFEE",
-      borderColor: "black",
+      backgroundColor: colors.tertiary,
+      borderColor: colors.black,
       borderWidth: 2,
       marginTop: 5,
       marginBottom: 10,
@@ -184,14 +180,13 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
+      backgroundColor: colors.secondary,
+      borderColor: colors.black,
       borderWidth: 2,
       marginTop: 15,
    },
    buttonText: {
-      fontSize: 16,
-      fontWeight: "bold",
+      ...typography.bodyBold,
       textAlign: "center",
    },
 });

@@ -1,33 +1,57 @@
 import { StyleSheet } from "react-native";
 
 export const colors = {
-   darkGreen: "#495E57",
-   lemonYellow: "#F4CE14",
-   lightGreen: "#EDEFEE",
-   darkGray: "#333333",
+   primary: "#495E57",
+   secondary: "#F4CE14",
+   tertiary: "#EDEFEE",
+   lightgrey: "#B0B0B0",
+   red: "#E53935",
+   black: "#000000",
    white: "#FFFFFF",
 };
 
-export const spacing = {
-   xs: 4,
-   sm: 8,
-   md: 12,
-   lg: 16,
-   xl: 20,
-   xxl: 24,
-   xxxl: 32,
+export const layout = {
+   container: {
+      flex: 1,
+      backgroundColor: colors.white,
+   },
 };
 
 export const typography = {
-   headline: {
-      fontSize: 24,
-      fontWeight: "600",
-      color: colors.darkGreen,
+   h1: {
+      fontSize: 25,
+      fontWeight: "bold",
+      color: colors.black,
+   },
+   h2: {
+      fontSize: 20,
+      fontWeight: "bold",
+      color: colors.black,
+   },
+   h3: {
+      fontSize: 17,
+      fontWeight: "bold",
+      color: colors.black,
    },
    body: {
       fontSize: 16,
       fontWeight: "400",
-      color: colors.darkGray,
+      color: colors.black,
+   },
+   bodyBold: {
+      fontSize: 16,
+      fontWeight: "700",
+      color: colors.black,
+   },
+   button: {
+      fontSize: 15,
+      fontWeight: "bold",
+      color: colors.black,
+   },
+   caption: {
+      fontSize: 14,
+      fontWeight: "400",
+      color: colors.black,
    },
 };
 

@@ -13,6 +13,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
+import * as theme from "../../styles/theme";
 import { addMenuItem, updateMenuItem } from "../../utils/supabase";
 
 const Item = ({ route }) => {
@@ -60,13 +61,13 @@ const Item = ({ route }) => {
    };
 
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, theme.layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: theme.colors.white }}
          />
-         <PageHeader navigator={navigator} heading={""} />
+         <PageHeader navigator={navigator} heading={"Edit Item"} />
 
          <ScrollView style={styles.container}>
             <View style={styles.infoBox}>
@@ -86,6 +87,7 @@ const Item = ({ route }) => {
 
                <Text style={styles.label}>Category</Text>
                <TextInput
+                  autoCapitalize="none"
                   style={styles.input}
                   value={itemCategory}
                   onChangeText={setItemCategory}
@@ -99,7 +101,6 @@ const Item = ({ route }) => {
                   onChangeText={setItemPrice}
                />
             </View>
-            <View style={styles.seperator} />
          </ScrollView>
 
          <KeyboardAvoidingView behavior="padding">
@@ -117,9 +118,7 @@ const Item = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-   },
+   container: {},
    infoBox: {
       width: "100%",
       padding: 20,
@@ -127,7 +126,7 @@ const styles = StyleSheet.create({
    seperator: {
       width: "100%",
       height: 0.5,
-      backgroundColor: "black",
+      backgroundColor: theme.colors.black,
    },
 
    button: {
@@ -136,30 +135,28 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
+      backgroundColor: theme.colors.secondary,
+      borderColor: theme.colors.black,
       borderWidth: 2,
       margin: 10,
    },
    buttonText: {
-      color: "black",
-      fontSize: 16,
-      fontWeight: "bold",
+      ...theme.typography.bodyBold,
+      color: theme.colors.black,
       textAlign: "center",
    },
    input: {
       height: 48,
       borderWidth: 2,
-      borderColor: "#495E57",
+      borderColor: theme.colors.primary,
       borderRadius: 8,
       paddingHorizontal: 12,
       marginBottom: 20,
-      backgroundColor: "#EDEFEE",
+      backgroundColor: theme.colors.tertiary,
    },
    label: {
-      fontSize: 14,
-      fontWeight: "bold",
-      color: "black",
+      ...theme.typography.caption,
+      color: theme.colors.black,
       marginBottom: 6,
    },
 });

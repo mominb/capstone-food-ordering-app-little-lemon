@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as theme from "../../styles/theme";
 
 const AdminHome = () => {
    const navigator = useNavigation();
    return (
-      <SafeAreaView style={styles.screen}>
+      <SafeAreaView style={[styles.container, theme.layout.container]}>
          <View style={styles.header}>
             <Image
                source={require("../../assets/logo-long-text.png")}
@@ -43,17 +44,18 @@ const AdminHome = () => {
    );
 };
 const styles = StyleSheet.create({
+   container: {},
    screen: {
-      flex: 1,
+      ...theme.layout.container,
    },
 
    header: {
       flexDirection: "row",
       justifyContent: "space-between",
       padding: 20,
-      backgroundColor: "white",
+      backgroundColor: theme.colors.white,
       borderWidth: 1,
-      borderColor: "black",
+      borderColor: theme.colors.black,
    },
    headerLogo: {
       width: 200,
@@ -64,19 +66,17 @@ const styles = StyleSheet.create({
       height: 40,
    },
    heading: {
-      fontWeight: "bold",
-      fontSize: 20,
+      ...theme.typography.h2,
       marginBottom: 10,
    },
    operationButton: {
       padding: 10,
-      backgroundColor: "black",
+      backgroundColor: theme.colors.black,
       margin: 5,
    },
    operationButtonText: {
-      color: "white",
-      fontSize: 15,
-      fontWeight: "bold",
+      ...theme.typography.button,
+      color: theme.colors.white,
    },
    operationsContainer: {
       padding: 20,

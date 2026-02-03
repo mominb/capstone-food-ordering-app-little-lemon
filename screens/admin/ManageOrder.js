@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import OrderItemList from "../../components/OrderItemList";
 import PageHeader from "../../components/PageHeader";
+import * as theme from "../../styles/theme";
 import { updateOrderStatus } from "../../utils/supabase";
 
 const ManageOrder = ({ route }) => {
@@ -59,11 +60,11 @@ const ManageOrder = ({ route }) => {
    };
 
    return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, theme.layout.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
-            textStyle={{ color: "#fff" }}
+            textStyle={{ color: theme.colors.white }}
          />
          <PageHeader navigator={navigator} heading={"Order"} />
          <View style={styles.dropdownContainer}>
@@ -115,24 +116,21 @@ const ManageOrder = ({ route }) => {
    );
 };
 const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-   },
+   container: {},
    orderInfoContainer: {
       margin: 16,
       padding: 12,
       borderRadius: 8,
-      backgroundColor: "#F6F6F6",
+      backgroundColor: theme.colors.tertiary,
       borderWidth: 1,
-      borderColor: "#DDD",
+      borderColor: theme.colors.black,
    },
    infoText: {
-      fontWeight: "600",
+      ...theme.typography.body,
       marginVertical: 4,
    },
    subHeading: {
-      fontWeight: "bold",
-      fontSize: 20,
+      ...theme.typography.h2,
       marginBottom: 10,
       alignSelf: "center",
    },
@@ -142,14 +140,13 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#F4CE14",
-      borderColor: "black",
+      backgroundColor: theme.colors.secondary,
+      borderColor: theme.colors.black,
       borderWidth: 2,
       marginTop: 15,
    },
    buttonText: {
-      fontSize: 16,
-      fontWeight: "bold",
+      ...theme.typography.bodyBold,
       textAlign: "center",
    },
    dropdown: {
@@ -157,8 +154,8 @@ const styles = StyleSheet.create({
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: "#EDEFEE",
-      borderColor: "black",
+      backgroundColor: theme.colors.tertiary,
+      borderColor: theme.colors.black,
       borderWidth: 2,
       marginTop: 5,
       marginBottom: 10,

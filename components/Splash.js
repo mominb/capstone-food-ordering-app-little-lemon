@@ -1,5 +1,6 @@
 import { Image, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { colors } from "../styles/theme";
 
 const Splash = () => {
    return (
@@ -15,7 +16,7 @@ const Splash = () => {
 const styles = StyleSheet.create({
    container: {
       flex: 1,
-      backgroundColor: "#495E57",
+      backgroundColor: colors.primary,
       alignItems: "center",
       justifyContent: "center",
    },
