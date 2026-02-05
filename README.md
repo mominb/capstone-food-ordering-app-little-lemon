@@ -71,3 +71,12 @@ npm run web
 
 ## Admin Access
 Admin routing is based on the `user_roles` table in Supabase. Users with `role = "admin"` are routed to the admin screens.
+
+##Gallery
+<img width="1170" height="2532" alt="image" src="https://github.com/user-attachments/assets/898c08fb-399f-4c2f-8238-6d2b6522c27a" />
+<img width="1170" height="2532" alt="image" src="https://github.com/user-attachments/assets/10feac00-3bc4-4d83-aa16-94f1741bdc89" />
+<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-04 at 17 47 29" src="https://github.com/user-attachments/assets/15455fa8-a869-443e-bdf5-e7f5d36341b4" />
+<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-04 at 17 48 38" src="https://github.com/user-attachments/assets/e4337022-4ad0-41e1-9c9c-629b70b29a75" />
+
+
+
