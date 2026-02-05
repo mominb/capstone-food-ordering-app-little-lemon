@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
    FlatList,
    ScrollView,
@@ -13,7 +13,7 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ItemSeperator from "../../components/ItemSeperator";
 import PageHeader from "../../components/PageHeader";
-import { placeOrder } from "../../utils/supabase";
+import { getGlobalSettings, placeOrder } from "../../utils/supabase";
 import { layout, colors, typography } from "../../styles/theme";
 
 const Checkout = ({ route, deleteUserCart }) => {
@@ -24,11 +24,23 @@ const Checkout = ({ route, deleteUserCart }) => {
    const totalAmount = data.totalAmount;
    const paymentMethods = [{ label: "Cash", value: "COD" }];
    const [paymentMethod, setPaymentMethod] = useState("COD");
+   const [currency, setCurrency] = useState();
    const deliveryMethods = [
       { label: "Deliver to Doorstep", value: "Delivery" },
       { label: "Pick-up from restaurant", value: "Pickup" },
    ];
    const [deliveryMethod, setDeliveryMethod] = useState("Delivery");
+
+   useEffect(() => {
+      const fetchSettings = async () => {
+         const globalSettings = await getGlobalSettings();
+         setCurrency(globalSettings?.[0]?.currency_code);
+      };
+      fetchSettings();
+   }, []);
+
+   const formatCurrency = (value) =>
+      currency ? `${value} ${currency}` : `${value}`;
    const handleOrderPlacement = async () => {
       setIsLoading(true);
       try {
@@ -71,7 +83,9 @@ const Checkout = ({ route, deleteUserCart }) => {
 
                         <View style={styles.itemPriceContainer}>
                            <Text style={styles.itemText}>
-                              ${(item.amount * item.price).toFixed(2)}
+                              {formatCurrency(
+                                 (item.amount * item.price).toFixed(2),
+                              )}
                            </Text>
                         </View>
                      </View>
@@ -80,7 +94,9 @@ const Checkout = ({ route, deleteUserCart }) => {
                <ItemSeperator />
                <View style={styles.totalAmountContainer}>
                   <Text style={styles.totalAmountText}>Total :</Text>
-                  <Text style={styles.totalAmountText}>${totalAmount}</Text>
+                  <Text style={styles.totalAmountText}>
+                     {formatCurrency(totalAmount)}
+                  </Text>
                </View>
             </View>
             <View style={styles.DetailsContainer}>

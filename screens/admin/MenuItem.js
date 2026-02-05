@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
    KeyboardAvoidingView,
    ScrollView,
@@ -14,18 +14,22 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
 import * as theme from "../../styles/theme";
-import { addMenuItem, updateMenuItem } from "../../utils/supabase";
+import {
+   addMenuItem,
+   getGlobalSettings,
+   updateMenuItem,
+} from "../../utils/supabase";
 
 const Item = ({ route }) => {
    const navigator = useNavigation();
    const item = route?.params?.item ?? {};
+   const [currency, setCurrency] = useState();
    const [itemName, setItemName] = useState(item.name);
    const [itemDescription, setItemDescription] = useState(item.description);
    const [itemPrice, setItemPrice] = useState(item.price?.toString());
    const [itemCategory, setItemCategory] = useState(item.category);
    const [isLoading, setIsLoading] = useState(false);
    const isItemExistent = Boolean(item.id);
-
    const handleItemUpdate = async () => {
       setIsLoading(true);
       try {
@@ -59,6 +63,13 @@ const Item = ({ route }) => {
          Toast.show({ type: "error", text1: "Save failed" });
       }
    };
+   useEffect(() => {
+      const fetchSettings = async () => {
+         const globalSettings = await getGlobalSettings();
+         setCurrency(globalSettings?.[0]?.currency_code);
+      };
+      fetchSettings();
+   });
 
    return (
       <SafeAreaView style={[styles.container, theme.layout.container]}>
@@ -93,7 +104,7 @@ const Item = ({ route }) => {
                   onChangeText={setItemCategory}
                />
 
-               <Text style={styles.label}>Price</Text>
+               <Text style={styles.label}>Price ({currency})</Text>
                <TextInput
                   keyboardType="numeric"
                   style={styles.input}

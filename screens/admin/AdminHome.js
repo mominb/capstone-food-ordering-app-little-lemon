@@ -1,43 +1,69 @@
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as theme from "../../styles/theme";
 
 const AdminHome = () => {
    const navigator = useNavigation();
+   const [isLoading, setIsLoading] = useState(false);
+   const handleLogout = async () => {
+      setIsLoading(true);
+      try {
+         const { error } = await supabase.auth.signOut();
+         if (error) {
+            Toast.show({ type: "error", text1: "Logout failed" });
+         } else {
+            Toast.show({ type: "success", text1: "You have been logged out" });
+         }
+      } catch (err) {
+         console.log(err);
+         Toast.show({ type: "error", text1: "Logout failed" });
+      } finally {
+         setIsLoading(false);
+      }
+   };
    return (
       <SafeAreaView style={[styles.container, theme.layout.container]}>
+         <Spinner
+            visible={isLoading}
+            textContent="Loading..."
+            textStyle={{ color: theme.colors.white }}
+         />
          <View style={styles.header}>
             <Image
                source={require("../../assets/logo-long-text.png")}
                resizeMode="contain"
                style={styles.headerLogo}
             />
-            <TouchableOpacity
-               onPress={() => {
-                  navigator.navigate("Settings");
-               }}
-            >
-               <Image
-                  source={require("../../assets/settings_icon.jpg")}
-                  resizeMode="contain"
-                  style={styles.headerProfileIcon}
-               />
-            </TouchableOpacity>
          </View>
-         <View style={styles.operationsContainer}>
-            <Text style={styles.heading}>Admin Operations</Text>
-            <TouchableOpacity
-               style={styles.operationButton}
-               onPress={() => navigator.navigate("AllOrders")}
-            >
-               <Text style={styles.operationButtonText}>Manage Orders</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-               onPress={() => navigator.navigate("ManageMenu")}
-               style={styles.operationButton}
-            >
-               <Text style={styles.operationButtonText}>Manage Menu</Text>
+         <View style={styles.content}>
+            <View style={styles.operationsContainer}>
+               <Text style={styles.heading}>Admin Operations</Text>
+               <TouchableOpacity
+                  style={styles.operationButton}
+                  onPress={() => navigator.navigate("AllOrders")}
+               >
+                  <Text style={styles.operationButtonText}>Manage Orders</Text>
+               </TouchableOpacity>
+               <TouchableOpacity
+                  onPress={() => navigator.navigate("ManageMenu")}
+                  style={styles.operationButton}
+               >
+                  <Text style={styles.operationButtonText}>Manage Menu</Text>
+               </TouchableOpacity>
+               <TouchableOpacity
+                  onPress={() => navigator.navigate("Settings")}
+                  style={styles.operationButton}
+               >
+                  <Text style={styles.operationButtonText}>
+                     Restaurant Settings
+                  </Text>
+               </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={handleLogout} style={styles.button}>
+               <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
          </View>
       </SafeAreaView>
@@ -45,9 +71,6 @@ const AdminHome = () => {
 };
 const styles = StyleSheet.create({
    container: {},
-   screen: {
-      ...theme.layout.container,
-   },
 
    header: {
       flexDirection: "row",
@@ -69,6 +92,11 @@ const styles = StyleSheet.create({
       ...theme.typography.h2,
       marginBottom: 10,
    },
+   content: {
+      flex: 1,
+      flexDirection: "column",
+      justifyContent: "space-between",
+   },
    operationButton: {
       padding: 10,
       backgroundColor: theme.colors.black,
@@ -80,6 +108,22 @@ const styles = StyleSheet.create({
    },
    operationsContainer: {
       padding: 20,
+   },
+   button: {
+      alignSelf: "center",
+      width: "90%",
+      paddingVertical: 12,
+      paddingHorizontal: 28,
+      borderRadius: 8,
+      backgroundColor: theme.colors.red,
+      borderColor: theme.colors.red,
+      borderWidth: 2,
+      marginTop: 15,
+   },
+   buttonText: {
+      ...theme.typography.bodyBold,
+      color: theme.colors.white,
+      textAlign: "center",
    },
 });
 export default AdminHome;

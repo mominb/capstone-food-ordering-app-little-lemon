@@ -1,8 +1,23 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { colors, typography } from "../styles/theme";
+import { getGlobalSettings } from "../utils/supabase";
 import ItemSeperator from "./ItemSeperator";
 
 const OrderItemList = ({ orderItems, order }) => {
+   const [currency, setCurrency] = useState();
+
+   useEffect(() => {
+      const fetchSettings = async () => {
+         const globalSettings = await getGlobalSettings();
+         setCurrency(globalSettings?.[0]?.currency_code);
+      };
+      fetchSettings();
+   }, []);
+
+   const formatCurrency = (value) =>
+      currency ? `${value} ${currency}` : `${value}`;
+
    return (
       <View style={styles.orderDetailsContainer}>
          <Text style={styles.subHeading}>Order Items</Text>
@@ -15,7 +30,7 @@ const OrderItemList = ({ orderItems, order }) => {
                      <Text style={styles.itemText}>{item.name}</Text>
                      {item.price && (
                         <Text style={styles.itemText}>
-                           ${item.price.toFixed(2)}
+                           {formatCurrency(item.price.toFixed(2))}
                         </Text>
                      )}
                   </View>
@@ -29,7 +44,7 @@ const OrderItemList = ({ orderItems, order }) => {
          <View style={styles.totalAmountContainer}>
             <Text style={styles.totalAmountText}>Total :</Text>
             <Text style={styles.totalAmountText}>
-               ${Number(order.total_price).toFixed(2)}
+               {formatCurrency(Number(order.total_price).toFixed(2))}
             </Text>
          </View>
       </View>

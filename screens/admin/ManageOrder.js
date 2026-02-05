@@ -104,7 +104,7 @@ const ManageOrder = ({ route }) => {
                   Email: {order.user_data.email}
                </Text>
                <Text style={styles.infoText}>
-                  Phone: {order.user_data.phone}
+                  Phone: 0{order.user_data.phone}
                </Text>
             </View>
          </ScrollView>

@@ -16,13 +16,18 @@ import Toast from "react-native-toast-message";
 import Filter from "../../components/Filter";
 import ItemSeperator from "../../components/ItemSeperator";
 import { colors, layout, typography } from "../../styles/theme";
+import {
+   getGlobalSettings,
+   getMenuByFilterAndSearch,
+} from "../../utils/supabase";
 
 const Home = ({ menuCategories, database }) => {
-   const [query, setQuery] = useState("");
+   const [searchTerm, setSearchTerm] = useState("");
    const [data, setData] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
    const [activeCategories, setActiveCategories] = useState([]);
    const [numOfCartItems, setNumOfCartItems] = useState(0);
+   const [currency, setCurrency] = useState();
    const navigation = useNavigation();
 
    const handleFilterSelection = (filter) => {
@@ -41,12 +46,20 @@ const Home = ({ menuCategories, database }) => {
    };
 
    useEffect(() => {
+      const fetchSettings = async () => {
+         const globalSettings = await getGlobalSettings();
+         setCurrency(globalSettings?.[0]?.currency_code);
+      };
+      fetchSettings();
+   }, []);
+
+   useEffect(() => {
       const loadData = async () => {
          setIsLoading(true);
          try {
-            const filteredItems = await database.filterByQueryAndCategories(
-               query,
+            const filteredItems = await getMenuByFilterAndSearch(
                activeCategories,
+               searchTerm,
             );
             setData(filteredItems);
          } catch (err) {
@@ -57,7 +70,10 @@ const Home = ({ menuCategories, database }) => {
          }
       };
       loadData();
-   }, [activeCategories, query, database]);
+   }, [activeCategories, searchTerm]);
+
+   const formatCurrency = (value) =>
+      currency ? `${value} ${currency}` : `${value}`;
 
    useFocusEffect(() => {
       async function fetchCartItemCount() {
@@ -96,8 +112,8 @@ const Home = ({ menuCategories, database }) => {
                   style={styles.searchIcon}
                />
                <TextInput
-                  value={query}
-                  onChangeText={setQuery}
+                  value={searchTerm}
+                  onChangeText={setSearchTerm}
                   style={styles.searchInput}
                />
             </View>
@@ -160,7 +176,9 @@ const Home = ({ menuCategories, database }) => {
                      <Text style={styles.itemDescription} numberOfLines={2}>
                         {item.description}
                      </Text>
-                     <Text style={styles.itemPrice}>${item.price}</Text>
+                     <Text style={styles.itemPrice}>
+                        {formatCurrency(item.price)}
+                     </Text>
                   </View>
 
                   <Image

@@ -191,3 +191,47 @@ export async function deleteMenuItem(id) {
       return { error: null };
    }
 }
+export async function getGlobalSettings() {
+   const { data, error } = await supabase
+      .from("global_settings")
+      .select("*")
+      .eq("id", true);
+
+   if (error) {
+      console.log("error fetching global settings: ", error);
+   } else {
+      return data;
+   }
+}
+``;
+export async function updateGlobalSettings(
+   currency_code,
+   restaurant_available,
+) {
+   const { error } = await supabase
+      .from("global_settings")
+      .update({ currency_code, restaurant_available })
+      .eq("id", true);
+   if (error) {
+      console.log("error updating global settings: ", error);
+   }
+}
+
+export async function getMenuByFilterAndSearch(categories, searchTerm) {
+   let query = supabase.from("menu").select("*");
+
+   if (searchTerm) {
+      query = query.ilike("name", `%${searchTerm}%`);
+   }
+
+   if (categories?.length) {
+      query = query.in("category", categories);
+   }
+
+   const { data, error } = await query;
+   if (error) {
+      console.log("error filtering menu items: ", error);
+      return [];
+   }
+   return data;
+}

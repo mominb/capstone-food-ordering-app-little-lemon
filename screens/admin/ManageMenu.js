@@ -14,12 +14,16 @@ import Toast from "react-native-toast-message";
 import ItemSeperator from "../../components/ItemSeperator";
 import PageHeader from "../../components/PageHeader";
 import * as theme from "../../styles/theme";
-import { deleteMenuItem, getMenuItems } from "../../utils/supabase";
+import {
+   deleteMenuItem,
+   getGlobalSettings,
+   getMenuItems,
+} from "../../utils/supabase";
 
 const ManageMenu = () => {
    const [menu, setMenu] = useState([]);
    const [isLoading, setIsLoading] = useState(true);
-
+   const [currency, setCurrency] = useState();
    const navigator = useNavigation();
 
    useFocusEffect(() => {
@@ -27,6 +31,8 @@ const ManageMenu = () => {
          try {
             const menu = await getMenuItems();
             setMenu(menu);
+            const globalSettings = await getGlobalSettings();
+            setCurrency(globalSettings?.[0]?.currency_code);
          } catch (error) {
             console.log(error);
             Toast.show({ type: "error", text1: "Failed to load menu" });
@@ -116,7 +122,9 @@ const ManageMenu = () => {
                         <Text style={styles.itemDescription} numberOfLines={2}>
                            {item.description}
                         </Text>
-                        <Text style={styles.itemPrice}>${item.price}</Text>
+                        <Text style={styles.itemPrice}>
+                           {item.price} {currency}
+                        </Text>
                      </View>
                      <TouchableOpacity
                         style={{

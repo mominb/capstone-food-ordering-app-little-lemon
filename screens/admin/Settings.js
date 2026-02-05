@@ -1,62 +1,53 @@
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import Spinner from "react-native-loading-spinner-overlay";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
 import * as theme from "../../styles/theme";
-import { supabase } from "../../utils/supabase";
+import { getGlobalSettings } from "../../utils/supabase";
 
 const Settings = () => {
+   const [currency, setCurrency] = useState();
+   const [availability, setAvailability] = useState();
    const navigator = useNavigation();
-   const [isLoading, setIsLoading] = useState(false);
-   const handleLogout = async () => {
-      setIsLoading(true);
-      try {
-         const { error } = await supabase.auth.signOut();
-         if (error) {
-            Toast.show({ type: "error", text1: "Logout failed" });
-         } else {
-            Toast.show({ type: "success", text1: "You have been logged out" });
-         }
-      } catch (err) {
-         console.log(err);
-         Toast.show({ type: "error", text1: "Logout failed" });
-      } finally {
-         setIsLoading(false);
-      }
-   };
+   useFocusEffect(() => {
+      const fetchSettings = async () => {
+         const data = await getGlobalSettings();
+         setCurrency(data?.[0]?.currency_code);
+         setAvailability(data?.[0]?.restaurant_available);
+      };
+      fetchSettings();
+   });
    return (
       <SafeAreaView style={[styles.container, theme.layout.container]}>
-         <Spinner
-            visible={isLoading}
-            textContent="Loading..."
-            textStyle={{ color: theme.colors.white }}
-         />
-         <PageHeader navigator={navigator} heading={"Settings"} />
-         <TouchableOpacity onPress={handleLogout} style={styles.button}>
-            <Text style={styles.buttonText}>Logout</Text>
+         <PageHeader navigator={navigator} heading={"Restaurant Settings"} />
+         <View>
+            <Text>
+               {currency}, {availability ? "Available" : "Not Available"}
+            </Text>
+         </View>
+         <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Save Changes</Text>
          </TouchableOpacity>
       </SafeAreaView>
    );
 };
 const styles = StyleSheet.create({
-   container: {},
+   container: { flexDirection: "column", justifyContent: "space-between" },
    button: {
       alignSelf: "center",
       width: "90%",
       paddingVertical: 12,
       paddingHorizontal: 28,
       borderRadius: 8,
-      backgroundColor: theme.colors.red,
-      borderColor: theme.colors.red,
+      backgroundColor: theme.colors.secondary,
+      borderColor: theme.colors.black,
       borderWidth: 2,
       marginTop: 15,
    },
    buttonText: {
       ...theme.typography.bodyBold,
-      color: theme.colors.white,
+      color: theme.colors.black,
       textAlign: "center",
    },
 });

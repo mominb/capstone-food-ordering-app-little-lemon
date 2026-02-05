@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Spinner from "react-native-loading-spinner-overlay";
@@ -7,12 +7,25 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import { colors, layout, typography } from "../../styles/theme";
 import { saveItemToCart } from "../../utils/database";
+import { getGlobalSettings } from "../../utils/supabase";
 
 const Item = ({ route }) => {
    const navigator = useNavigation();
    const item = route.params.item;
    const [amount, setAmount] = useState(1);
    const [isLoading, setIsLoading] = useState(false);
+   const [currency, setCurrency] = useState();
+
+   useEffect(() => {
+      const fetchSettings = async () => {
+         const globalSettings = await getGlobalSettings();
+         setCurrency(globalSettings?.[0]?.currency_code);
+      };
+      fetchSettings();
+   }, []);
+
+   const formatCurrency = (value) =>
+      currency ? `${value} ${currency}` : `${value}`;
 
    const increaseAmount = () => {
       setAmount((prev) => prev + 1);
@@ -61,7 +74,7 @@ const Item = ({ route }) => {
          <View style={styles.infoBox}>
             <Text style={styles.itemName}>{item.name}</Text>
             <Text style={styles.itemDescription}>{item.description}</Text>
-            <Text style={styles.itemPrice}>${item.price}</Text>
+            <Text style={styles.itemPrice}>{formatCurrency(item.price)}</Text>
          </View>
          <View style={styles.seperator} />
          <View>

@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
    FlatList,
    Image,
@@ -13,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
 import { colors, layout, typography } from "../../styles/theme";
+import { getGlobalSettings } from "../../utils/supabase";
 
 const Cart = ({
    getCartItems,
@@ -25,6 +26,18 @@ const Cart = ({
    const [cartItems, setCartItems] = useState([]);
    const [totalAmount, setTotalAmount] = useState(0);
    const [isLoading, setIsLoading] = useState(true);
+   const [currency, setCurrency] = useState();
+
+   useEffect(() => {
+      const fetchSettings = async () => {
+         const globalSettings = await getGlobalSettings();
+         setCurrency(globalSettings?.[0]?.currency_code);
+      };
+      fetchSettings();
+   }, []);
+
+   const formatCurrency = (value) =>
+      currency ? `${value} ${currency}` : `${value}`;
 
    const load = async () => {
       try {
@@ -125,7 +138,8 @@ const Cart = ({
                         <Text style={styles.itemQty}>Qty: {item.amount}</Text>
                      </View>
                      <Text style={styles.itemTotal}>
-                        Total: ${(item.amount * item.price).toFixed(2)}
+                        Total:{" "}
+                        {formatCurrency((item.amount * item.price).toFixed(2))}
                      </Text>
                   </View>
 
@@ -185,10 +199,12 @@ const Cart = ({
             )}
          />
          <View style={styles.footer}>
-            <View style={styles.totalAmountContainer}>
-               <Text style={styles.totalAmountText}>Total amount</Text>
-               <Text style={styles.totalAmountText}>${totalAmount}</Text>
-            </View>
+           <View style={styles.totalAmountContainer}>
+              <Text style={styles.totalAmountText}>Total amount</Text>
+               <Text style={styles.totalAmountText}>
+                  {formatCurrency(totalAmount)}
+               </Text>
+           </View>
             <TouchableOpacity
                onPress={handleCheckoutNavi}
                style={styles.checkoutButton}
