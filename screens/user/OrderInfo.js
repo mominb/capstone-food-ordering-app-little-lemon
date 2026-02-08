@@ -1,9 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import InfoBox from "../../components/InfoBox";
 import OrderItemList from "../../components/OrderItemList";
 import PageHeader from "../../components/PageHeader";
-import { layout, colors, typography } from "../../styles/theme";
+import { colors, layout, typography } from "../../styles/theme";
 
 const OrderInfo = ({ route }) => {
    const navigator = useNavigation();
@@ -24,7 +25,12 @@ const OrderInfo = ({ route }) => {
 
    return (
       <SafeAreaView style={[styles.container, layout.container]}>
-         <PageHeader navigator={navigator} heading={"Order"} />
+         <PageHeader navigator={navigator} heading={"Order Details"} />
+         <InfoBox
+            message={
+               "For any further changes or cancellation please contact the restaurant"
+            }
+         />
          <ScrollView>
             <OrderItemList orderItems={orderItems} order={order} />
 

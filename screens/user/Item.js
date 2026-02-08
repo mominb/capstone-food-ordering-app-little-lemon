@@ -99,7 +99,7 @@ const Item = ({ route }) => {
                onPress={async () => {
                   setIsLoading(true);
                   try {
-                     const response = await saveItemToCart(item.id, amount);
+                     const response = await saveItemToCart(item, amount);
                      Toast.show({
                         type: response.type,
                         text1: response.message,

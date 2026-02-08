@@ -4,84 +4,70 @@ let db;
 
 async function initDB() {
    if (!db) {
-      db = await SQLite.openDatabaseAsync("little_lemon-v3");
+      db = await SQLite.openDatabaseAsync("little_lemon-v5");
    }
    return db;
 }
 
 export async function createTable() {
    const database = await initDB();
+
    await database.execAsync(`
-    CREATE TABLE IF NOT EXISTS menuitems (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      price TEXT,
-      description TEXT,
-      image TEXT,
-      category TEXT,
-      UNIQUE(name, category)
-    );
-
-    CREATE TABLE IF NOT EXISTS cartitems (
-      item_id INTEGER PRIMARY KEY,
-      amount INTEGER NOT NULL,
-      FOREIGN KEY (item_id) REFERENCES menuitems(id)
-    );
-  `);
-}
-
-export async function getMenuItems() {
-   const database = await initDB();
-   const rows = await database.getAllAsync("SELECT * FROM menuitems");
-   return rows;
-}
-
-export async function clearMenuItems() {
-   const database = await initDB();
-   await database.execAsync("DELETE FROM menuitems;");
+      CREATE TABLE IF NOT EXISTS cartitems (
+        item_id TEXT PRIMARY KEY,
+        name TEXT,
+        price REAL,
+        description TEXT,
+        image_url TEXT,
+        category TEXT,
+        amount INTEGER NOT NULL
+      );
+    `);
+   return;
 }
 
 export async function getMenuItemsInCart() {
    const database = await initDB();
    const cartItems = await database.getAllAsync(`
     SELECT
-      cartitems.item_id,
-      cartitems.amount,
-      menuitems.name,
-      menuitems.price,
-      menuitems.description,
-      menuitems.image,
-      menuitems.category
+      item_id,
+      amount,
+      name,
+      price,
+      description,
+      image_url,
+      category
     FROM cartitems
-      JOIN menuitems ON cartitems.item_id = menuitems.id
   `);
    return cartItems;
 }
 
-export async function getCategoriesfromDB() {
-   const database = await initDB();
-   const menu = await database.getAllAsync("SELECT * FROM menuitems");
-   const categories = [];
-   menu.forEach((item) => {
-      if (!categories.includes(item.category)) {
-         categories.push(item.category);
-      }
-   });
-   return categories;
-}
-
-export async function saveItemToCart(item_id, amount) {
+export async function saveItemToCart(item, amount) {
    const database = await initDB();
 
    try {
       await database.execAsync("BEGIN TRANSACTION;");
       const sql = `
-  INSERT INTO cartitems (item_id, amount)
-  VALUES (?, ?)
+  INSERT INTO cartitems (item_id, name, price, description, image_url, category, amount)
+  VALUES (?, ?, ?, ?, ?, ?, ?)
   ON CONFLICT (item_id) DO UPDATE SET
-  amount = amount + excluded.amount
+  amount = amount + excluded.amount,
+  name = excluded.name,
+  price = excluded.price,
+  description = excluded.description,
+  image_url = excluded.image_url,
+  category = excluded.category
   `;
-      await database.runAsync(sql, item_id, amount);
+      await database.runAsync(
+         sql,
+         item.id,
+         item.name,
+         item.price,
+         item.description,
+         item.image_url,
+         item.category,
+         amount,
+      );
       await database.execAsync("COMMIT;");
       return { type: "success", message: "Item added to cart" };
    } catch (e) {
@@ -143,9 +129,8 @@ export async function getTotalCartCost() {
    const database = await initDB();
    try {
       const rows = await database.getAllAsync(`
-         SELECT SUM( cartitems.amount * menuitems.price ) AS total
+         SELECT SUM(amount * price) AS total
          FROM cartitems
-         JOIN menuitems ON cartitems.item_id = menuitems.id
          `);
       return rows[0].total;
    } catch (error) {

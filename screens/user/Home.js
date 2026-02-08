@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import Filter from "../../components/Filter";
 import ItemSeperator from "../../components/ItemSeperator";
+import RestaurantClosedOverlay from "../../components/RestaurantClosedOverlay";
 import { colors, layout, typography } from "../../styles/theme";
 import {
    getGlobalSettings,
@@ -28,6 +29,7 @@ const Home = ({ menuCategories, database }) => {
    const [activeCategories, setActiveCategories] = useState([]);
    const [numOfCartItems, setNumOfCartItems] = useState(0);
    const [currency, setCurrency] = useState();
+   const [isRestaurantOpen, setIsRestaurantOpen] = useState(true);
    const navigation = useNavigation();
 
    const handleFilterSelection = (filter) => {
@@ -49,6 +51,8 @@ const Home = ({ menuCategories, database }) => {
       const fetchSettings = async () => {
          const globalSettings = await getGlobalSettings();
          setCurrency(globalSettings?.[0]?.currency_code);
+         const isOpen = globalSettings?.[0]?.restaurant_available;
+         setIsRestaurantOpen(isOpen !== false);
       };
       fetchSettings();
    }, []);
@@ -190,6 +194,7 @@ const Home = ({ menuCategories, database }) => {
                </TouchableOpacity>
             )}
          />
+         <RestaurantClosedOverlay visible={!isRestaurantOpen} />
       </SafeAreaView>
    );
 };

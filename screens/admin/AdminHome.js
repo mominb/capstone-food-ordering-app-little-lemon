@@ -1,9 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+   Alert,
+   Image,
+   StyleSheet,
+   Text,
+   TouchableOpacity,
+   View,
+} from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import * as theme from "../../styles/theme";
+import * as supabase from "../../utils/supabase";
 
 const AdminHome = () => {
    const navigator = useNavigation();
@@ -23,6 +32,18 @@ const AdminHome = () => {
       } finally {
          setIsLoading(false);
       }
+   };
+
+   const confirmLogout = () => {
+      Alert.alert(
+         "Log out",
+         "Are you sure you want to log out?",
+         [
+            { text: "Cancel", style: "cancel" },
+            { text: "Logout", style: "destructive", onPress: handleLogout },
+         ],
+         { cancelable: true },
+      );
    };
    return (
       <SafeAreaView style={[styles.container, theme.layout.container]}>
@@ -62,7 +83,7 @@ const AdminHome = () => {
                   </Text>
                </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={handleLogout} style={styles.button}>
+            <TouchableOpacity onPress={confirmLogout} style={styles.button}>
                <Text style={styles.buttonText}>Logout</Text>
             </TouchableOpacity>
          </View>

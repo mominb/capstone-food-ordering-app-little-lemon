@@ -1,6 +1,7 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
+   Alert,
    FlatList,
    Image,
    StyleSheet,
@@ -60,6 +61,22 @@ const ManageMenu = () => {
       } finally {
          setIsLoading(false);
       }
+   };
+
+   const confirmDelete = (id, name) => {
+      Alert.alert(
+         "Delete menu item",
+         `Are you sure you want to delete "${name}"?`,
+         [
+            { text: "Cancel", style: "cancel" },
+            {
+               text: "Delete",
+               style: "destructive",
+               onPress: () => handleDelete(id),
+            },
+         ],
+         { cancelable: true }
+      );
    };
    return (
       <SafeAreaView style={[styles.container, theme.layout.container]}>
@@ -135,7 +152,7 @@ const ManageMenu = () => {
                            padding: 10,
                            borderRadius: 10,
                         }}
-                        onPress={() => handleDelete(item.id)}
+                        onPress={() => confirmDelete(item.id, item.name)}
                      >
                         <Text style={{ color: theme.colors.red }}>DELETE</Text>
                      </TouchableOpacity>

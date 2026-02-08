@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
+   Alert,
    Image,
    Keyboard,
    KeyboardAvoidingView,
@@ -92,6 +93,18 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
          setIsLoading(false);
       }
    };
+
+   const confirmLogout = () => {
+      Alert.alert(
+         "Log out",
+         "Are you sure you want to log out?",
+         [
+            { text: "Cancel", style: "cancel" },
+            { text: "Logout", style: "destructive", onPress: handleLogout },
+         ],
+         { cancelable: true }
+      );
+   };
    return (
       <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
@@ -157,7 +170,7 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
          <View>
             <TouchableOpacity
                style={styles.logoutButton}
-               onPress={handleLogout}
+               onPress={confirmLogout}
             >
                <Text style={styles.logoutButtonText}>Logout</Text>
             </TouchableOpacity>

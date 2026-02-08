@@ -203,14 +203,10 @@ export async function getGlobalSettings() {
       return data;
    }
 }
-``;
-export async function updateGlobalSettings(
-   currency_code,
-   restaurant_available,
-) {
+export async function updateGlobalSettings(restaurant_available) {
    const { error } = await supabase
       .from("global_settings")
-      .update({ currency_code, restaurant_available })
+      .update({ restaurant_available })
       .eq("id", true);
    if (error) {
       console.log("error updating global settings: ", error);
@@ -234,4 +230,19 @@ export async function getMenuByFilterAndSearch(categories, searchTerm) {
       return [];
    }
    return data;
+}
+
+export async function getMenuCategories() {
+   const { data, error } = await supabase.from("menu").select("category");
+   if (error) {
+      console.log("error fetching menu categories: ", error);
+      return [];
+   }
+   const categories = [];
+   data.forEach((item) => {
+      if (item.category && !categories.includes(item.category)) {
+         categories.push(item.category);
+      }
+   });
+   return categories;
 }

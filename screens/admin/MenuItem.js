@@ -69,7 +69,7 @@ const Item = ({ route }) => {
          setCurrency(globalSettings?.[0]?.currency_code);
       };
       fetchSettings();
-   });
+   }, []);
 
    return (
       <SafeAreaView style={[styles.container, theme.layout.container]}>

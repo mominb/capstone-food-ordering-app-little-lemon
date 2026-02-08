@@ -146,7 +146,7 @@ const Cart = ({
                   <View style={styles.itemActions}>
                      <Image
                         source={{
-                           uri: `https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/refs/heads/main/images/${item.image}`,
+                           uri: item.image_url,
                         }}
                         style={styles.itemImage}
                      />
