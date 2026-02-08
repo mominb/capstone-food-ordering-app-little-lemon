@@ -4,6 +4,7 @@ import {
    KeyboardAvoidingView,
    ScrollView,
    StyleSheet,
+   Switch,
    Text,
    TextInput,
    TouchableOpacity,
@@ -12,6 +13,7 @@ import {
 import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
+import InfoBox from "../../components/InfoBox";
 import PageHeader from "../../components/PageHeader";
 import * as theme from "../../styles/theme";
 import {
@@ -28,6 +30,7 @@ const Item = ({ route }) => {
    const [itemDescription, setItemDescription] = useState(item.description);
    const [itemPrice, setItemPrice] = useState(item.price?.toString());
    const [itemCategory, setItemCategory] = useState(item.category);
+   const [itemDisabled, setItemDisabled] = useState(item.is_disabled);
    const [isLoading, setIsLoading] = useState(false);
    const isItemExistent = Boolean(item.id);
    const handleItemUpdate = async () => {
@@ -40,6 +43,7 @@ const Item = ({ route }) => {
                itemDescription,
                itemPrice,
                itemCategory,
+               itemDisabled,
             );
          } else {
             res = await updateMenuItem(
@@ -48,6 +52,7 @@ const Item = ({ route }) => {
                itemDescription,
                itemPrice,
                itemCategory,
+               itemDisabled,
             );
          }
          setIsLoading(false);
@@ -78,8 +83,16 @@ const Item = ({ route }) => {
             textContent="Loading..."
             textStyle={{ color: theme.colors.white }}
          />
-         <PageHeader navigator={navigator} heading={"Edit Item"} />
-
+         <PageHeader
+            navigator={navigator}
+            heading={isItemExistent ? "Edit Item" : "Add Item"}
+         />
+         {item.is_disabled && (
+            <InfoBox
+               type="error"
+               message="Item is currently disabled and won't be visible to customers."
+            />
+         )}
          <ScrollView style={styles.container}>
             <View style={styles.infoBox}>
                <Text style={styles.label}>Name</Text>
@@ -111,6 +124,20 @@ const Item = ({ route }) => {
                   value={itemPrice}
                   onChangeText={setItemPrice}
                />
+               <View
+                  style={{
+                     flexDirection: "row",
+                     alignItems: "center",
+                     justifyContent: "space-between",
+                     marginBottom: 20,
+                  }}
+               >
+                  <Text style={styles.label}>Disable item</Text>
+                  <Switch
+                     value={itemDisabled}
+                     onValueChange={setItemDisabled}
+                  />
+               </View>
             </View>
          </ScrollView>
 
@@ -166,7 +193,7 @@ const styles = StyleSheet.create({
       backgroundColor: theme.colors.tertiary,
    },
    label: {
-      ...theme.typography.caption,
+      ...theme.typography.h3,
       color: theme.colors.black,
       marginBottom: 6,
    },

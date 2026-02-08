@@ -154,10 +154,17 @@ export async function getMenuItems() {
    return data;
 }
 
-export async function updateMenuItem(id, name, description, price, category) {
+export async function updateMenuItem(
+   id,
+   name,
+   description,
+   price,
+   category,
+   is_disabled,
+) {
    const { error } = await supabase
       .from("menu")
-      .update({ name, description, price, category })
+      .update({ name, description, price, category, is_disabled })
       .eq("id", id);
    if (error) {
       console.log("error updating menu item: ", error);

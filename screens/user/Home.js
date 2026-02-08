@@ -168,7 +168,7 @@ const Home = ({ menuCategories, database }) => {
 
          <FlatList
             keyExtractor={(item) => item.id}
-            data={data}
+            data={data.filter((item) => !item.is_disabled)}
             ItemSeparatorComponent={ItemSeperator}
             renderItem={({ item }) => (
                <TouchableOpacity

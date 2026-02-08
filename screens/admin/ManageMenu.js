@@ -75,7 +75,7 @@ const ManageMenu = () => {
                onPress: () => handleDelete(id),
             },
          ],
-         { cancelable: true }
+         { cancelable: true },
       );
    };
    return (
@@ -126,7 +126,11 @@ const ManageMenu = () => {
             renderItem={({ item }) => (
                <TouchableOpacity
                   onPress={() => navigator.navigate("MenuItem", { item })}
-                  style={styles.itemRow}
+                  style={
+                     item.is_disabled
+                        ? [styles.itemRow, styles.itemRowDisabled]
+                        : styles.itemRow
+                  }
                >
                   <View
                      style={{
@@ -143,6 +147,7 @@ const ManageMenu = () => {
                            {item.price} {currency}
                         </Text>
                      </View>
+
                      <TouchableOpacity
                         style={{
                            alignItems: "center",
@@ -176,6 +181,9 @@ const styles = StyleSheet.create({
       padding: 15,
       justifyContent: "space-between",
    },
+   itemRowDisabled: {
+      backgroundColor: theme.colors.lightgrey,
+   },
    itemTextColumn: {
       width: "60%",
    },
@@ -185,14 +193,13 @@ const styles = StyleSheet.create({
    itemDescription: {
       ...theme.typography.body,
       color: theme.colors.black,
-      marginTop: 5,
-      marginBottom: 5,
+      marginVertical: 5,
    },
    itemPrice: {
       ...theme.typography.bodyBold,
    },
    itemImage: {
-      resizeMode: "fill",
+      resizeMode: "cover",
       width: "30%",
       height: "100%",
       backgroundColor: theme.colors.black,
