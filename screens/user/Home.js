@@ -185,12 +185,20 @@ const Home = ({ menuCategories, database }) => {
                      </Text>
                   </View>
 
-                  <Image
-                     style={styles.itemImage}
-                     source={{
-                        uri: item.image_url,
-                     }}
-                  />
+                  {item.image_url ? (
+                     <Image
+                        style={styles.itemImage}
+                        source={{
+                           uri: item.image_url,
+                        }}
+                     />
+                  ) : (
+                     <View style={styles.itemImagePlaceholder}>
+                        <Text style={styles.itemImagePlaceholderText}>
+                           No Image
+                        </Text>
+                     </View>
+                  )}
                </TouchableOpacity>
             )}
          />
@@ -305,6 +313,22 @@ const styles = StyleSheet.create({
       height: 100,
       backgroundColor: colors.lightgrey,
       borderRadius: 10,
+   },
+   itemImagePlaceholder: {
+      width: 100,
+      height: 100,
+      backgroundColor: colors.lightgrey,
+      borderRadius: 10,
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: colors.black,
+   },
+   itemImagePlaceholderText: {
+      ...typography.body,
+      color: colors.black,
+      fontSize: 12,
+      textAlign: "center",
    },
 });
 

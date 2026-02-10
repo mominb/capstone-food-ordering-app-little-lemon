@@ -14,8 +14,8 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import OtpTimer from "../components/OtpTimer";
+import { colors, layout, typography } from "../styles/theme";
 import { sendEmailOTP, verifyEmailOTP } from "../utils/supabase";
-import { layout, colors, typography } from "../styles/theme";
 
 const Onboarding = () => {
    const [email, setEmail] = useState("");
@@ -69,7 +69,7 @@ const Onboarding = () => {
    };
 
    return (
-      <SafeAreaView style={[styles.container, layout.container]}>
+      <SafeAreaView style={[layout.container, styles.container]}>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
@@ -125,13 +125,18 @@ const Onboarding = () => {
 };
 
 const styles = StyleSheet.create({
-   container: {},
+   container: {
+      backgroundColor: colors.primary,
+      paddingHorizontal: 20,
+   },
    logo: {
       width: 200,
       height: 150,
       alignSelf: "center",
    },
-   content: {},
+   content: {
+      marginTop: 10,
+   },
    title: {
       ...typography.h1,
       color: colors.secondary,

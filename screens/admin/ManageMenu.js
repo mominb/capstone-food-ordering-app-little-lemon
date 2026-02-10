@@ -162,12 +162,20 @@ const ManageMenu = () => {
                         <Text style={{ color: theme.colors.red }}>DELETE</Text>
                      </TouchableOpacity>
                   </View>
-                  <Image
-                     style={styles.itemImage}
-                     source={{
-                        uri: item.image_url,
-                     }}
-                  />
+                  {item.image_url ? (
+                     <Image
+                        style={styles.itemImage}
+                        source={{
+                           uri: item.image_url,
+                        }}
+                     />
+                  ) : (
+                     <View style={styles.itemImagePlaceholder}>
+                        <Text style={styles.itemImagePlaceholderText}>
+                           No Image
+                        </Text>
+                     </View>
+                  )}
                </TouchableOpacity>
             )}
          />
@@ -204,6 +212,22 @@ const styles = StyleSheet.create({
       height: "100%",
       backgroundColor: theme.colors.black,
       borderRadius: 10,
+   },
+   itemImagePlaceholder: {
+      width: "30%",
+      height: "100%",
+      backgroundColor: theme.colors.lightgrey,
+      borderRadius: 10,
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: theme.colors.black,
+   },
+   itemImagePlaceholderText: {
+      ...theme.typography.body,
+      color: theme.colors.black,
+      fontSize: 12,
+      textAlign: "center",
    },
    button: {
       alignSelf: "center",

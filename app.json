@@ -13,9 +13,13 @@
          "backgroundColor": "#ffffff"
       },
       "ios": {
-         "supportsTablet": true
+         "supportsTablet": true,
+         "infoPlist": {
+            "NSPhotoLibraryUsageDescription": "Allow access to your photos to upload menu images."
+         }
       },
       "android": {
+         "permissions": ["READ_MEDIA_IMAGES", "READ_EXTERNAL_STORAGE"],
          "adaptiveIcon": {
             "foregroundImage": "./assets/adaptive-icon.png",
             "backgroundColor": "#ffffff"

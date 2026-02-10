@@ -15,6 +15,79 @@ export const supabase = createClient(
    },
 );
 
+const MENU_IMAGE_BUCKET = "menu-images";
+const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
+
+const buildPublicUrlPrefix = () =>
+   `${SUPABASE_URL}/storage/v1/object/public/${MENU_IMAGE_BUCKET}/`;
+
+const getStoragePathFromPublicUrl = (publicUrl) => {
+   if (!publicUrl) return null;
+   const prefix = buildPublicUrlPrefix();
+   if (!publicUrl.startsWith(prefix)) return null;
+   const path = publicUrl.replace(prefix, "");
+   return path.split("?")[0];
+};
+
+const getFileExtension = (uri) => {
+   const cleanUri = uri.split("?")[0];
+   const parts = cleanUri.split(".");
+   return parts.length > 1 ? parts.pop() : "jpg";
+};
+
+const buildMenuImagePath = (uri, itemId) => {
+   const extension = getFileExtension(uri);
+   const uniqueSuffix = `${Date.now()}-${Math.floor(Math.random() * 100000)}`;
+   const prefix = itemId ? `menu/${itemId}` : "menu/new";
+   return `${prefix}/${uniqueSuffix}.${extension}`;
+};
+
+export async function uploadMenuImage({ uri, itemId }) {
+   try {
+      const response = await fetch(uri);
+      const arrayBuffer = await response.arrayBuffer();
+      if (!arrayBuffer || arrayBuffer.byteLength === 0) {
+         console.log("error uploading menu image: empty file");
+         return { error: new Error("Empty file") };
+      }
+      const path = buildMenuImagePath(uri, itemId);
+      const { data, error } = await supabase.storage
+         .from(MENU_IMAGE_BUCKET)
+         .upload(path, arrayBuffer, {
+            contentType: response.headers.get("Content-Type") || "image/jpeg",
+            upsert: true,
+         });
+
+      if (error) {
+         console.log("error uploading menu image: ", error);
+         return { error };
+      }
+
+      const { data: publicData } = supabase.storage
+         .from(MENU_IMAGE_BUCKET)
+         .getPublicUrl(data.path);
+
+      return { publicUrl: publicData.publicUrl, path: data.path, error: null };
+   } catch (error) {
+      console.log("error uploading menu image: ", error);
+      return { error };
+   }
+}
+
+export async function deleteMenuImageByUrl(imageUrl) {
+   const path = getStoragePathFromPublicUrl(imageUrl);
+   if (!path) return { error: null };
+
+   const { error } = await supabase.storage
+      .from(MENU_IMAGE_BUCKET)
+      .remove([path]);
+   if (error) {
+      console.log("error deleting menu image: ", error);
+      return { error };
+   }
+   return { error: null };
+}
+
 export async function sendEmailOTP(email) {
    const { error } = await supabase.auth.signInWithOtp({ email });
 
@@ -161,10 +234,11 @@ export async function updateMenuItem(
    price,
    category,
    is_disabled,
+   image_url,
 ) {
    const { error } = await supabase
       .from("menu")
-      .update({ name, description, price, category, is_disabled })
+      .update({ name, description, price, category, is_disabled, image_url })
       .eq("id", id);
    if (error) {
       console.log("error updating menu item: ", error);
@@ -175,10 +249,17 @@ export async function updateMenuItem(
    }
 }
 
-export async function addMenuItem(name, description, price, category) {
+export async function addMenuItem(
+   name,
+   description,
+   price,
+   category,
+   is_disabled,
+   image_url,
+) {
    const { error } = await supabase
       .from("menu")
-      .insert({ name, description, price, category });
+      .insert({ name, description, price, category, is_disabled, image_url });
    if (error) {
       console.log("error adding menu item: ", error);
       return { error };

@@ -58,19 +58,18 @@ const Item = ({ route }) => {
             />
          </View>
 
-         <Image
-            style={{
-               resizeMode: "stretch",
-               backgroundColor: colors.lightgrey,
-               width: "100%",
-               height: "30%",
-               borderBottomColor: colors.black,
-               borderBottomWidth: 2,
-            }}
-            source={{
-               uri: item.image_url,
-            }}
-         />
+         {item.image_url ? (
+            <Image
+               style={styles.heroImage}
+               source={{
+                  uri: item.image_url,
+               }}
+            />
+         ) : (
+            <View style={styles.heroImagePlaceholder}>
+               <Text style={styles.heroImagePlaceholderText}>No Image</Text>
+            </View>
+         )}
          <View style={styles.infoBox}>
             <Text style={styles.itemName}>{item.name}</Text>
             <Text style={styles.itemDescription}>{item.description}</Text>
@@ -145,6 +144,28 @@ const styles = StyleSheet.create({
    infoBox: {
       width: "100%",
       padding: 20,
+   },
+   heroImage: {
+      resizeMode: "stretch",
+      backgroundColor: colors.lightgrey,
+      width: "100%",
+      height: "30%",
+      borderBottomColor: colors.black,
+      borderBottomWidth: 2,
+   },
+   heroImagePlaceholder: {
+      backgroundColor: colors.lightgrey,
+      width: "100%",
+      height: "30%",
+      borderBottomColor: colors.black,
+      borderBottomWidth: 2,
+      alignItems: "center",
+      justifyContent: "center",
+   },
+   heroImagePlaceholderText: {
+      ...typography.body,
+      color: colors.black,
+      fontSize: 14,
    },
    itemName: {
       ...typography.h2,

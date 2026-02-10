@@ -144,12 +144,20 @@ const Cart = ({
                   </View>
 
                   <View style={styles.itemActions}>
-                     <Image
-                        source={{
-                           uri: item.image_url,
-                        }}
-                        style={styles.itemImage}
-                     />
+                     {item.image_url ? (
+                        <Image
+                           source={{
+                              uri: item.image_url,
+                           }}
+                           style={styles.itemImage}
+                        />
+                     ) : (
+                        <View style={styles.itemImagePlaceholder}>
+                           <Text style={styles.itemImagePlaceholderText}>
+                              No Image
+                           </Text>
+                        </View>
+                     )}
                      <View style={styles.counterContainer}>
                         <TouchableOpacity
                            style={styles.CounterButton}
@@ -199,12 +207,12 @@ const Cart = ({
             )}
          />
          <View style={styles.footer}>
-           <View style={styles.totalAmountContainer}>
-              <Text style={styles.totalAmountText}>Total amount</Text>
+            <View style={styles.totalAmountContainer}>
+               <Text style={styles.totalAmountText}>Total amount</Text>
                <Text style={styles.totalAmountText}>
                   {formatCurrency(totalAmount)}
                </Text>
-           </View>
+            </View>
             <TouchableOpacity
                onPress={handleCheckoutNavi}
                style={styles.checkoutButton}
@@ -260,6 +268,22 @@ const styles = StyleSheet.create({
       height: 60,
       borderRadius: 6,
       backgroundColor: colors.lightgrey,
+   },
+   itemImagePlaceholder: {
+      width: 60,
+      height: 60,
+      borderRadius: 6,
+      backgroundColor: colors.lightgrey,
+      alignItems: "center",
+      justifyContent: "center",
+      borderWidth: 1,
+      borderColor: colors.black,
+   },
+   itemImagePlaceholderText: {
+      ...typography.caption,
+      color: colors.black,
+      fontSize: 10,
+      textAlign: "center",
    },
    deleteButton: {
       paddingVertical: 6,
