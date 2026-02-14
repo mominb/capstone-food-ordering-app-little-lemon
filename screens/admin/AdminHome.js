@@ -15,7 +15,7 @@ import * as theme from "../../styles/theme";
 import * as supabase from "../../utils/supabase";
 
 const AdminHome = () => {
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const [isLoading, setIsLoading] = useState(false);
    const handleLogout = async () => {
       setIsLoading(true);
@@ -64,18 +64,18 @@ const AdminHome = () => {
                <Text style={styles.heading}>Admin Operations</Text>
                <TouchableOpacity
                   style={styles.operationButton}
-                  onPress={() => navigator.navigate("AllOrders")}
+                  onPress={() => navigation.navigate("AllOrders")}
                >
                   <Text style={styles.operationButtonText}>Manage Orders</Text>
                </TouchableOpacity>
                <TouchableOpacity
-                  onPress={() => navigator.navigate("ManageMenu")}
+                  onPress={() => navigation.navigate("ManageMenu")}
                   style={styles.operationButton}
                >
                   <Text style={styles.operationButtonText}>Manage Menu</Text>
                </TouchableOpacity>
                <TouchableOpacity
-                  onPress={() => navigator.navigate("Settings")}
+                  onPress={() => navigation.navigate("Settings")}
                   style={styles.operationButton}
                >
                   <Text style={styles.operationButtonText}>

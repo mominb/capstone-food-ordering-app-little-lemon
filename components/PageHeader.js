@@ -2,11 +2,17 @@ import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { borderRadius, colors, spacing, typography } from "../styles/theme";
 
-const PageHeader = ({ navigator, heading }) => {
+const PageHeader = ({ navigation, heading }) => {
+   const handleBackPress = () => {
+      if (navigation?.canGoBack()) {
+         navigation.goBack();
+      }
+   };
+
    return (
       <View style={styles.header}>
          <TouchableOpacity
-            onPress={() => navigator.goBack()}
+            onPress={handleBackPress}
             style={styles.backButtonContainer}
          >
             <Ionicons name="chevron-back" size={28} color={colors.primary} />
@@ -32,12 +38,14 @@ const styles = StyleSheet.create({
       left: spacing.lg,
       padding: spacing.sm,
       borderRadius: borderRadius.md,
+      zIndex: 10,
    },
    heading: {
       ...typography.h2,
       color: colors.primary,
       textAlign: "center",
       width: "100%",
+      pointerEvents: "none",
    },
 });
 

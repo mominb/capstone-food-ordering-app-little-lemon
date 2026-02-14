@@ -25,7 +25,7 @@ import { getGlobalSettings, placeOrder } from "../../utils/supabase";
 
 const Checkout = ({ route, deleteUserCart }) => {
    const [isLoading, setIsLoading] = useState(false);
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const data = route.params;
    const cartItems = data.cartItems;
    const totalAmount = data.totalAmount;
@@ -57,7 +57,7 @@ const Checkout = ({ route, deleteUserCart }) => {
             paymentMethod,
             totalAmount,
          );
-         navigator.navigate("Orders");
+         navigation.navigate("Orders");
          await deleteUserCart();
       } catch (error) {
          console.log(error);
@@ -73,7 +73,7 @@ const Checkout = ({ route, deleteUserCart }) => {
             textContent="Loading..."
             textStyle={{ color: colors.white }}
          />
-         <PageHeader navigator={navigator} heading={"Checkout"}></PageHeader>
+         <PageHeader navigation={navigation} heading={"Checkout"}></PageHeader>
          <ScrollView>
             <View style={styles.orderDetailsContainer}>
                <Text style={styles.subHeading}>Order Details</Text>

@@ -13,7 +13,7 @@ import {
    typography,
 } from "../styles/theme";
 
-const OrderCards = ({ orders, navigator, onPressRoute = "OrderInfo" }) => {
+const OrderCards = ({ orders, navigation, onPressRoute = "OrderInfo" }) => {
    const formattedDate = (date) => {
       const formatted = new Date(date).toLocaleString("en-GB", {
          day: "2-digit",
@@ -34,7 +34,7 @@ const OrderCards = ({ orders, navigator, onPressRoute = "OrderInfo" }) => {
          contentContainerStyle={styles.listContent}
          renderItem={({ item }) => (
             <TouchableOpacity
-               onPress={() => navigator.navigate(onPressRoute, { item })}
+               onPress={() => navigation.navigate(onPressRoute, { item })}
                style={[
                   styles.card,
                   item.order_status === "completed" ||

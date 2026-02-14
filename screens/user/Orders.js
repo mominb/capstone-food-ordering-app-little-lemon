@@ -17,7 +17,7 @@ import {
 import { getUsersOrders } from "../../utils/supabase";
 
 const Orders = () => {
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const [orders, setOrders] = useState();
    const [isLoading, setIsLoading] = useState(false);
 
@@ -45,11 +45,11 @@ const Orders = () => {
             textContent="Loading..."
             textStyle={{ color: colors.white }}
          />
-         <PageHeader navigator={navigator} heading={"Your Orders"} />
+         <PageHeader navigation={navigation} heading={"Your Orders"} />
          <View style={styles.content}>
-            <OrderCards navigator={navigator} orders={orders} />
+            <OrderCards navigation={navigation} orders={orders} />
             <TouchableOpacity
-               onPress={() => navigator.navigate("Home")}
+               onPress={() => navigation.navigate("Home")}
                style={styles.button}
             >
                <Text style={styles.buttonText}>Back to home</Text>

@@ -10,7 +10,7 @@ import * as theme from "../../styles/theme";
 import { getAllOrders } from "../../utils/supabase";
 
 const AllOrders = () => {
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const [orders, setOrders] = useState();
    const [isLoading, setIsLoading] = useState(false);
    useFocusEffect(
@@ -38,9 +38,9 @@ const AllOrders = () => {
             textContent="Loading..."
             textStyle={{ color: theme.colors.white }}
          />
-         <PageHeader navigator={navigator} heading={"Orders"} />
+         <PageHeader navigation={navigation} heading={"Orders"} />
          <OrderCards
-            navigator={navigator}
+            navigation={navigation}
             orders={orders}
             onPressRoute="ManageOrder"
          />

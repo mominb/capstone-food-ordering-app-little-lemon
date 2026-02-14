@@ -14,7 +14,7 @@ import {
 } from "../../styles/theme";
 
 const OrderInfo = ({ route }) => {
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const { item: order } = route.params;
    const orderItems = order.order_items || [];
 
@@ -32,7 +32,7 @@ const OrderInfo = ({ route }) => {
 
    return (
       <SafeAreaView style={[styles.container, layout.container]}>
-         <PageHeader navigator={navigator} heading={"Order Details"} />
+         <PageHeader navigation={navigation} heading={"Order Details"} />
          <InfoBox
             message={
                "For any further changes or cancellation please contact the restaurant"

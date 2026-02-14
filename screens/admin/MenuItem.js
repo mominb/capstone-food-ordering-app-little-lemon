@@ -27,7 +27,7 @@ import {
 } from "../../utils/supabase";
 
 const Item = ({ route }) => {
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const item = route?.params?.item ?? {};
    const [currency, setCurrency] = useState();
    const [itemName, setItemName] = useState(item.name);
@@ -127,7 +127,9 @@ const Item = ({ route }) => {
             Toast.show({ type: "error", text1: "Save failed" });
          } else {
             Toast.show({ type: "success", text1: "Saved successfully" });
-            navigator.goBack();
+            if (navigation.canGoBack()) {
+               navigation.goBack();
+            }
          }
       } catch (err) {
          console.log(err);
@@ -151,7 +153,7 @@ const Item = ({ route }) => {
             textStyle={{ color: theme.colors.white }}
          />
          <PageHeader
-            navigator={navigator}
+            navigation={navigation}
             heading={isItemExistent ? "Edit Item" : "Add Item"}
          />
          {item.is_disabled && (

@@ -26,7 +26,7 @@ const ManageMenu = () => {
    const [menu, setMenu] = useState([]);
    const [isLoading, setIsLoading] = useState(true);
    const [currency, setCurrency] = useState();
-   const navigator = useNavigation();
+   const navigation = useNavigation();
 
    useFocusEffect(() => {
       const load = async () => {
@@ -86,10 +86,10 @@ const ManageMenu = () => {
             textContent="Loading..."
             textStyle={{ color: theme.colors.white }}
          />
-         <PageHeader heading={"Menu Management"} navigator={navigator} />
+         <PageHeader heading={"Menu Management"} navigation={navigation} />
          <View>
             <ItemSeperator />
-            <TouchableOpacity onPress={() => navigator.navigate("MenuItem")}>
+            <TouchableOpacity onPress={() => navigation.navigate("MenuItem")}>
                <View
                   style={{
                      flexDirection: "row",
@@ -126,7 +126,7 @@ const ManageMenu = () => {
             contentContainerStyle={{ paddingBottom: 24 }}
             renderItem={({ item }) => (
                <TouchableOpacity
-                  onPress={() => navigator.navigate("MenuItem", { item })}
+                  onPress={() => navigation.navigate("MenuItem", { item })}
                   style={
                      item.is_disabled
                         ? [styles.itemRow, styles.itemRowDisabled]

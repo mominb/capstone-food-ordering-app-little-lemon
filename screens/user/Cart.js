@@ -30,7 +30,7 @@ const Cart = ({
    getTotalCartCost,
    userMetaDataExists,
 }) => {
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const [cartItems, setCartItems] = useState([]);
    const [totalAmount, setTotalAmount] = useState(0);
    const [isLoading, setIsLoading] = useState(true);
@@ -104,7 +104,7 @@ const Cart = ({
 
    const handleCheckoutNavi = () => {
       if (isCheckoutAllowed) {
-         navigator.navigate("Checkout", {
+         navigation.navigate("Checkout", {
             cartItems: cartItems,
             totalAmount: totalAmount,
          });
@@ -115,7 +115,7 @@ const Cart = ({
                text1: "Please complete profile",
                text2: "You cannot checkout until information is complete",
             });
-            navigator.navigate("Profile");
+            navigation.navigate("Profile");
          } else {
             Toast.show({
                type: "error",
@@ -132,7 +132,7 @@ const Cart = ({
             textContent="Loading..."
             textStyle={{ color: colors.white }}
          />
-         <PageHeader navigator={navigator} heading={"Cart"}></PageHeader>
+         <PageHeader navigation={navigation} heading={"Cart"}></PageHeader>
 
          <FlatList
             data={cartItems}

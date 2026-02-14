@@ -1,10 +1,10 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
    Alert,
    Keyboard,
    KeyboardAvoidingView,
+   Platform,
    ScrollView,
    StyleSheet,
    Text,
@@ -13,10 +13,16 @@ import {
    View,
 } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
-import PhoneInput from "react-native-phone-number-input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
+import {
+   countryCode,
+   validateEmail,
+   validateName,
+   validatePhone,
+   validation,
+} from "../../config";
 import {
    borderRadius,
    colors,
@@ -33,41 +39,94 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
    const [phone, setPhone] = useState("");
    const [isNameFocused, setIsNameFocused] = useState(false);
    const [isEmailFocused, setIsEmailFocused] = useState(false);
-   const [phoneInputKey, setPhoneInputKey] = useState(0);
-
+   const [isPhoneFocused, setIsPhoneFocused] = useState(false);
    const [isLoading, setIsLoading] = useState(false);
 
-   const navigator = useNavigation();
+   const navigation = useNavigation();
 
    useEffect(() => {
       const loadUserData = async () => {
          setIsLoading(true);
-         const userData = await getUserData();
-         const user = userData.data?.user;
-         if (user) {
-            setName(user.user_metadata?.displayName ?? "");
-            setEmail(user.user_metadata?.email ?? "");
-            setPhone(user.user_metadata?.phone ?? "");
-            setPhoneInputKey((prev) => prev + 1);
+         try {
+            const userData = await getUserData();
+            const user = userData.data?.user;
+            if (user) {
+               setName(user.user_metadata?.displayName ?? "");
+               setEmail(user.user_metadata?.email ?? "");
+
+               // Parse phone number to extract just the number part
+               const fullPhone = user.user_metadata?.phone ?? "";
+               if (fullPhone) {
+                  let phoneNumber = fullPhone.trim();
+                  if (phoneNumber.startsWith(countryCode)) {
+                     phoneNumber = phoneNumber.substring(countryCode.length);
+                  }
+                  setPhone(phoneNumber);
+               }
+            }
+         } catch (err) {
+            console.error("Error loading user data:", err);
+         } finally {
+            setIsLoading(false);
          }
-         setIsLoading(false);
       };
       loadUserData();
    }, []);
+
    const handleSaveInfo = async () => {
+      // Validate name
+      const nameValidation = validateName(name);
+      if (!nameValidation.valid) {
+         Toast.show({
+            type: "error",
+            text1: nameValidation.message,
+         });
+         return;
+      }
+
+      // Validate phone
+      if (!phone) {
+         Toast.show({
+            type: "error",
+            text1: "Phone number is required",
+         });
+         return;
+      }
+
+      const phoneValidation = validatePhone(phone);
+      if (!phoneValidation.valid) {
+         Toast.show({
+            type: "error",
+            text1: phoneValidation.message,
+         });
+         return;
+      }
+
+      // Validate email if provided
+      if (email) {
+         const emailValidation = validateEmail(email);
+         if (!emailValidation.valid) {
+            Toast.show({
+               type: "error",
+               text1: emailValidation.message,
+            });
+            return;
+         }
+      }
+
       setIsLoading(true);
       try {
+         // Combine country code and phone number
+         const fullPhone = `${countryCode}${phone}`;
          await updateUserData({
-            phone: phone,
+            phone: fullPhone,
             email: email,
             displayName: name,
          });
-         setIsLoading(false);
          Keyboard.dismiss();
-         console.log("User info saved");
          Toast.show({
             type: "success",
-            text1: "Information updated successfully",
+            text1: "Information updated",
          });
          refreshUserInfo();
       } catch (error) {
@@ -76,6 +135,8 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
             type: "error",
             text1: "Failed to update information",
          });
+      } finally {
+         setIsLoading(false);
       }
    };
    const handleLogout = async () => {
@@ -83,7 +144,6 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
       try {
          const { error } = await supabase.auth.signOut();
          if (error) {
-            console.log("Error logging out:", error);
             Toast.show({
                type: "error",
                text1: "Logout failed",
@@ -91,10 +151,9 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
          } else {
             Toast.show({
                type: "success",
-               text1: "You have been logged out",
+               text1: "Logged out",
             });
          }
-
          await deleteUserCart();
       } finally {
          setIsLoading(false);
@@ -112,6 +171,7 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
          { cancelable: true },
       );
    };
+
    return (
       <SafeAreaView style={[styles.container, layout.container]}>
          <Spinner
@@ -119,16 +179,12 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
             textContent="Loading..."
             textStyle={{ color: colors.white }}
          />
-         <PageHeader navigator={navigator} heading={"Profile"}></PageHeader>
-         <KeyboardAvoidingView behavior="padding" style={styles.content}>
+         <PageHeader navigation={navigation} heading="Profile" />
+         <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.content}
+         >
             <ScrollView>
-               <View style={styles.profileImageContainer}>
-                  <Ionicons
-                     name="person-circle"
-                     size={120}
-                     color={colors.primary}
-                  />
-               </View>
                <View style={styles.form}>
                   <Text style={styles.label}>Name</Text>
                   <TextInput
@@ -140,6 +196,8 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
                      ]}
                      value={name}
                      onChangeText={setName}
+                     placeholder="Your name"
+                     placeholderTextColor={colors.gray}
                   />
 
                   <Text style={styles.label}>Email</Text>
@@ -154,17 +212,32 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
                      ]}
                      value={email}
                      onChangeText={setEmail}
+                     placeholder="name@example.com"
+                     placeholderTextColor={colors.gray}
                   />
+
                   <Text style={styles.label}>Phone</Text>
-                  <PhoneInput
-                     key={`phone-input-${phoneInputKey}`}
-                     defaultCode="PK"
-                     defaultValue={phone}
-                     onChangeText={setPhone}
-                     containerStyle={[styles.phoneContainer]}
-                     textContainerStyle={styles.phoneTextContainer}
-                     textInputStyle={styles.phoneTextInput}
-                  />
+                  <View style={styles.phoneContainer}>
+                     <View style={styles.countryCodeDisplay}>
+                        <Text style={styles.countryCodeText}>
+                           {countryCode}
+                        </Text>
+                     </View>
+                     <TextInput
+                        keyboardType="phone-pad"
+                        onFocus={() => setIsPhoneFocused(true)}
+                        onBlur={() => setIsPhoneFocused(false)}
+                        style={[
+                           styles.phoneInput,
+                           isPhoneFocused && styles.inputFocused,
+                        ]}
+                        value={phone}
+                        onChangeText={setPhone}
+                        placeholder={validation.phoneFormat}
+                        placeholderTextColor={colors.gray}
+                        maxLength={validation.phoneMaxLength}
+                     />
+                  </View>
                </View>
             </ScrollView>
             <TouchableOpacity
@@ -188,31 +261,21 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
 
 const styles = StyleSheet.create({
    container: {},
-   profileImageContainer: {
-      alignItems: "center",
-      paddingVertical: spacing.xl,
-      backgroundColor: colors.tertiary,
-   },
-   logoutButton: {
-      alignSelf: "center",
-      width: "90%",
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.lg,
-      borderRadius: borderRadius.lg,
-      backgroundColor: colors.red,
-      marginVertical: spacing.lg,
-      ...shadows.medium,
-   },
    content: {
+      flex: 1,
       backgroundColor: colors.white,
    },
-   logoutButtonText: {
-      ...typography.button,
-      color: colors.white,
-      textAlign: "center",
+   form: {
+      padding: spacing.lg,
+   },
+   label: {
+      ...typography.caption,
+      color: colors.primary,
+      marginBottom: spacing.sm,
+      fontWeight: "700",
    },
    input: {
-      height: 48,
+      height: 52,
       borderWidth: 1,
       borderColor: colors.borderLight,
       borderRadius: borderRadius.md,
@@ -223,40 +286,40 @@ const styles = StyleSheet.create({
       ...shadows.small,
    },
    inputFocused: {
-      height: 48,
       borderWidth: 2,
       borderColor: colors.primary,
-      borderRadius: borderRadius.md,
-      paddingHorizontal: spacing.md,
-      marginBottom: spacing.lg,
-      backgroundColor: colors.white,
    },
    phoneContainer: {
-      width: "100%",
-      height: 48,
-      borderColor: colors.borderLight,
+      flexDirection: "row",
+      gap: spacing.sm,
+      marginBottom: spacing.lg,
+   },
+   countryCodeDisplay: {
+      height: 52,
+      width: 80,
       borderWidth: 1,
+      borderColor: colors.borderLight,
       borderRadius: borderRadius.md,
+      backgroundColor: colors.tertiary,
+      justifyContent: "center",
+      alignItems: "center",
       ...shadows.small,
    },
-   phoneTextContainer: {
-      borderTopRightRadius: borderRadius.md,
-      borderBottomRightRadius: borderRadius.md,
-      backgroundColor: colors.tertiary,
-   },
-   phoneTextInput: {
-      height: 48,
-      fontWeight: "600",
-      paddingTop: spacing.xs,
-   },
-   label: {
-      ...typography.caption,
-      color: colors.primary,
-      marginBottom: spacing.sm,
+   countryCodeText: {
+      ...typography.body,
       fontWeight: "700",
+      color: colors.primary,
    },
-   form: {
-      padding: spacing.lg,
+   phoneInput: {
+      flex: 1,
+      height: 52,
+      borderWidth: 1,
+      borderColor: colors.borderLight,
+      borderRadius: borderRadius.md,
+      paddingHorizontal: spacing.md,
+      backgroundColor: colors.white,
+      ...typography.body,
+      ...shadows.small,
    },
    saveButton: {
       alignSelf: "center",
@@ -273,5 +336,21 @@ const styles = StyleSheet.create({
       color: colors.white,
       textAlign: "center",
    },
+   logoutButton: {
+      alignSelf: "center",
+      width: "90%",
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
+      backgroundColor: colors.red,
+      marginVertical: spacing.lg,
+      ...shadows.medium,
+   },
+   logoutButtonText: {
+      ...typography.button,
+      color: colors.white,
+      textAlign: "center",
+   },
 });
+
 export default Profile;

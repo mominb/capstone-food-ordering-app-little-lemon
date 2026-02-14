@@ -17,7 +17,7 @@ import { saveItemToCart } from "../../utils/database";
 import { getGlobalSettings } from "../../utils/supabase";
 
 const Item = ({ route }) => {
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const item = route.params.item;
    const [amount, setAmount] = useState(1);
    const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +52,11 @@ const Item = ({ route }) => {
          />
          <View style={styles.header}>
             <TouchableOpacity
-               onPress={() => navigator.goBack()}
+               onPress={() => {
+                  if (navigation.canGoBack()) {
+                     navigation.goBack();
+                  }
+               }}
                style={styles.backButtonContainer}
             >
                <Ionicons name="chevron-back" size={28} color={colors.primary} />
@@ -109,7 +113,7 @@ const Item = ({ route }) => {
                         type: response.type,
                         text1: response.message,
                      });
-                     navigator.navigate("Home");
+                     navigation.navigate("Home");
                   } catch (err) {
                      console.log(err);
                      Toast.show({ type: "error", text1: "Add to cart failed" });
@@ -129,22 +133,22 @@ const Item = ({ route }) => {
 const styles = StyleSheet.create({
    container: {},
    header: {
-      justifyContent: "flex-start",
+      justifyContent: "center",
+      alignItems: "center",
       backgroundColor: colors.white,
       borderBottomWidth: 1,
       borderBottomColor: colors.borderLight,
-      flexDirection: "row",
-      alignItems: "center",
       paddingVertical: spacing.lg,
       paddingHorizontal: spacing.lg,
-      gap: spacing.lg,
+      position: "relative",
    },
 
    backButtonContainer: {
+      position: "absolute",
+      left: spacing.lg,
       padding: spacing.sm,
    },
    logoLemon: {
-      flex: 1,
       width: 160,
       height: 32,
    },

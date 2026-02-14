@@ -10,7 +10,7 @@ import { getGlobalSettings, updateGlobalSettings } from "../../utils/supabase";
 
 const Settings = () => {
    const [availability, setAvailability] = useState();
-   const navigator = useNavigation();
+   const navigation = useNavigation();
 
    useFocusEffect(
       useCallback(() => {
@@ -40,7 +40,7 @@ const Settings = () => {
    return (
       <SafeAreaView style={[styles.container, theme.layout.container]}>
          <View>
-            <PageHeader navigator={navigator} heading={"Restaurant Settings"} />
+            <PageHeader navigation={navigation} heading={"Restaurant Settings"} />
 
             <View style={styles.dropdownContainer}>
                <Text style={[theme.typography.h2, { alignSelf: "flex-start" }]}>

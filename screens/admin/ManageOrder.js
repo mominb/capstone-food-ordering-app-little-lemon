@@ -24,7 +24,7 @@ const ManageOrder = ({ route }) => {
       { label: "Cancelled", value: "cancelled" },
    ];
 
-   const navigator = useNavigation();
+   const navigation = useNavigation();
    const { item: order } = route.params;
    const orderItems = order.order_items || [];
    const [statusUpdate, setStatusUpdate] = useState(order.order_status);
@@ -49,7 +49,9 @@ const ManageOrder = ({ route }) => {
             Toast.show({ type: "error", text1: "Update failed" });
          } else {
             Toast.show({ type: "success", text1: "Order updated" });
-            navigator.goBack();
+            if (navigation.canGoBack()) {
+               navigation.goBack();
+            }
          }
       } catch (error) {
          console.log(error);
@@ -66,7 +68,7 @@ const ManageOrder = ({ route }) => {
             textContent="Loading..."
             textStyle={{ color: theme.colors.white }}
          />
-         <PageHeader navigator={navigator} heading={"Order"} />
+         <PageHeader navigation={navigation} heading={"Order"} />
          <View style={styles.dropdownContainer}>
             <Text style={[styles.subHeading, { alignSelf: "flex-start" }]}>
                Status
