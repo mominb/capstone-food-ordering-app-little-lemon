@@ -230,5 +230,20 @@ This is a capstone project for educational purposes. Feel free to fork and modif
 ## 📷 Gallery
 
 
+<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-14 at 15 57 13" src="https://github.com/user-attachments/assets/ae5304ee-ce15-42dc-b939-e17a320a9a2a" />
 
+
+<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-14 at 16 05 41" src="https://github.com/user-attachments/assets/cac79649-4a49-40e2-be14-32c8e83515ee" />
+
+
+<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-14 at 15 57 18" src="https://github.com/user-attachments/assets/5f698d31-4ee1-413d-aa6c-1e4e2f73f9f9" />
+
+
+<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-14 at 16 04 04" src="https://github.com/user-attachments/assets/4bbe4af7-25cb-40eb-967e-b66fd5680db6" />
+
+
+<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-14 at 16 04 00" src="https://github.com/user-attachments/assets/b676ab34-5bf1-4746-87a0-a54251b5cbd9" />
+
+
+<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-14 at 16 03 39" src="https://github.com/user-attachments/assets/b00a2e60-0bed-47f3-937d-0453d99cf9fe" />
 
