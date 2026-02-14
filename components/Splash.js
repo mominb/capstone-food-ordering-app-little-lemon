@@ -1,6 +1,6 @@
 import { Image, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors, spacing } from "../styles/theme";
+import { colors } from "../styles/theme";
 
 const Splash = () => {
    return (
