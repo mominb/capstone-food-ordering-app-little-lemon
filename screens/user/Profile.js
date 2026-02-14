@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
@@ -17,7 +18,14 @@ import PhoneInput from "react-native-phone-number-input";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
-import { colors, layout, typography } from "../../styles/theme";
+import {
+   borderRadius,
+   colors,
+   layout,
+   shadows,
+   spacing,
+   typography,
+} from "../../styles/theme";
 import { getUserData, supabase, updateUserData } from "../../utils/supabase";
 
 const Profile = ({ refreshUserInfo, deleteUserCart }) => {
@@ -102,7 +110,7 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
             { text: "Cancel", style: "cancel" },
             { text: "Logout", style: "destructive", onPress: handleLogout },
          ],
-         { cancelable: true }
+         { cancelable: true },
       );
    };
    return (
@@ -116,10 +124,10 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
          <KeyboardAvoidingView behavior="padding" style={styles.content}>
             <ScrollView>
                <View style={styles.profileImageContainer}>
-                  <Image
-                     source={require("../../assets/profile-icon.png")}
-                     resizeMode="contain"
-                     style={styles.profileImage}
+                  <Ionicons
+                     name="person-circle"
+                     size={120}
+                     color={colors.primary}
                   />
                </View>
                <View style={styles.form}>
@@ -182,88 +190,88 @@ const Profile = ({ refreshUserInfo, deleteUserCart }) => {
 const styles = StyleSheet.create({
    container: {},
    profileImageContainer: {
-      height: "25%",
-      alignSelf: "center",
+      alignItems: "center",
+      paddingVertical: spacing.xl,
+      backgroundColor: colors.tertiary,
    },
    logoutButton: {
       alignSelf: "center",
       width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
       backgroundColor: colors.red,
-      borderColor: colors.red,
-      borderWidth: 2,
+      marginVertical: spacing.lg,
+      ...shadows.medium,
    },
    content: {
       backgroundColor: colors.white,
    },
-   profileImage: {
-      height: 100,
-      width: 100,
-      margin: 20,
-   },
    logoutButtonText: {
-      ...typography.bodyBold,
+      ...typography.button,
       color: colors.white,
       textAlign: "center",
    },
    input: {
-      height: 54,
-      borderWidth: 2,
-      borderColor: colors.primary,
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      marginBottom: 20,
+      height: 48,
+      borderWidth: 1,
+      borderColor: colors.borderLight,
+      borderRadius: borderRadius.md,
+      paddingHorizontal: spacing.md,
+      marginBottom: spacing.lg,
       backgroundColor: colors.white,
+      ...typography.body,
+      ...shadows.small,
    },
    inputFocused: {
-      height: 54,
+      height: 48,
       borderWidth: 2,
-      borderColor: colors.secondary,
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      marginBottom: 20,
+      borderColor: colors.primary,
+      borderRadius: borderRadius.md,
+      paddingHorizontal: spacing.md,
+      marginBottom: spacing.lg,
+      backgroundColor: colors.white,
    },
    phoneContainer: {
       width: "100%",
-      height: 54,
-      borderColor: colors.black,
-      borderWidth: 2,
-      borderRadius: 8,
+      height: 48,
+      borderColor: colors.borderLight,
+      borderWidth: 1,
+      borderRadius: borderRadius.md,
+      ...shadows.small,
    },
    phoneTextContainer: {
-      borderTopRightRadius: 8,
-      borderBottomRightRadius: 8,
-      backgroundColor: colors.lightgrey,
+      borderTopRightRadius: borderRadius.md,
+      borderBottomRightRadius: borderRadius.md,
+      backgroundColor: colors.tertiary,
    },
    phoneTextInput: {
-      height: 50,
+      height: 48,
       fontWeight: "600",
-      paddingTop: 2.45,
+      paddingTop: spacing.xs,
    },
    label: {
       ...typography.caption,
-      color: colors.black,
-      marginBottom: 6,
+      color: colors.primary,
+      marginBottom: spacing.sm,
+      fontWeight: "700",
    },
    form: {
-      padding: 20,
+      padding: spacing.lg,
    },
    saveButton: {
       alignSelf: "center",
       width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
-      backgroundColor: colors.secondary,
-      borderColor: colors.black,
-      borderWidth: 2,
-      marginBottom: 20,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
+      backgroundColor: colors.primary,
+      marginBottom: spacing.lg,
+      ...shadows.medium,
    },
    saveButtonText: {
-      ...typography.bodyBold,
-      color: colors.black,
+      ...typography.button,
+      color: colors.white,
       textAlign: "center",
    },
 });

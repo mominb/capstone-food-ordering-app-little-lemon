@@ -6,8 +6,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import OrderCards from "../../components/OrderCards";
 import PageHeader from "../../components/PageHeader";
+import {
+   borderRadius,
+   colors,
+   layout,
+   shadows,
+   spacing,
+   typography,
+} from "../../styles/theme";
 import { getUsersOrders } from "../../utils/supabase";
-import { layout, colors, typography } from "../../styles/theme";
 
 const Orders = () => {
    const navigator = useNavigation();
@@ -57,16 +64,16 @@ const styles = StyleSheet.create({
    button: {
       alignSelf: "center",
       width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
-      backgroundColor: colors.secondary,
-      borderColor: colors.black,
-      borderWidth: 2,
-      marginVertical: 16,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
+      backgroundColor: colors.primary,
+      marginVertical: spacing.lg,
+      ...shadows.medium,
    },
    buttonText: {
-      ...typography.bodyBold,
+      ...typography.button,
+      color: colors.white,
       textAlign: "center",
    },
 });

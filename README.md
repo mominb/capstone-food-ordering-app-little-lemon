@@ -1,82 +1,234 @@
-# Little Lemon
+# Little Lemon 🍋
 
-Mobile ordering app for the Little Lemon restaurant, built with React Native + Expo. The app supports a customer flow (browse menu, cart, checkout, orders, profile) and an admin flow (menu management and order status updates) backed by Supabase.
+A full-featured mobile restaurant ordering app built with React Native and Expo. Little Lemon provides a complete dual-interface solution with a customer-facing ordering system and an admin management dashboard, all backed by Supabase.
 
-## Features
-- Email OTP sign-in with Supabase Auth.
-- Menu browsing with search + category filters.
-- Item details, cart management, and quantity updates.
-- Checkout with delivery method and payment method selection.
-- Order history for customers.
-- Profile management (name, email, phone) and logout.
-- Admin dashboard to view all orders and update order status.
-- Admin menu management (add, edit, delete items).
-- Local SQLite cache for menu data and cart storage.
+> **📌 Project Evolution:** This project was extended from an initial non-functional app for Meta React Native Course into a fully functional, production-ready full-stack application with complete backend integration, authentication, real-time data synchronization, and a comprehensive admin management system.
 
-## Tech Stack
-- React Native (Expo)
-- React Navigation (native stack)
-- Supabase (Auth + data tables)
-- Expo SQLite + AsyncStorage
-- react-native-toast-message, loading spinner overlay
+## ✨ Features
 
-## Getting Started
+### Customer Features
+- 🔐 **Email OTP Authentication** - Secure sign-in with Supabase Auth
+- 🍽️ **Menu Browsing** - Search and filter menu items by category
+- 🛒 **Smart Cart Management** - Add, remove, and update item quantities
+- 📦 **Order Checkout** - Select delivery method and payment options
+- 📋 **Order History** - Track current and past orders
+- 👤 **Profile Management** - Update name, email, and phone number
+- 🔄 **Real-time Updates** - Live order status synchronization
+
+### Admin Features
+- 📊 **Order Management Dashboard** - View and manage all customer orders
+- ✏️ **Order Status Updates** - Update order status in real-time
+- 🍴 **Menu Management** - Add, edit, and delete menu items
+- 📷 **Image Upload** - Manage menu item images
+- ⚙️ **Settings Panel** - Admin account management
+
+### Technical Features
+- 💾 **Offline Support** - Local SQLite cache for menu data
+- 🚀 **Performance Optimized** - Efficient data loading and caching
+- 📱 **Cross-platform** - Works on iOS, Android, and Web
+- 🎨 **Modern UI** - Clean, responsive interface with custom components
+
+## 🛠️ Tech Stack
+- **Frontend**: React Native (Expo SDK 54)
+- **Navigation**: React Navigation (Native Stack)
+- **Backend**: Supabase (Auth + PostgreSQL)
+- **Local Storage**: Expo SQLite + AsyncStorage
+- **UI Components**: Custom components with react-native-loading-spinner-overlay
+- **Notifications**: react-native-toast-message
+- **Media**: expo-image-picker
+- **Form Controls**: react-native-element-dropdown, react-native-phone-number-input
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js + npm
-- Expo CLI (or `npx expo`)
-- A Supabase project with the required tables:
-  - `menu`
-  - `orders`
-  - `user_roles`
+- Node.js (v18 or higher) + npm/yarn
+- Expo CLI or `npx expo`
+- A Supabase project with required tables (see Database Setup below)
+- iOS Simulator (for macOS) or Android Emulator
 
-### Setup
-1. Install dependencies:
+### Installation
+
+1. **Clone and Install Dependencies**
    ```bash
    npm install
    ```
-2. Create a `.env` file in the project root:
+
+2. **Configure Environment Variables**
+   
+   Create a `.env` file in the project root:
    ```bash
    EXPO_PUBLIC_SUPABASE_URL=your_supabase_url
    EXPO_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    ```
-3. Start the app:
+
+3. **Database Setup**
+   
+   Create the following tables in your Supabase project:
+
+   **`menu` table:**
+   ```sql
+   - id (uuid, primary key)
+   - name (text)
+   - description (text)
+   - price (numeric)
+   - category (text)
+   - image (text, URL)
+   - created_at (timestamp)
+   ```
+
+   **`orders` table:**
+   ```sql
+   - id (uuid, primary key)
+   - user_id (uuid, foreign key to auth.users)
+   - items (jsonb, array of order items)
+   - total (numeric)
+   - status (text: 'pending', 'preparing', 'ready', 'delivered')
+   - delivery_method (text)
+   - payment_method (text)
+   - created_at (timestamp)
+   ```
+
+   **`user_roles` table:**
+   ```sql
+   - id (uuid, primary key)
+   - user_id (uuid, foreign key to auth.users)
+   - role (text: 'customer' or 'admin')
+   - created_at (timestamp)
+   ```
+
+4. **Start the Development Server**
    ```bash
    npm start
    ```
 
-### Run on devices
+### Running on Devices
+
 ```bash
-npm run android
-npm run ios
-npm run web
+npm run android   # Launch on Android emulator/device
+npm run ios       # Launch on iOS simulator/device
+npm run web       # Launch in web browser
 ```
 
-## Scripts
-- `npm start` - Start Expo dev server
-- `npm run android` - Launch on Android
-- `npm run ios` - Launch on iOS
-- `npm run web` - Launch on Web
+## 📝 Scripts
+- `npm start` - Start Expo development server with QR code
+- `npm run android` - Launch on Android emulator/device
+- `npm run ios` - Launch on iOS simulator/device
+- `npm run web` - Launch in web browser
 
-## Project Structure
-- `App.js` - Navigation and role-based routing
-- `screens/`
-  - `user/` - Customer flow (home, item, cart, checkout, orders, profile)
-  - `admin/` - Admin flow (orders, menu management, settings)
-- `components/` - UI components (headers, filters, separators, etc.)
-- `utils/`
-  - `supabase.js` - Supabase client and API helpers
-  - `database.js` - SQLite menu + cart helpers
-  - `bootstrap.js` - Initial data load and setup
+## 📁 Project Structure
 
-## Admin Access
-Admin routing is based on the `user_roles` table in Supabase. Users with `role = "admin"` are routed to the admin screens.
+```
+little-lemon/
+├── App.js                    # Main navigation and authentication logic
+├── index.js                  # App entry point
+├── app.json                  # Expo configuration
+├── package.json              # Dependencies and scripts
+├── biome.json               # Biome linter configuration
+│
+├── screens/
+│   ├── Onboarding.js        # Email OTP authentication screen
+│   ├── user/                # Customer-facing screens
+│   │   ├── Home.js          # Menu browsing with search/filters
+│   │   ├── Item.js          # Item detail view
+│   │   ├── Cart.js          # Shopping cart
+│   │   ├── Checkout.js      # Order checkout
+│   │   ├── Orders.js        # Order history
+│   │   ├── OrderInfo.js     # Individual order details
+│   │   └── Profile.js       # User profile management
+│   │
+│   └── admin/               # Admin dashboard screens
+│       ├── AdminHome.js     # Admin dashboard home
+│       ├── AllOrders.js     # View all customer orders
+│       ├── ManageOrder.js   # Update order status
+│       ├── ManageMenu.js    # Menu management list
+│       ├── MenuItem.js      # Add/edit menu items
+│       └── Settings.js      # Admin settings
+│
+├── components/              # Reusable UI components
+│   ├── Button.js           # Custom button component
+│   ├── Filter.js           # Category filter chips
+│   ├── InfoBox.js          # Information display box
+│   ├── ItemSeperator.js    # List item separator
+│   ├── OrderCards.js       # Order card component
+│   ├── OrderItemList.js    # Order items list
+│   ├── OtpTimer.js         # Countdown timer for OTP
+│   ├── PageHeader.js       # Screen header component
+│   ├── RestaurantClosedOverlay.js  # Closed status overlay
+│   └── Splash.js           # Loading splash screen
+│
+├── utils/                  # Utility functions
+│   ├── supabase.js        # Supabase client and API methods
+│   ├── database.js        # SQLite operations for menu/cart
+│   └── bootstrap.js       # App initialization and data loading
+│
+├── styles/
+│   └── theme.js           # Color palette and theme constants
+│
+└── assets/                # Images, fonts, and static files
+```
 
-##Gallery
-<img width="1170" height="2532" alt="image" src="https://github.com/user-attachments/assets/898c08fb-399f-4c2f-8238-6d2b6522c27a" />
-<img width="1170" height="2532" alt="image" src="https://github.com/user-attachments/assets/10feac00-3bc4-4d83-aa16-94f1741bdc89" />
-<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-04 at 17 47 29" src="https://github.com/user-attachments/assets/15455fa8-a869-443e-bdf5-e7f5d36341b4" />
-<img width="1170" height="2532" alt="Simulator Screenshot - iPhone 16e - 2026-02-04 at 17 48 38" src="https://github.com/user-attachments/assets/e4337022-4ad0-41e1-9c9c-629b70b29a75" />
+## 🔐 Admin Access
+
+Admin privileges are controlled through the `user_roles` table in Supabase. To grant admin access:
+
+1. Sign in to your Supabase dashboard
+2. Navigate to the `user_roles` table
+3. Add a new row with:
+   - `user_id`: The UUID from `auth.users`
+   - `role`: `"admin"`
+
+Users with `role = "admin"` will automatically be routed to the admin dashboard instead of the customer interface.
+
+## 🎬 App Flow
+
+### Customer Flow
+1. **Sign In** → Email OTP authentication
+2. **Browse Menu** → Search and filter by category
+3. **Add to Cart** → Select items and quantities
+4. **Checkout** → Choose delivery and payment method
+5. **Track Orders** → View order status in real-time
+6. **Manage Profile** → Update personal information
+
+### Admin Flow
+1. **Dashboard** → Overview of restaurant operations
+2. **View Orders** → See all customer orders
+3. **Update Status** → Change order status (pending → preparing → ready → delivered)
+4. **Manage Menu** → Add, edit, or delete menu items
+5. **Settings** → Admin account management
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**Issue: "Cannot connect to Supabase"**
+- Verify your `.env` file contains the correct Supabase URL and anon key
+- Check that your Supabase project is active and accessible
+- Ensure environment variables are prefixed with `EXPO_PUBLIC_`
+
+**Issue: "No menu items showing"**
+- Run the app once to initialize the local SQLite database
+- Ensure your `menu` table in Supabase has data
+- Check the database bootstrap process in `utils/bootstrap.js`
+
+**Issue: "Authentication not working"**
+- Verify Email Auth is enabled in your Supabase project settings
+- Check that the email provider is properly configured
+- Ensure OTP email templates are set up in Supabase
+
+**Issue: "Admin dashboard not accessible"**
+- Confirm the user has an entry in the `user_roles` table with `role = "admin"`
+- Check that the `user_id` matches the authenticated user's UUID
+
+## 📄 License
+
+This project is part of the Meta React Native Specialization capstone project.
+
+## 🤝 Contributing
+
+This is a capstone project for educational purposes. Feel free to fork and modify for your own learning!
+
+## 📷 Gallery
+
 
 
 

@@ -1,6 +1,6 @@
 import { Image, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors } from "../styles/theme";
+import { colors, spacing } from "../styles/theme";
 
 const Splash = () => {
    return (
@@ -22,10 +22,11 @@ const styles = StyleSheet.create({
    },
 
    image: {
-      width: "80%",
-      height: "15%",
+      width: "75%",
+      height: "20%",
       alignItems: "center",
       justifyContent: "center",
+      resizeMode: "contain",
    },
 });
 export default Splash;

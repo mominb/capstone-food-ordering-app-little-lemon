@@ -13,8 +13,15 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ItemSeperator from "../../components/ItemSeperator";
 import PageHeader from "../../components/PageHeader";
+import {
+   borderRadius,
+   colors,
+   layout,
+   shadows,
+   spacing,
+   typography,
+} from "../../styles/theme";
 import { getGlobalSettings, placeOrder } from "../../utils/supabase";
-import { layout, colors, typography } from "../../styles/theme";
 
 const Checkout = ({ route, deleteUserCart }) => {
    const [isLoading, setIsLoading] = useState(false);
@@ -144,65 +151,80 @@ const Checkout = ({ route, deleteUserCart }) => {
 const styles = StyleSheet.create({
    container: {},
    subHeading: {
-      ...typography.h2,
-      marginBottom: 10,
-      alignSelf: "center",
+      ...typography.h3,
+      marginBottom: spacing.md,
+      color: colors.primary,
+      alignSelf: "flex-start",
    },
    orderDetailsContainer: {
-      padding: 20,
-      margin: 20,
-      borderColor: colors.black,
-      borderWidth: 2,
-      borderRadius: 10,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.lg,
+      marginHorizontal: spacing.md,
+      marginVertical: spacing.md,
+      borderColor: colors.borderLight,
+      borderWidth: 1,
+      borderRadius: borderRadius.lg,
+      backgroundColor: colors.white,
+      ...shadows.small,
    },
    itemContainer: {
       flexDirection: "row",
       justifyContent: "space-between",
+      paddingVertical: spacing.md,
+      alignItems: "center",
    },
    itemInfoContainer: {
       flexDirection: "row",
+      flex: 1,
+      gap: spacing.md,
    },
+   itemPriceContainer: {},
    itemText: {
       ...typography.bodyBold,
-      margin: 10,
+      color: colors.black,
    },
    totalAmountText: {
       ...typography.h3,
-      margin: 10,
+      color: colors.black,
+      margin: spacing.md,
    },
    totalAmountContainer: {
       flexDirection: "row",
       justifyContent: "space-between",
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.md,
+      backgroundColor: colors.secondary,
+      borderRadius: borderRadius.md,
+      marginTop: spacing.md,
    },
    DetailsContainer: {
-      flexDirection: "column",
-      justifyContent: "space-between",
-      margin: 20,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.lg,
    },
    MethodSelector: {
       width: "100%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
-      backgroundColor: colors.tertiary,
-      borderColor: colors.black,
-      borderWidth: 2,
-      marginTop: 5,
-      marginBottom: 10,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
+      backgroundColor: colors.white,
+      borderColor: colors.borderLight,
+      borderWidth: 1,
+      marginVertical: spacing.md,
+      ...shadows.small,
    },
    button: {
       alignSelf: "center",
       width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
-      backgroundColor: colors.secondary,
-      borderColor: colors.black,
-      borderWidth: 2,
-      marginTop: 15,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
+      backgroundColor: colors.primary,
+      marginVertical: spacing.lg,
+      ...shadows.medium,
    },
    buttonText: {
-      ...typography.bodyBold,
+      ...typography.button,
+      color: colors.white,
       textAlign: "center",
    },
 });

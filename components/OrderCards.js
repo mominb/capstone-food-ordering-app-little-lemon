@@ -1,5 +1,17 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { colors, typography } from "../styles/theme";
+import {
+   FlatList,
+   StyleSheet,
+   Text,
+   TouchableOpacity,
+   View,
+} from "react-native";
+import {
+   borderRadius,
+   colors,
+   shadows,
+   spacing,
+   typography,
+} from "../styles/theme";
 
 const OrderCards = ({ orders, navigator, onPressRoute = "OrderInfo" }) => {
    const formattedDate = (date) => {
@@ -23,21 +35,35 @@ const OrderCards = ({ orders, navigator, onPressRoute = "OrderInfo" }) => {
          renderItem={({ item }) => (
             <TouchableOpacity
                onPress={() => navigator.navigate(onPressRoute, { item })}
-               style={
+               style={[
+                  styles.card,
                   item.order_status === "completed" ||
                   item.order_status === "cancelled"
-                     ? styles.orderInactive
-                     : styles.orderActive
-               }
+                     ? styles.cardInactive
+                     : styles.cardActive,
+               ]}
             >
-               <Text style={styles.orderId}>
-                  Order #{item.id.substring(0, 8)}
-               </Text>
+               <View style={styles.headerRow}>
+                  <Text style={styles.orderId}>
+                     Order #{item.id.substring(0, 8)}
+                  </Text>
+                  <View
+                     style={[
+                        styles.badge,
+                        item.order_status === "pending" && styles.badgePending,
+                        item.order_status === "confirmed" &&
+                           styles.badgeConfirmed,
+                        item.order_status === "completed" &&
+                           styles.badgeCompleted,
+                        item.order_status === "cancelled" &&
+                           styles.badgeCancelled,
+                     ]}
+                  >
+                     <Text style={styles.badgeText}>{item.order_status}</Text>
+                  </View>
+               </View>
                <Text style={styles.metaText}>
                   Placed on {formattedDate(item.created_at)}
-               </Text>
-               <Text style={styles.statusText}>
-                  Status: {item.order_status}
                </Text>
                <Text style={styles.metaText}>{item.delivery_mode}</Text>
             </TouchableOpacity>
@@ -51,50 +77,63 @@ const styles = StyleSheet.create({
       flex: 1,
    },
    listContent: {
-      paddingVertical: 12,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
    },
-   orderActive: {
+   card: {
+      borderRadius: borderRadius.lg,
+      padding: spacing.lg,
+      marginBottom: spacing.md,
+      ...shadows.small,
+   },
+   cardActive: {
       backgroundColor: colors.white,
-      borderRadius: 10,
-      padding: 16,
-      marginVertical: 8,
-      marginHorizontal: 16,
-      shadowColor: colors.black,
-      shadowOpacity: 0.2,
-      shadowRadius: 6,
-      shadowOffset: { width: 0, height: 3 },
-      elevation: 4,
-      borderLeftWidth: 5,
-      borderLeftColor: "green",
+      borderLeftWidth: 4,
+      borderLeftColor: colors.success,
    },
-   orderInactive: {
-      backgroundColor: "lightgray",
-      borderRadius: 10,
-      padding: 16,
-      marginVertical: 8,
-      marginHorizontal: 16,
-      shadowColor: colors.black,
-      shadowOpacity: 0,
-      shadowRadius: 4,
-      shadowOffset: { width: 0, height: 2 },
-      elevation: 2,
-      borderLeftWidth: 5,
-      borderLeftColor: colors.black,
+   cardInactive: {
+      backgroundColor: colors.tertiary,
+      borderLeftWidth: 4,
+      borderLeftColor: colors.lightgrey,
+   },
+   headerRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: spacing.md,
    },
    orderId: {
-      ...typography.bodyBold,
-      marginBottom: 6,
+      ...typography.h3,
       color: colors.black,
+   },
+   badge: {
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xs,
+      borderRadius: borderRadius.full,
+      backgroundColor: colors.tertiary,
+   },
+   badgePending: {
+      backgroundColor: colors.warning,
+   },
+   badgeConfirmed: {
+      backgroundColor: "#2196F3",
+   },
+   badgeCompleted: {
+      backgroundColor: colors.success,
+   },
+   badgeCancelled: {
+      backgroundColor: colors.red,
+   },
+   badgeText: {
+      ...typography.small,
+      color: colors.white,
+      textTransform: "capitalize",
+      fontWeight: "700",
    },
    metaText: {
       ...typography.caption,
-      color: colors.black,
-      marginBottom: 4,
-   },
-   statusText: {
-      ...typography.caption,
-      color: colors.black,
-      marginBottom: 6,
+      color: colors.lightgrey,
+      marginBottom: spacing.xs,
    },
 });
 

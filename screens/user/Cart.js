@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
@@ -12,7 +13,14 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import PageHeader from "../../components/PageHeader";
-import { colors, layout, typography } from "../../styles/theme";
+import {
+   borderRadius,
+   colors,
+   layout,
+   shadows,
+   spacing,
+   typography,
+} from "../../styles/theme";
 import { getGlobalSettings } from "../../utils/supabase";
 
 const Cart = ({
@@ -163,7 +171,11 @@ const Cart = ({
                            style={styles.CounterButton}
                            onPress={() => decreaseAmount(item.item_id)}
                         >
-                           <Text style={styles.counterText}>-</Text>
+                           <Ionicons
+                              name="remove"
+                              size={20}
+                              color={colors.white}
+                           />
                         </TouchableOpacity>
                         <Text
                            style={[styles.counterText, { color: colors.black }]}
@@ -174,7 +186,11 @@ const Cart = ({
                            style={styles.CounterButton}
                            onPress={() => increaseAmount(item.item_id)}
                         >
-                           <Text style={styles.counterText}>+</Text>
+                           <Ionicons
+                              name="add"
+                              size={20}
+                              color={colors.white}
+                           />
                         </TouchableOpacity>
                      </View>
                      <TouchableOpacity
@@ -229,113 +245,123 @@ const Cart = ({
 const styles = StyleSheet.create({
    container: {},
    listContainer: {
-      paddingHorizontal: 20,
-      paddingBottom: 20,
-      marginTop: 30,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.lg,
    },
    itemContainer: {
-      backgroundColor: colors.tertiary,
-      padding: 15,
-      borderRadius: 8,
-      marginBottom: 10,
-      borderColor: colors.black,
-      borderWidth: 1,
+      backgroundColor: colors.white,
+      padding: spacing.lg,
+      borderRadius: borderRadius.lg,
+      marginBottom: spacing.md,
+      ...shadows.small,
    },
    itemInfo: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      marginBottom: 10,
+      marginBottom: spacing.md,
    },
    itemName: {
-      ...typography.body,
+      ...typography.bodyBold,
    },
    itemQty: {
       ...typography.caption,
-      color: colors.black,
-      marginTop: 4,
+      color: colors.lightgrey,
+      marginTop: spacing.xs,
    },
    itemTotal: {
-      ...typography.button,
+      ...typography.bodyBold,
+      color: colors.primary,
    },
    itemActions: {
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
+      gap: spacing.md,
    },
    itemImage: {
-      width: 60,
-      height: 60,
-      borderRadius: 6,
+      width: 70,
+      height: 70,
+      borderRadius: borderRadius.md,
       backgroundColor: colors.lightgrey,
    },
    itemImagePlaceholder: {
-      width: 60,
-      height: 60,
-      borderRadius: 6,
-      backgroundColor: colors.lightgrey,
+      width: 70,
+      height: 70,
+      borderRadius: borderRadius.md,
+      backgroundColor: colors.tertiary,
       alignItems: "center",
       justifyContent: "center",
       borderWidth: 1,
-      borderColor: colors.black,
+      borderColor: colors.borderLight,
    },
    itemImagePlaceholderText: {
       ...typography.caption,
-      color: colors.black,
-      fontSize: 10,
+      color: colors.lightgrey,
+      fontSize: 11,
       textAlign: "center",
    },
    deleteButton: {
-      paddingVertical: 6,
-      paddingHorizontal: 12,
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.md,
       backgroundColor: colors.red,
-      borderRadius: 4,
+      borderRadius: borderRadius.md,
    },
    deleteText: {
-      ...typography.body,
+      ...typography.button,
       color: colors.white,
+      fontSize: 13,
    },
    counterContainer: {
       flexDirection: "row",
       alignItems: "center",
-      justifyContent: "center",
+      gap: spacing.sm,
+      backgroundColor: colors.tertiary,
+      borderRadius: borderRadius.md,
+      paddingHorizontal: spacing.sm,
+      paddingVertical: spacing.xs,
    },
    CounterButton: {
-      backgroundColor: colors.lightgrey,
-      width: 20,
-      height: 20,
+      backgroundColor: colors.primary,
+      width: 28,
+      height: 28,
       alignItems: "center",
-      borderRadius: 20,
-      margin: 8,
+      justifyContent: "center",
+      borderRadius: borderRadius.md,
    },
    counterText: {
       ...typography.button,
       color: colors.white,
    },
-   footer: {},
+   footer: {
+      paddingBottom: spacing.lg,
+   },
    totalAmountContainer: {
       flexDirection: "row",
       justifyContent: "space-between",
-      width: "100%",
+      alignItems: "center",
       backgroundColor: colors.secondary,
-      padding: 10,
+      padding: spacing.lg,
+      marginHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
+      marginBottom: spacing.md,
    },
    totalAmountText: {
-      ...typography.h2,
+      ...typography.h3,
+      color: colors.black,
    },
    checkoutButton: {
       alignSelf: "center",
       width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
-      backgroundColor: colors.tertiary,
-      borderColor: colors.black,
-      borderWidth: 2,
-      marginTop: 15,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
+      backgroundColor: colors.primary,
+      ...shadows.medium,
    },
    checkoutButtonText: {
-      ...typography.bodyBold,
+      ...typography.button,
+      color: colors.white,
       textAlign: "center",
    },
 });

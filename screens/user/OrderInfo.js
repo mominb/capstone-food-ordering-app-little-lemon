@@ -4,7 +4,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import InfoBox from "../../components/InfoBox";
 import OrderItemList from "../../components/OrderItemList";
 import PageHeader from "../../components/PageHeader";
-import { colors, layout, typography } from "../../styles/theme";
+import {
+   borderRadius,
+   colors,
+   layout,
+   shadows,
+   spacing,
+   typography,
+} from "../../styles/theme";
 
 const OrderInfo = ({ route }) => {
    const navigator = useNavigation();
@@ -52,16 +59,20 @@ const OrderInfo = ({ route }) => {
 const styles = StyleSheet.create({
    container: {},
    metaContainer: {
-      margin: 16,
-      padding: 12,
-      borderRadius: 8,
+      marginHorizontal: spacing.lg,
+      marginBottom: spacing.xl,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      borderRadius: borderRadius.lg,
       backgroundColor: colors.tertiary,
-      borderWidth: 1,
-      borderColor: colors.black,
+      borderLeftWidth: 4,
+      borderLeftColor: colors.primary,
+      ...shadows.small,
    },
    metaText: {
       ...typography.body,
-      marginVertical: 4,
+      marginVertical: spacing.xs,
+      color: colors.black,
    },
 });
 export default OrderInfo;

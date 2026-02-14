@@ -1,11 +1,18 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
 import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
-import { colors, layout, typography } from "../../styles/theme";
+import {
+   borderRadius,
+   colors,
+   layout,
+   shadows,
+   spacing,
+   typography,
+} from "../../styles/theme";
 import { saveItemToCart } from "../../utils/database";
 import { getGlobalSettings } from "../../utils/supabase";
 
@@ -44,12 +51,11 @@ const Item = ({ route }) => {
             textStyle={{ color: colors.white }}
          />
          <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigator.goBack()}>
-               <Image
-                  source={require("../../assets/back-button.jpg")}
-                  resizeMode="contain"
-                  style={styles.backButton}
-               />
+            <TouchableOpacity
+               onPress={() => navigator.goBack()}
+               style={styles.backButtonContainer}
+            >
+               <Ionicons name="chevron-back" size={28} color={colors.primary} />
             </TouchableOpacity>
             <Image
                source={require("../../assets/logo-long-text.png")}
@@ -82,7 +88,7 @@ const Item = ({ route }) => {
                   style={styles.CounterButton}
                   onPress={decreaseAmount}
                >
-                  <Text style={styles.counterText}>-</Text>
+                  <Ionicons name="remove" size={20} color={colors.white} />
                </TouchableOpacity>
                <Text style={[styles.counterText, { color: colors.black }]}>
                   {amount}
@@ -91,7 +97,7 @@ const Item = ({ route }) => {
                   style={styles.CounterButton}
                   onPress={increaseAmount}
                >
-                  <Text style={styles.counterText}>+</Text>
+                  <Ionicons name="add" size={20} color={colors.white} />
                </TouchableOpacity>
             </View>
             <TouchableOpacity
@@ -113,6 +119,7 @@ const Item = ({ route }) => {
                }}
                style={styles.button}
             >
+               <Ionicons name="cart" size={20} color={colors.primary} />
                <Text style={styles.buttonText}>Add to Cart</Text>
             </TouchableOpacity>
          </View>
@@ -124,97 +131,110 @@ const styles = StyleSheet.create({
    header: {
       justifyContent: "flex-start",
       backgroundColor: colors.white,
-      borderWidth: 1,
-      borderColor: colors.black,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.borderLight,
       flexDirection: "row",
-      padding: 20,
+      alignItems: "center",
+      paddingVertical: spacing.lg,
+      paddingHorizontal: spacing.lg,
+      gap: spacing.lg,
    },
 
-   logoLemon: {
-      alignSelf: "center",
-      marginLeft: 25,
-      width: 200,
-      height: 40,
+   backButtonContainer: {
+      padding: spacing.sm,
    },
-   backButton: {
-      alignSelf: "flex-start",
-      width: 48,
-      height: 48,
+   logoLemon: {
+      flex: 1,
+      width: 160,
+      height: 32,
    },
    infoBox: {
       width: "100%",
-      padding: 20,
+      padding: spacing.lg,
+      backgroundColor: colors.white,
    },
    heroImage: {
-      resizeMode: "stretch",
+      resizeMode: "cover",
       backgroundColor: colors.lightgrey,
       width: "100%",
-      height: "30%",
-      borderBottomColor: colors.black,
-      borderBottomWidth: 2,
+      height: 320,
    },
    heroImagePlaceholder: {
-      backgroundColor: colors.lightgrey,
+      backgroundColor: colors.tertiary,
       width: "100%",
-      height: "30%",
-      borderBottomColor: colors.black,
-      borderBottomWidth: 2,
+      height: 320,
       alignItems: "center",
       justifyContent: "center",
+      borderBottomColor: colors.borderLight,
+      borderBottomWidth: 1,
    },
    heroImagePlaceholderText: {
       ...typography.body,
-      color: colors.black,
-      fontSize: 14,
+      color: colors.lightgrey,
+      fontSize: 16,
    },
    itemName: {
       ...typography.h2,
-      marginBottom: 5,
+      marginBottom: spacing.md,
+      color: colors.primary,
    },
    itemDescription: {
       ...typography.body,
+      color: colors.lightgrey,
+      marginBottom: spacing.lg,
+      lineHeight: 24,
    },
    itemPrice: {
-      ...typography.h2,
-      marginTop: 30,
+      ...typography.h1,
+      color: colors.secondary,
+      fontWeight: "700",
    },
    seperator: {
       width: "100%",
-      height: 0.5,
-      backgroundColor: colors.black,
+      height: 1,
+      backgroundColor: colors.borderLight,
    },
    button: {
       alignSelf: "center",
       width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
       backgroundColor: colors.secondary,
-      borderColor: colors.black,
-      borderWidth: 2,
-      marginBottom: 20,
-   },
-   buttonText: {
-      ...typography.bodyBold,
-      color: colors.black,
-      textAlign: "center",
-   },
-   counterContainer: {
-      height: "50%",
+      marginVertical: spacing.lg,
+      ...shadows.medium,
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
+      gap: spacing.md,
+   },
+   buttonText: {
+      ...typography.button,
+      color: colors.primary,
+      textAlign: "center",
+   },
+   counterContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: spacing.lg,
+      paddingVertical: spacing.xl,
+      backgroundColor: colors.tertiary,
+      marginHorizontal: spacing.lg,
+      borderRadius: borderRadius.lg,
+      marginVertical: spacing.lg,
    },
    CounterButton: {
-      backgroundColor: colors.lightgrey,
-      width: 35,
-      height: 35,
+      backgroundColor: colors.primary,
+      width: 40,
+      height: 40,
       alignItems: "center",
-      borderRadius: 20,
-      margin: 15,
+      justifyContent: "center",
+      borderRadius: borderRadius.md,
+      ...shadows.small,
    },
    counterText: {
-      ...typography.h1,
+      ...typography.h2,
       color: colors.white,
    },
 });

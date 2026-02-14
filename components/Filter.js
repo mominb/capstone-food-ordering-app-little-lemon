@@ -1,45 +1,74 @@
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { colors, typography } from "../styles/theme";
+import {
+   borderRadius,
+   colors,
+   shadows,
+   spacing,
+   typography,
+} from "../styles/theme";
 
 const Filter = ({ categories, onClick, activeCat }) => {
    const isActive = (category) => {
-      if (activeCat.includes(category)) {
-         return true;
-      } else {
-         return false;
-      }
+      return activeCat.includes(category);
    };
+
    return categories.map((category) => (
       <TouchableOpacity
-         style={
-            isActive(category) ? styles.filterButtonActive : styles.filterButton
-         }
+         style={[
+            isActive(category)
+               ? styles.filterButtonActive
+               : styles.filterButton,
+            shadows.small,
+         ]}
          onPress={() => onClick(category)}
          key={category}
       >
-         <Text style={styles.filterButtonText}>{category}</Text>
+         <Text
+            style={
+               isActive(category)
+                  ? styles.filterButtonTextActive
+                  : styles.filterButtonText
+            }
+         >
+            {category}
+         </Text>
       </TouchableOpacity>
    ));
 };
 
 const styles = StyleSheet.create({
    filterButton: {
-      padding: 10,
-      margin: 10,
-      borderRadius: 15,
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.md,
+      marginHorizontal: spacing.sm,
+      marginVertical: spacing.sm,
+      borderRadius: borderRadius.full,
       backgroundColor: colors.tertiary,
+      borderWidth: 1,
+      borderColor: colors.borderLight,
    },
 
    filterButtonActive: {
-      padding: 10,
-      margin: 10,
-      borderRadius: 15,
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.md,
+      marginHorizontal: spacing.sm,
+      marginVertical: spacing.sm,
+      borderRadius: borderRadius.full,
       backgroundColor: colors.secondary,
+      borderWidth: 1,
+      borderColor: colors.primary,
    },
 
    filterButtonText: {
-      ...typography.bodyBold,
+      ...typography.button,
       color: colors.black,
+      fontSize: 14,
+   },
+
+   filterButtonTextActive: {
+      ...typography.button,
+      color: colors.primary,
+      fontSize: 14,
    },
 });
 

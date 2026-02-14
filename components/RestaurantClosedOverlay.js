@@ -1,15 +1,21 @@
 import { StyleSheet, Text, View } from "react-native";
-import { colors, typography } from "../styles/theme";
+import {
+   borderRadius,
+   colors,
+   shadows,
+   spacing,
+   typography,
+} from "../styles/theme";
 
 const RestaurantClosedOverlay = ({ visible }) => {
    if (!visible) return null;
 
    return (
       <View style={styles.overlay} pointerEvents="auto">
-         <View style={styles.card}>
-            <Text style={styles.title}>Restaurant is closed</Text>
+         <View style={[styles.card, shadows.large]}>
+            <Text style={styles.title}>🍋 Restaurant Closed</Text>
             <Text style={styles.message}>
-               Ordering is unavailable. Please try again later.
+               Ordering is currently unavailable. Please check back later.
             </Text>
          </View>
       </View>
@@ -19,23 +25,24 @@ const RestaurantClosedOverlay = ({ visible }) => {
 const styles = StyleSheet.create({
    overlay: {
       ...StyleSheet.absoluteFillObject,
-      backgroundColor: "rgba(0, 0, 0, 0.45)",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
       alignItems: "center",
       justifyContent: "center",
       zIndex: 10,
    },
    card: {
       width: "85%",
-      backgroundColor: colors.lightgrey,
-      borderRadius: 12,
-      padding: 16,
-      borderColor: colors.black,
-      borderWidth: 2,
+      backgroundColor: colors.white,
+      borderRadius: borderRadius.xl,
+      padding: spacing.xl,
+      borderLeftWidth: 4,
+      borderLeftColor: colors.primary,
    },
    title: {
       ...typography.h2,
       textAlign: "center",
-      marginBottom: 6,
+      marginBottom: spacing.md,
+      color: colors.primary,
    },
    message: {
       ...typography.body,

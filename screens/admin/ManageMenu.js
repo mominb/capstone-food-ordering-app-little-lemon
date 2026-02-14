@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
@@ -132,12 +133,7 @@ const ManageMenu = () => {
                         : styles.itemRow
                   }
                >
-                  <View
-                     style={{
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                     }}
-                  >
+                  <View style={styles.itemContentSection}>
                      <View style={styles.itemTextColumn}>
                         <Text style={styles.itemTitle}>{item.name}</Text>
                         <Text style={styles.itemDescription} numberOfLines={2}>
@@ -151,31 +147,40 @@ const ManageMenu = () => {
                      <TouchableOpacity
                         style={{
                            alignItems: "center",
+                           justifyContent: "center",
                            marginTop: 10,
                            borderWidth: 1,
                            borderColor: theme.colors.red,
                            padding: 10,
-                           borderRadius: 10,
+                           borderRadius: theme.borderRadius.md,
+                           width: 44,
+                           height: 44,
                         }}
                         onPress={() => confirmDelete(item.id, item.name)}
                      >
-                        <Text style={{ color: theme.colors.red }}>DELETE</Text>
+                        <Ionicons
+                           name="trash"
+                           size={20}
+                           color={theme.colors.red}
+                        />
                      </TouchableOpacity>
                   </View>
-                  {item.image_url ? (
-                     <Image
-                        style={styles.itemImage}
-                        source={{
-                           uri: item.image_url,
-                        }}
-                     />
-                  ) : (
-                     <View style={styles.itemImagePlaceholder}>
-                        <Text style={styles.itemImagePlaceholderText}>
-                           No Image
-                        </Text>
-                     </View>
-                  )}
+                  <View style={styles.itemImageSection}>
+                     {item.image_url ? (
+                        <Image
+                           style={styles.itemImage}
+                           source={{
+                              uri: item.image_url,
+                           }}
+                        />
+                     ) : (
+                        <View style={styles.itemImagePlaceholder}>
+                           <Text style={styles.itemImagePlaceholderText}>
+                              No Image
+                           </Text>
+                        </View>
+                     )}
+                  </View>
                </TouchableOpacity>
             )}
          />
@@ -186,67 +191,93 @@ const styles = StyleSheet.create({
    container: {},
    itemRow: {
       flexDirection: "row",
-      padding: 15,
+      paddingHorizontal: theme.spacing.lg,
+      paddingVertical: theme.spacing.md,
       justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: theme.colors.white,
+      marginHorizontal: theme.spacing.md,
+      marginVertical: theme.spacing.sm,
+      borderRadius: theme.borderRadius.lg,
+      ...theme.shadows.small,
+      overflow: "hidden",
+   },
+   itemContentSection: {
+      width: "70%",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      paddingRight: theme.spacing.md,
+   },
+   itemImageSection: {
+      width: "30%",
+      alignItems: "center",
+      justifyContent: "center",
    },
    itemRowDisabled: {
-      backgroundColor: theme.colors.lightgrey,
+      backgroundColor: theme.colors.tertiary,
+      opacity: 0.6,
    },
    itemTextColumn: {
-      width: "60%",
+      marginRight: theme.spacing.md,
    },
    itemTitle: {
-      ...theme.typography.h2,
+      ...theme.typography.h3,
+      marginBottom: theme.spacing.xs,
    },
    itemDescription: {
-      ...theme.typography.body,
-      color: theme.colors.black,
-      marginVertical: 5,
+      ...theme.typography.caption,
+      color: theme.colors.lightgrey,
+      marginVertical: theme.spacing.xs,
    },
    itemPrice: {
       ...theme.typography.bodyBold,
+      color: theme.colors.primary,
    },
    itemImage: {
       resizeMode: "cover",
-      width: "30%",
-      height: "100%",
-      backgroundColor: theme.colors.black,
-      borderRadius: 10,
+      width: 80,
+      height: 80,
+      backgroundColor: theme.colors.lightgrey,
+      borderRadius: theme.borderRadius.lg,
+      flexShrink: 1,
    },
    itemImagePlaceholder: {
-      width: "30%",
-      height: "100%",
-      backgroundColor: theme.colors.lightgrey,
-      borderRadius: 10,
+      width: 80,
+      height: 80,
+      backgroundColor: theme.colors.tertiary,
+      borderRadius: theme.borderRadius.lg,
       alignItems: "center",
       justifyContent: "center",
       borderWidth: 1,
-      borderColor: theme.colors.black,
+      borderColor: theme.colors.borderLight,
+      flexShrink: 1,
    },
    itemImagePlaceholderText: {
-      ...theme.typography.body,
-      color: theme.colors.black,
+      ...theme.typography.caption,
+      color: theme.colors.lightgrey,
       fontSize: 12,
       textAlign: "center",
    },
    button: {
       alignSelf: "center",
       width: "90%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
-      backgroundColor: theme.colors.secondary,
-      borderColor: theme.colors.black,
-      borderWidth: 2,
-      marginVertical: 15,
+      paddingVertical: theme.spacing.md,
+      paddingHorizontal: theme.spacing.lg,
+      borderRadius: theme.borderRadius.lg,
+      backgroundColor: theme.colors.primary,
+      marginVertical: theme.spacing.lg,
+      ...theme.shadows.medium,
    },
    buttonText: {
-      ...theme.typography.bodyBold,
+      ...theme.typography.button,
+      color: theme.colors.white,
       textAlign: "center",
    },
    title: {
       ...theme.typography.h2,
-      padding: 10,
+      paddingHorizontal: theme.spacing.lg,
+      paddingVertical: theme.spacing.md,
+      color: theme.colors.primary,
    },
 });
 export default ManageMenu;

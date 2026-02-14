@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import {
@@ -16,7 +17,14 @@ import Toast from "react-native-toast-message";
 import Filter from "../../components/Filter";
 import ItemSeperator from "../../components/ItemSeperator";
 import RestaurantClosedOverlay from "../../components/RestaurantClosedOverlay";
-import { colors, layout, typography } from "../../styles/theme";
+import {
+   borderRadius,
+   colors,
+   layout,
+   shadows,
+   spacing,
+   typography,
+} from "../../styles/theme";
 import {
    getGlobalSettings,
    getMenuByFilterAndSearch,
@@ -101,18 +109,20 @@ const Home = ({ menuCategories, database }) => {
                style={styles.headerLogo}
             />
             <TouchableOpacity onPress={handleProfileIconClick}>
-               <Image
-                  source={require("../../assets/profile-icon.png")}
-                  resizeMode="contain"
-                  style={styles.headerProfileIcon}
+               <Ionicons
+                  name="person-circle"
+                  size={40}
+                  color={colors.primary}
                />
             </TouchableOpacity>
          </View>
 
          <View style={styles.searchBarSection}>
             <View style={styles.searchBar}>
-               <Image
-                  source={require("../../assets/search-icon.png")}
+               <Ionicons
+                  name="search"
+                  size={20}
+                  color={colors.primary}
                   style={styles.searchIcon}
                />
                <TextInput
@@ -125,11 +135,7 @@ const Home = ({ menuCategories, database }) => {
                style={styles.cartButton}
                onPress={() => navigation.navigate("Cart")}
             >
-               <Image
-                  source={require("../../assets/shopping-bag-icon.png")}
-                  resizeMode="contain"
-                  style={styles.cartIcon}
-               />
+               <Ionicons name="bag" size={24} color={colors.black} />
                <View style={styles.cartBadge}>
                   <Text style={styles.cartBadgeText}>{numOfCartItems}</Text>
                </View>
@@ -137,17 +143,18 @@ const Home = ({ menuCategories, database }) => {
          </View>
 
          <View>
-            <View style={{ backgroundColor: colors.primary }}>
+            <View
+               style={{
+                  backgroundColor: colors.primary,
+                  paddingVertical: spacing.md,
+               }}
+            >
                <TouchableOpacity
-                  style={[
-                     styles.cartButton,
-                     { width: "90%", alignSelf: "center", marginBottom: 10 },
-                  ]}
+                  style={styles.viewOrdersButton}
                   onPress={() => navigation.navigate("Orders")}
                >
-                  <Text style={[styles.itemTitle, { marginHorizontal: 10 }]}>
-                     View orders
-                  </Text>
+                  <Ionicons name="receipt" size={20} color={colors.black} />
+                  <Text style={styles.viewOrdersButtonText}>View orders</Text>
                </TouchableOpacity>
             </View>
             <ItemSeperator />
@@ -216,15 +223,19 @@ const styles = StyleSheet.create({
    header: {
       flexDirection: "row",
       justifyContent: "space-between",
-      padding: 20,
+      alignItems: "center",
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
+      backgroundColor: colors.white,
    },
    headerLogo: {
-      width: 200,
-      height: 40,
+      width: 160,
+      height: 32,
    },
    headerProfileIcon: {
       width: 40,
       height: 40,
+      borderRadius: borderRadius.full,
    },
 
    searchBarSection: {
@@ -232,102 +243,130 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent: "space-between",
       alignItems: "center",
-      paddingHorizontal: 20,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.lg,
+      gap: spacing.md,
    },
    searchBar: {
+      flex: 1,
       flexDirection: "row",
       backgroundColor: colors.white,
-      width: "80%",
-      height: 40,
-      borderRadius: 15,
-      alignSelf: "center",
+      height: 44,
+      borderRadius: borderRadius.lg,
       alignItems: "center",
-      marginVertical: 15,
+      paddingHorizontal: spacing.md,
+      ...shadows.small,
    },
    searchIcon: {
-      height: 30,
-      width: 30,
-      borderRadius: 15,
-      marginLeft: 5,
+      marginRight: spacing.sm,
    },
    searchInput: {
-      height: 40,
-      width: "60%",
+      height: 44,
+      flex: 1,
+      ...typography.body,
    },
 
    cartButton: {
       backgroundColor: colors.secondary,
-      borderRadius: 15,
+      borderRadius: borderRadius.lg,
       justifyContent: "center",
       alignItems: "center",
-      height: 40,
+      height: 44,
+      width: 44,
       flexDirection: "row",
-
-      paddingHorizontal: 6,
-   },
-   cartIcon: {
-      width: 30,
-      height: 30,
+      ...shadows.small,
+      position: "relative",
    },
    cartBadge: {
       backgroundColor: colors.red,
-      width: 20,
-      height: 20,
-      borderRadius: 10,
+      width: 22,
+      height: 22,
+      borderRadius: 11,
       alignItems: "center",
       justifyContent: "center",
+      position: "absolute",
+      top: -8,
+      right: -8,
    },
    cartBadgeText: {
-      ...typography.caption,
+      ...typography.small,
       color: colors.white,
+      fontWeight: "700",
+   },
+
+   viewOrdersButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      width: "90%",
+      alignSelf: "center",
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.lg,
+      gap: spacing.md,
+      backgroundColor: colors.secondary,
+      borderRadius: borderRadius.lg,
+      ...shadows.medium,
+   },
+   viewOrdersButtonText: {
+      ...typography.button,
+      color: colors.black,
+      fontSize: 16,
    },
 
    filtersSection: {
-      marginLeft: 20,
-      marginTop: 5,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.md,
    },
 
    itemRow: {
       flexDirection: "row",
-      padding: 15,
+      paddingHorizontal: spacing.lg,
+      paddingVertical: spacing.md,
       justifyContent: "space-between",
+      alignItems: "center",
+      ...shadows.small,
+      marginHorizontal: spacing.md,
+      marginVertical: spacing.sm,
+      borderRadius: borderRadius.lg,
+      backgroundColor: colors.white,
    },
    itemTextColumn: {
-      width: "60%",
+      flex: 1,
+      marginRight: spacing.md,
    },
    itemTitle: {
-      ...typography.h2,
+      ...typography.h3,
+      marginBottom: spacing.xs,
    },
    itemDescription: {
-      ...typography.body,
-      color: colors.black,
-      marginTop: 5,
-      marginBottom: 5,
+      ...typography.caption,
+      color: colors.lightgrey,
+      marginBottom: spacing.sm,
    },
    itemPrice: {
       ...typography.bodyBold,
+      color: colors.primary,
    },
    itemImage: {
-      resizeMode: "fill",
+      resizeMode: "cover",
       width: 100,
       height: 100,
       backgroundColor: colors.lightgrey,
-      borderRadius: 10,
+      borderRadius: borderRadius.lg,
    },
    itemImagePlaceholder: {
       width: 100,
       height: 100,
-      backgroundColor: colors.lightgrey,
-      borderRadius: 10,
+      backgroundColor: colors.tertiary,
+      borderRadius: borderRadius.lg,
       alignItems: "center",
       justifyContent: "center",
       borderWidth: 1,
-      borderColor: colors.black,
+      borderColor: colors.borderLight,
    },
    itemImagePlaceholderText: {
-      ...typography.body,
-      color: colors.black,
-      fontSize: 12,
+      ...typography.caption,
+      color: colors.lightgrey,
       textAlign: "center",
    },
 });

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors, typography } from "../styles/theme";
+import { colors, spacing, typography } from "../styles/theme";
 
 const OtpTimer = ({ sendOTP }) => {
    const [seconds, setSeconds] = useState(0);
@@ -38,14 +38,17 @@ export default OtpTimer;
 const styles = StyleSheet.create({
    container: {
       alignSelf: "center",
-      marginBottom: 10,
+      marginBottom: spacing.lg,
    },
    sendText: {
-      ...typography.bodyBold,
+      ...typography.button,
       color: colors.secondary,
+      textDecorationLine: "underline",
+      fontSize: 15,
    },
    resendText: {
       ...typography.bodyBold,
-      color: colors.black,
+      color: colors.lightgrey,
+      fontSize: 14,
    },
 });

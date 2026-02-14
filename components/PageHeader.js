@@ -1,39 +1,44 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors, typography } from "../styles/theme";
+import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { borderRadius, colors, spacing, typography } from "../styles/theme";
 
 const PageHeader = ({ navigator, heading }) => {
    return (
       <View style={styles.header}>
-         <TouchableOpacity onPress={() => navigator.goBack()}>
-            <Image
-               source={require("../assets/back-button.jpg")}
-               resizeMode="contain"
-               style={styles.backButton}
-            />
+         <TouchableOpacity
+            onPress={() => navigator.goBack()}
+            style={styles.backButtonContainer}
+         >
+            <Ionicons name="chevron-back" size={28} color={colors.primary} />
          </TouchableOpacity>
          <Text style={styles.heading}>{heading}</Text>
       </View>
    );
 };
+
 const styles = StyleSheet.create({
    header: {
-      justifyContent: "flex-start",
+      justifyContent: "center",
+      alignItems: "center",
       backgroundColor: colors.white,
-      borderWidth: 1,
-      borderColor: colors.black,
-      flexDirection: "row",
-      padding: 20,
+      paddingVertical: spacing.lg,
+      paddingHorizontal: spacing.lg,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.borderLight,
+      position: "relative",
    },
-
-   backButton: {
-      alignSelf: "flex-start",
-      width: 48,
-      height: 48,
+   backButtonContainer: {
+      position: "absolute",
+      left: spacing.lg,
+      padding: spacing.sm,
+      borderRadius: borderRadius.md,
    },
    heading: {
-      ...typography.h1,
-      marginHorizontal: 20,
-      marginVertical: 10,
+      ...typography.h2,
+      color: colors.primary,
+      textAlign: "center",
+      width: "100%",
    },
 });
+
 export default PageHeader;
