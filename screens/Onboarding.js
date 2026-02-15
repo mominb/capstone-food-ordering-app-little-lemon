@@ -14,7 +14,14 @@ import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import OtpTimer from "../components/OtpTimer";
-import { colors, layout, typography } from "../styles/theme";
+import {
+   borderRadius,
+   colors,
+   layout,
+   shadows,
+   spacing,
+   typography,
+} from "../styles/theme";
 import { sendEmailOTP, verifyEmailOTP } from "../utils/supabase";
 
 const Onboarding = () => {
@@ -75,17 +82,21 @@ const Onboarding = () => {
             textContent="Loading..."
             textStyle={{ color: colors.white }}
          />
-         <View>
+         <View style={styles.logoContainer}>
             <Image
                source={require("../assets/littlelemon-logo-long-white.jpg")}
                style={styles.logo}
                resizeMode="contain"
             />
          </View>
-         <Text style={styles.title}>Sign in to Little Lemon</Text>
 
-         <ScrollView style={styles.content}>
-            <View>
+         <Text style={styles.title}>Welcome Back</Text>
+
+         <ScrollView
+            style={styles.content}
+            showsVerticalScrollIndicator={false}
+         >
+            <View style={styles.inputGroup}>
                <Text style={styles.label}>Email</Text>
                <TextInput
                   onFocus={() => setIsEmailFocused(true)}
@@ -95,12 +106,15 @@ const Onboarding = () => {
                   onChangeText={setEmail}
                   keyboardType="email-address"
                   autoCapitalize="none"
+                  placeholder="Enter your email"
+                  placeholderTextColor="rgba(237, 239, 238, 0.5)"
                />
             </View>
-            {<OtpTimer sendOTP={sendOTP} />}
 
-            <View>
-               <Text style={styles.label}>OTP</Text>
+            <OtpTimer sendOTP={sendOTP} />
+
+            <View style={styles.inputGroup}>
+               <Text style={styles.label}>OTP Code</Text>
                <TextInput
                   onFocus={() => setIsOTPFocused(true)}
                   onBlur={() => setIsOTPFocused(false)}
@@ -108,6 +122,9 @@ const Onboarding = () => {
                   value={token}
                   onChangeText={setToken}
                   keyboardType="number-pad"
+                  placeholder="6-digit code"
+                  placeholderTextColor="rgba(237, 239, 238, 0.5)"
+                  maxLength={6}
                />
             </View>
          </ScrollView>
@@ -127,58 +144,65 @@ const Onboarding = () => {
 const styles = StyleSheet.create({
    container: {
       backgroundColor: colors.primary,
-      paddingHorizontal: 20,
+      paddingHorizontal: spacing.xl,
+   },
+   logoContainer: {
+      alignItems: "center",
+      paddingVertical: spacing.xxl * 2,
    },
    logo: {
       width: 200,
-      height: 150,
-      alignSelf: "center",
+      height: 120,
    },
    content: {
-      marginTop: 10,
+      flex: 1,
    },
    title: {
       ...typography.h1,
-      color: colors.secondary,
-      padding: 30,
+      color: colors.white,
       textAlign: "center",
+      marginBottom: spacing.xxl,
+      fontSize: 26,
+   },
+   inputGroup: {
+      marginBottom: spacing.xl,
    },
    label: {
       ...typography.caption,
       color: colors.tertiary,
-      marginBottom: 6,
+      marginBottom: spacing.sm,
+      fontSize: 14,
    },
    input: {
-      height: 48,
+      height: 54,
       width: "100%",
-      borderWidth: 2.5,
-      borderColor: colors.primary,
-      borderRadius: 8,
-      paddingHorizontal: 12,
-      marginBottom: 20,
-      backgroundColor: colors.tertiary,
-      alignSelf: "center",
+      borderWidth: 2,
+      borderColor: "rgba(237, 239, 238, 0.3)",
+      borderRadius: borderRadius.lg,
+      paddingHorizontal: spacing.lg,
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      ...typography.body,
+      color: colors.white,
+      fontSize: 16,
    },
    inputFocused: {
       borderColor: colors.secondary,
+      backgroundColor: "rgba(255, 255, 255, 0.15)",
    },
    button: {
-      alignSelf: "center",
       width: "100%",
-      paddingVertical: 12,
-      paddingHorizontal: 28,
-      borderRadius: 8,
+      paddingVertical: spacing.lg,
+      borderRadius: borderRadius.lg,
       backgroundColor: colors.secondary,
-      borderColor: colors.black,
-      borderWidth: 2,
-      marginBottom: 10,
+      marginVertical: spacing.xl,
+      ...shadows.medium,
    },
    buttonDisabled: {
       opacity: 0.4,
    },
 
    buttonText: {
-      ...typography.body,
+      ...typography.button,
       color: colors.black,
       textAlign: "center",
    },
