@@ -4,9 +4,9 @@ export const BUSINESS_CONFIG = {
    businessTagline: "Fresh Mediterranean flavors delivered",
 
    // Location & Contact
-   country: "United States",
-   countryCode: "+1",
-   currency: "$",
+   country: "Pakistan",
+   countryCode: "+92",
+   currency: "PKR",
 
    // App Identity
    appName: "Little Lemon",
@@ -14,7 +14,7 @@ export const BUSINESS_CONFIG = {
 
    // Default Settings
    defaultLanguage: "en",
-   timeZone: "America/New_York",
+   timeZone: "Asia/Karachi",
 
    // Delivery Options
    deliveryOptions: [
@@ -38,12 +38,12 @@ export const BUSINESS_CONFIG = {
 
    // Validation Rules & Regex Patterns
    validation: {
-      // Phone number validation (US format: 10 digits)
-      phoneRegex: /^[2-9][0-9]{9}$/,
-      phoneFormat: "(XXX) XXX-XXXX",
+      // Phone number validation (Pakistan mobile: 10-11 digits)
+      phoneRegex: /^\d{10,11}$/,
+      phoneFormat: "3XX-XXXXXXX",
       phoneMinLength: 10,
-      phoneMaxLength: 10,
-      phoneErrorMessage: "Please enter a valid 10-digit phone number",
+      phoneMaxLength: 11,
+      phoneErrorMessage: "Please enter a valid 10-11 digit phone number",
 
       // Email validation
       emailRegex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -63,12 +63,12 @@ export const BUSINESS_CONFIG = {
 
    // Country-Specific Formats
    formats: {
-      dateFormat: "MM/DD/YYYY",
-      dateTimeFormat: "MM/DD/YYYY hh:mm A",
+      dateFormat: "DD/MM/YYYY",
+      dateTimeFormat: "DD/MM/YYYY hh:mm A",
       timeFormat: "hh:mm A",
       use24HourFormat: false,
       currencyPosition: "left",
-      currencySpacing: false,
+      currencySpacing: true,
       decimalSeparator: ".",
       thousandSeparator: ",",
       currencyDecimals: 2,

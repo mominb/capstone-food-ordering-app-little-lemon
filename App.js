@@ -1,3 +1,10 @@
+import {
+   Inter_400Regular,
+   Inter_500Medium,
+   Inter_600SemiBold,
+   Inter_700Bold,
+   useFonts,
+} from "@expo-google-fonts/inter";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useCallback, useEffect, useState } from "react";
@@ -30,6 +37,12 @@ export default function App() {
    const [session, setSession] = useState(null);
    const [menuCategories, setMenuCategories] = useState([]);
    const [userMetaDataExists, setUserMetaDataExists] = useState(false);
+   const [fontsLoaded] = useFonts({
+      Inter_400Regular,
+      Inter_500Medium,
+      Inter_600SemiBold,
+      Inter_700Bold,
+   });
    const getUserInformation = useCallback(async () => {
       const userData = await getUserData();
       const user = userData.data?.user;
@@ -64,7 +77,7 @@ export default function App() {
       };
    }, [getUserInformation]);
 
-   if (loading) {
+   if (loading || !fontsLoaded) {
       return <Splash />;
    }
 

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 export const colors = {
    primary: "#495E57",
@@ -63,51 +63,66 @@ export const layout = {
    },
 };
 
+const fontFamilies = {
+   regular: Platform.select({ ios: "System", android: "Inter_400Regular" }),
+   medium: Platform.select({ ios: "System", android: "Inter_500Medium" }),
+   semibold: Platform.select({ ios: "System", android: "Inter_600SemiBold" }),
+   bold: Platform.select({ ios: "System", android: "Inter_700Bold" }),
+};
+
 export const typography = {
    h1: {
       fontSize: 28,
       fontWeight: "700",
+      fontFamily: fontFamilies.bold,
       color: colors.black,
       lineHeight: 34,
    },
    h2: {
       fontSize: 22,
       fontWeight: "700",
+      fontFamily: fontFamilies.bold,
       color: colors.black,
       lineHeight: 28,
    },
    h3: {
       fontSize: 18,
       fontWeight: "700",
+      fontFamily: fontFamilies.bold,
       color: colors.black,
       lineHeight: 24,
    },
    body: {
       fontSize: 16,
       fontWeight: "400",
+      fontFamily: fontFamilies.regular,
       color: colors.black,
       lineHeight: 22,
    },
    bodyBold: {
       fontSize: 16,
       fontWeight: "700",
+      fontFamily: fontFamilies.bold,
       color: colors.black,
       lineHeight: 22,
    },
    button: {
       fontSize: 16,
       fontWeight: "700",
+      fontFamily: fontFamilies.semibold,
       color: colors.black,
    },
    caption: {
       fontSize: 14,
       fontWeight: "500",
+      fontFamily: fontFamilies.medium,
       color: colors.black,
       lineHeight: 20,
    },
    small: {
       fontSize: 12,
       fontWeight: "400",
+      fontFamily: fontFamilies.regular,
       color: colors.lightgrey,
       lineHeight: 16,
    },
