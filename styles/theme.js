@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform } from "react-native";
 
 export const colors = {
    primary: "#495E57",
@@ -127,5 +127,3 @@ export const typography = {
       lineHeight: 16,
    },
 };
-
-export const globalStyles = StyleSheet.create({});

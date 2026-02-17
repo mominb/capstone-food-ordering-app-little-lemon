@@ -167,6 +167,35 @@ little-lemon/
 └── assets/                # Images, fonts, and static files
 ```
 
+## 🎨 Design System & Theming
+
+The app uses a centralized theme system defined in [styles/theme.js](styles/theme.js):
+
+### Color Palette
+- **Primary** (`#495E57`) - Main brand color
+- **Secondary** (`#F4CE14`) - Accent highlights
+- **Tertiary** (`#EDEFEE`) - Light backgrounds
+- **Status Colors** - Success, Warning, Error indicators
+
+### Spacing Scale
+Consistent spacing values (xs: 4px, sm: 8px, md: 12px, lg: 16px, xl: 20px, xxl: 24px)
+
+### Typography System
+- **Headings** (h1, h2, h3) - Bold, semantic sizing
+- **Body Text** - Regular and bold variants
+- **Button Typography** - Semibold with emphasis
+- **Captions** - Medium weight for secondary info
+
+### Shadows & Effects
+- **Small** - Subtle elevation (2dp)
+- **Medium** - Moderate depth (4dp)  
+- **Large** - Strong emphasis (6dp)
+
+### Border Radius
+Standardized corner radius values (sm: 4px to full: 24px)
+
+All components import from this single theme file to maintain visual consistency across the app.
+
 ## 🔐 Admin Access
 
 Admin privileges are controlled through the `user_roles` table in Supabase. To grant admin access:
