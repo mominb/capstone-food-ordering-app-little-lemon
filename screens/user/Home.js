@@ -30,7 +30,7 @@ import {
    getMenuByFilterAndSearch,
 } from "../../utils/supabase";
 
-const Home = ({ menuCategories, database }) => {
+const Home = ({ menuCategories, database, session }) => {
    const [searchTerm, setSearchTerm] = useState("");
    const [data, setData] = useState([]);
    const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +52,15 @@ const Home = ({ menuCategories, database }) => {
    };
 
    const handleProfileIconClick = () => {
-      navigation.navigate("Profile");
+      if (!session) {
+         Toast.show({
+            type: "error",
+            text1: "You must login to continue",
+         });
+         navigation.navigate("Onboarding");
+      } else {
+         navigation.navigate("Profile");
+      }
    };
 
    useEffect(() => {
@@ -151,7 +159,17 @@ const Home = ({ menuCategories, database }) => {
             >
                <TouchableOpacity
                   style={styles.viewOrdersButton}
-                  onPress={() => navigation.navigate("Orders")}
+                  onPress={() => {
+                     if (!session) {
+                        Toast.show({
+                           type: "error",
+                           text1: "You must login to continue",
+                        });
+                        navigation.navigate("Onboarding");
+                     } else {
+                        navigation.navigate("Orders");
+                     }
+                  }}
                >
                   <Ionicons name="receipt" size={20} color={colors.black} />
                   <Text style={styles.viewOrdersButtonText}>View orders</Text>

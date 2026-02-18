@@ -1,4 +1,6 @@
+import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import {
    Image,
@@ -25,6 +27,7 @@ import {
 import { sendEmailOTP, verifyEmailOTP } from "../utils/supabase";
 
 const Onboarding = () => {
+   const navigation = useNavigation();
    const [email, setEmail] = useState("");
    const [token, setToken] = useState("");
    const [isOTPFocused, setIsOTPFocused] = useState(false);
@@ -77,6 +80,12 @@ const Onboarding = () => {
 
    return (
       <SafeAreaView style={[layout.container, styles.container]}>
+         <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}
+         >
+            <Ionicons name="chevron-back" size={28} color={colors.white} />
+         </TouchableOpacity>
          <Spinner
             visible={isLoading}
             textContent="Loading..."
@@ -145,6 +154,11 @@ const styles = StyleSheet.create({
    container: {
       backgroundColor: colors.primary,
       paddingHorizontal: spacing.xl,
+   },
+   backButton: {
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.sm,
+      marginBottom: spacing.md,
    },
    logoContainer: {
       alignItems: "center",

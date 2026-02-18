@@ -70,6 +70,11 @@ export default function App() {
       const { data: listener } = supabase.auth.onAuthStateChange(
          (_event, session) => {
             setSession(session);
+            if (session) {
+               getUserInformation();
+            } else {
+               setUserRole(undefined);
+            }
          },
       );
       return () => {
@@ -85,9 +90,35 @@ export default function App() {
       <NavigationContainer>
          <Stack.Navigator screenOptions={{ headerShown: false }}>
             {!session ? (
-               <Stack.Screen name="Onboarding">
-                  {(props) => <Onboarding {...props} />}
-               </Stack.Screen>
+               <>
+                  <Stack.Screen name="Home">
+                     {(props) => (
+                        <Home
+                           {...props}
+                           menuCategories={menuCategories}
+                           database={database}
+                           session={session}
+                        />
+                     )}
+                  </Stack.Screen>
+                  <Stack.Screen name="Onboarding">
+                     {(props) => <Onboarding {...props} />}
+                  </Stack.Screen>
+                  <Stack.Screen name="Item" component={Item} />
+                  <Stack.Screen name="Cart">
+                     {(props) => (
+                        <Cart
+                           {...props}
+                           getCartItems={database.getMenuItemsInCart}
+                           deleteCartItem={database.deleteCartItem}
+                           changeItemQtyInCart={database.changeItemQtyInCart}
+                           getTotalCartCost={database.getTotalCartCost}
+                           userMetaDataExists={userMetaDataExists}
+                           session={session}
+                        />
+                     )}
+                  </Stack.Screen>
+               </>
             ) : userRole === "admin" ? (
                <>
                   <Stack.Screen name="AdminHome" component={AdminHome} />
@@ -105,6 +136,7 @@ export default function App() {
                            {...props}
                            menuCategories={menuCategories}
                            database={database}
+                           session={session}
                         />
                      )}
                   </Stack.Screen>
@@ -130,6 +162,7 @@ export default function App() {
                            changeItemQtyInCart={database.changeItemQtyInCart}
                            getTotalCartCost={database.getTotalCartCost}
                            userMetaDataExists={userMetaDataExists}
+                           session={session}
                         />
                      )}
                   </Stack.Screen>

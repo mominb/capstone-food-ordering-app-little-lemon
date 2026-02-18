@@ -29,6 +29,7 @@ const Cart = ({
    changeItemQtyInCart,
    getTotalCartCost,
    userMetaDataExists,
+   session,
 }) => {
    const navigation = useNavigation();
    const [cartItems, setCartItems] = useState([]);
@@ -103,6 +104,14 @@ const Cart = ({
    const isCheckoutAllowed = userMetaDataExists && cartItems.length > 0;
 
    const handleCheckoutNavi = () => {
+      if (!session) {
+         Toast.show({
+            type: "error",
+            text1: "You must login to continue",
+         });
+         navigation.navigate("Onboarding");
+         return;
+      }
       if (isCheckoutAllowed) {
          navigation.navigate("Checkout", {
             cartItems: cartItems,
