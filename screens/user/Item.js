@@ -1,7 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+   Image,
+   ScrollView,
+   StyleSheet,
+   Text,
+   TouchableOpacity,
+   View,
+} from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -50,43 +57,52 @@ const Item = ({ route }) => {
             textContent="Loading..."
             textStyle={{ color: colors.white }}
          />
-         <View style={styles.header}>
-            <TouchableOpacity
-               onPress={() => {
-                  if (navigation.canGoBack()) {
-                     navigation.goBack();
-                  }
-               }}
-               style={styles.backButtonContainer}
-            >
-               <Ionicons name="chevron-back" size={28} color={colors.primary} />
-            </TouchableOpacity>
-            <Image
-               source={require("../../assets/logo-long-text.png")}
-               resizeMode="contain"
-               style={styles.logoLemon}
-            />
-         </View>
-
-         {item.image_url ? (
-            <Image
-               style={styles.heroImage}
-               source={{
-                  uri: item.image_url,
-               }}
-            />
-         ) : (
-            <View style={styles.heroImagePlaceholder}>
-               <Text style={styles.heroImagePlaceholderText}>No Image</Text>
+         <ScrollView
+            style={styles.scrollView}
+            showsVerticalScrollIndicator={false}
+         >
+            <View style={styles.header}>
+               <TouchableOpacity
+                  onPress={() => {
+                     if (navigation.canGoBack()) {
+                        navigation.goBack();
+                     }
+                  }}
+                  style={styles.backButtonContainer}
+               >
+                  <Ionicons
+                     name="chevron-back"
+                     size={28}
+                     color={colors.primary}
+                  />
+               </TouchableOpacity>
+               <Image
+                  source={require("../../assets/logo-long-text.png")}
+                  resizeMode="contain"
+                  style={styles.logoLemon}
+               />
             </View>
-         )}
-         <View style={styles.infoBox}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemDescription}>{item.description}</Text>
-            <Text style={styles.itemPrice}>{formatCurrency(item.price)}</Text>
-         </View>
-         <View style={styles.seperator} />
-         <View>
+
+            {item.image_url ? (
+               <Image
+                  style={styles.heroImage}
+                  source={{
+                     uri: item.image_url,
+                  }}
+               />
+            ) : (
+               <View style={styles.heroImagePlaceholder}>
+                  <Text style={styles.heroImagePlaceholderText}>No Image</Text>
+               </View>
+            )}
+            <View style={styles.infoBox}>
+               <Text style={styles.itemName}>{item.name}</Text>
+               <Text style={styles.itemDescription}>{item.description}</Text>
+               <Text style={styles.itemPrice}>
+                  {formatCurrency(item.price)}
+               </Text>
+            </View>
+            <View style={styles.seperator} />
             <View style={styles.counterContainer}>
                <TouchableOpacity
                   style={styles.CounterButton}
@@ -104,6 +120,8 @@ const Item = ({ route }) => {
                   <Ionicons name="add" size={20} color={colors.white} />
                </TouchableOpacity>
             </View>
+         </ScrollView>
+         <View style={styles.bottomContainer}>
             <TouchableOpacity
                onPress={async () => {
                   setIsLoading(true);
@@ -131,7 +149,18 @@ const Item = ({ route }) => {
    );
 };
 const styles = StyleSheet.create({
-   container: {},
+   container: {
+      flex: 1,
+   },
+   scrollView: {
+      flex: 1,
+   },
+   bottomContainer: {
+      backgroundColor: colors.white,
+      borderTopWidth: 1,
+      borderTopColor: colors.borderLight,
+      paddingBottom: spacing.sm,
+   },
    header: {
       justifyContent: "center",
       alignItems: "center",
@@ -205,7 +234,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: spacing.lg,
       borderRadius: borderRadius.lg,
       backgroundColor: colors.secondary,
-      marginVertical: spacing.lg,
+      marginBottom: spacing.md,
       ...shadows.medium,
       flexDirection: "row",
       alignItems: "center",
@@ -222,11 +251,12 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center",
       gap: spacing.lg,
-      paddingVertical: spacing.xl,
+      paddingVertical: spacing.lg,
       backgroundColor: colors.tertiary,
       marginHorizontal: spacing.lg,
       borderRadius: borderRadius.lg,
-      marginVertical: spacing.lg,
+      marginTop: spacing.lg,
+      marginBottom: spacing.sm,
    },
    CounterButton: {
       backgroundColor: colors.primary,
