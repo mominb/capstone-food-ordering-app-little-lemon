@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
-   FlatList,
    ScrollView,
    StyleSheet,
    Text,
@@ -11,7 +10,7 @@ import {
 import { Dropdown } from "react-native-element-dropdown";
 import Spinner from "react-native-loading-spinner-overlay";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ItemSeperator from "../../components/ItemSeperator";
+import OrderItemList from "../../components/OrderItemList";
 import PageHeader from "../../components/PageHeader";
 import {
    borderRadius,
@@ -21,7 +20,7 @@ import {
    spacing,
    typography,
 } from "../../styles/theme";
-import { getGlobalSettings, placeOrder } from "../../utils/supabase";
+import { placeOrder } from "../../utils/supabase";
 
 const Checkout = ({ route, deleteUserCart }) => {
    const [isLoading, setIsLoading] = useState(false);
@@ -31,23 +30,12 @@ const Checkout = ({ route, deleteUserCart }) => {
    const totalAmount = data.totalAmount;
    const paymentMethods = [{ label: "Cash", value: "COD" }];
    const [paymentMethod, setPaymentMethod] = useState("COD");
-   const [currency, setCurrency] = useState();
    const deliveryMethods = [
       { label: "Deliver to Doorstep", value: "Delivery" },
       { label: "Pick-up from restaurant", value: "Pickup" },
    ];
    const [deliveryMethod, setDeliveryMethod] = useState("Delivery");
 
-   useEffect(() => {
-      const fetchSettings = async () => {
-         const globalSettings = await getGlobalSettings();
-         setCurrency(globalSettings?.[0]?.currency_code);
-      };
-      fetchSettings();
-   }, []);
-
-   const formatCurrency = (value) =>
-      currency ? `${value} ${currency}` : `${value}`;
    const handleOrderPlacement = async () => {
       setIsLoading(true);
       try {
@@ -75,37 +63,14 @@ const Checkout = ({ route, deleteUserCart }) => {
          />
          <PageHeader navigation={navigation} heading={"Checkout"}></PageHeader>
          <ScrollView>
-            <View style={styles.orderDetailsContainer}>
-               <Text style={styles.subHeading}>Order Details</Text>
-               <FlatList
-                  data={cartItems}
-                  keyExtractor={(item) => String(item.item_id)}
-                  ItemSeparatorComponent={ItemSeperator}
-                  renderItem={({ item }) => (
-                     <View style={styles.itemContainer}>
-                        <View style={styles.itemInfoContainer}>
-                           <Text style={styles.itemText}>{item.amount}x</Text>
-                           <Text style={styles.itemText}>{item.name}</Text>
-                        </View>
-
-                        <View style={styles.itemPriceContainer}>
-                           <Text style={styles.itemText}>
-                              {formatCurrency(
-                                 (item.amount * item.price).toFixed(2),
-                              )}
-                           </Text>
-                        </View>
-                     </View>
-                  )}
-               />
-               <ItemSeperator />
-               <View style={styles.totalAmountContainer}>
-                  <Text style={styles.totalAmountText}>Total :</Text>
-                  <Text style={styles.totalAmountText}>
-                     {formatCurrency(totalAmount)}
-                  </Text>
-               </View>
-            </View>
+            <OrderItemList
+               orderItems={cartItems}
+               order={{ total_price: totalAmount }}
+               showHeader={true}
+               showTotal={true}
+               totalLabel="Total :"
+               showItemPrice={true}
+            />
             <View style={styles.DetailsContainer}>
                <Text style={[styles.subHeading, { alignSelf: "flex-start" }]}>
                   Delivery Method
@@ -150,53 +115,6 @@ const Checkout = ({ route, deleteUserCart }) => {
 };
 const styles = StyleSheet.create({
    container: {},
-   subHeading: {
-      ...typography.h3,
-      marginBottom: spacing.md,
-      color: colors.primary,
-      alignSelf: "flex-start",
-   },
-   orderDetailsContainer: {
-      paddingHorizontal: spacing.lg,
-      paddingVertical: spacing.lg,
-      marginHorizontal: spacing.md,
-      marginVertical: spacing.md,
-      borderColor: colors.borderLight,
-      borderWidth: 1,
-      borderRadius: borderRadius.lg,
-      backgroundColor: colors.white,
-      ...shadows.small,
-   },
-   itemContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      paddingVertical: spacing.md,
-      alignItems: "center",
-   },
-   itemInfoContainer: {
-      flexDirection: "row",
-      flex: 1,
-      gap: spacing.md,
-   },
-   itemPriceContainer: {},
-   itemText: {
-      ...typography.bodyBold,
-      color: colors.black,
-   },
-   totalAmountText: {
-      ...typography.h3,
-      color: colors.black,
-      margin: spacing.md,
-   },
-   totalAmountContainer: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      paddingHorizontal: spacing.md,
-      paddingVertical: spacing.md,
-      backgroundColor: colors.secondary,
-      borderRadius: borderRadius.md,
-      marginTop: spacing.md,
-   },
    DetailsContainer: {
       paddingHorizontal: spacing.lg,
       paddingVertical: spacing.lg,
@@ -211,6 +129,12 @@ const styles = StyleSheet.create({
       borderWidth: 1,
       marginVertical: spacing.md,
       ...shadows.small,
+   },
+   subHeading: {
+      ...typography.h3,
+      marginBottom: spacing.md,
+      color: colors.primary,
+      alignSelf: "flex-start",
    },
    button: {
       alignSelf: "center",

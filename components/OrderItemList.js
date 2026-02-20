@@ -10,7 +10,15 @@ import {
 import { getGlobalSettings } from "../utils/supabase";
 import ItemSeperator from "./ItemSeperator";
 
-const OrderItemList = ({ orderItems, order }) => {
+const OrderItemList = ({
+   orderItems,
+   order,
+   showHeader = true,
+   showTotal = true,
+   totalLabel = "Total Amount:",
+   containerStyle,
+   showItemPrice = true,
+}) => {
    const [currency, setCurrency] = useState();
 
    useEffect(() => {
@@ -25,17 +33,19 @@ const OrderItemList = ({ orderItems, order }) => {
       currency ? `${value} ${currency}` : `${value}`;
 
    return (
-      <View style={styles.orderDetailsContainer}>
-         <Text style={styles.subHeading}>Order Items</Text>
+      <View style={[styles.orderDetailsContainer, containerStyle]}>
+         {showHeader && <Text style={styles.subHeading}>Order Items</Text>}
 
          {orderItems.map((item, index) => (
             <View key={item.id ?? item.item_id ?? index}>
                <View style={styles.itemContainer}>
                   <View style={styles.itemInfoContainer}>
-                     <Text style={styles.quantity}>{item.quantity}x</Text>
+                     <Text style={styles.quantity}>
+                        {item.quantity ?? item.amount}x
+                     </Text>
                      <View style={styles.itemDetails}>
                         <Text style={styles.itemText}>{item.name}</Text>
-                        {item.price && (
+                        {item.price && showItemPrice && (
                            <Text style={styles.itemPrice}>
                               {formatCurrency(item.price.toFixed(2))}
                            </Text>
@@ -49,12 +59,14 @@ const OrderItemList = ({ orderItems, order }) => {
 
          <ItemSeperator />
 
-         <View style={styles.totalAmountContainer}>
-            <Text style={styles.totalLabel}>Total Amount:</Text>
-            <Text style={styles.totalAmount}>
-               {formatCurrency(Number(order.total_price).toFixed(2))}
-            </Text>
-         </View>
+         {showTotal && order && (
+            <View style={styles.totalAmountContainer}>
+               <Text style={styles.totalLabel}>{totalLabel}</Text>
+               <Text style={styles.totalAmount}>
+                  {formatCurrency(Number(order.total_price).toFixed(2))}
+               </Text>
+            </View>
+         )}
       </View>
    );
 };
